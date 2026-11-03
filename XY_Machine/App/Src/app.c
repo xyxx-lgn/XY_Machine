@@ -69,6 +69,8 @@ static void app_print_help(void)
         "  a/b : X motor test, DIR low/high, 16 pulses\r\n"
         "  d/e : Y motor test, DIR low/high, 16 pulses\r\n"
         "  f/g : Z motor test, DIR low/high, 16 pulses\r\n"
+				"  v : show USART2 RX statistics\r\n"
+        "  u : RX test byte, no action\r\n"
     );
 }
 
@@ -154,11 +156,10 @@ void app_init(void)
     unsigned int i;
 
     board_motor_init();
-	
-		board_step_test_init();
+    board_step_test_init();
 
-		s_current_ready = false;
-		s_step_test_active = false;
+    s_current_ready = false;
+    s_step_test_active = false;
 
     for (i = 0u; i < (unsigned int)BOARD_AXIS_COUNT; ++i)
     {
@@ -166,10 +167,22 @@ void app_init(void)
     }
 
     /*
-     * 屏幕暂不使用。
-     * CS保持高，防止SPI初始化或后续测试误选屏幕。
+     * 屏幕暂时不用。
+     * CS保持高，避免误选中。
      */
-    HAL_GPIO_WritePin(LCD_CS_GPIO_Port,LCD_CS_Pin,GPIO_PIN_SET);
+    HAL_GPIO_WritePin(LCD_CS_GPIO_Port, LCD_CS_Pin, GPIO_PIN_SET);
+
+    /*
+     * CubeMX已初始化USART2硬件。
+     * 这里启动软件接收缓冲区和中断接收。
+     *
+     * 必须在启动信息打印前调用，
+     * 这样打印期间收到的数据也能暂存。
+     */
+    if (!board_serial_init())
+    {
+        board_serial_write("USART2 RX initialization failed.\r\n");
+    }
 
     board_serial_write(
         "\r\n"
@@ -624,6 +637,33 @@ static void app_poll_step_test(void)
     board_serial_write(message);
 }
 
+/*
+ * 打印主机串口的累计接收统计。
+ *
+ * 不要求received固定为某个值：
+ * 命令字符、回车和换行都会计入。
+ *
+ * 正常测试应满足：
+ * dropped = 0
+ * errors = 0
+ */
+static void app_print_serial_stats(void)
+{
+    uint32_t received;
+    uint32_t dropped;
+    uint32_t errors;
+    char message[128];
+
+    board_serial_get_rx_stats(&received, &dropped, &errors);
+
+    (void)snprintf(message, sizeof(message), "USART2 RX: received=%lu dropped=%lu errors=%lu\r\n",
+                   (unsigned long)received,
+                   (unsigned long)dropped,
+                   (unsigned long)errors);
+
+    board_serial_write(message);
+}
+
 
 void app_process(void)
 {
@@ -773,6 +813,20 @@ void app_process(void)
 				case 'C':
 						app_configure_test_currents();
 						break;
+				
+				/* 查看USART2接收统计。 */
+        case 'v':
+            app_print_serial_stats();
+            break;
+
+        /*
+         * 接收吞吐测试字符。
+         *
+         * 收到后不运动、不打印，
+         * 避免大量打印干扰接收测试。
+         */
+        case 'u':
+            break;
 
         default:
             board_serial_write("Unknown command. Send h for help.\r\n");

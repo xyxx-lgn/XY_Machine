@@ -1144,9 +1144,9 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x67DD529C)
-F (..\BSP\Inc\board_serial.h)(0x6AE84F67)()
-F (..\BSP\Src\board_serial.c)(0x6AE84F67)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\board_serial.o --omf_browse xy_machine\board_serial.crf --depend xy_machine\board_serial.d)
-I (../BSP/Inc/board_serial.h)(0x6AE84F67)
+F (..\BSP\Inc\board_serial.h)(0x6AE9C372)()
+F (..\BSP\Src\board_serial.c)(0x6AE9C372)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\board_serial.o --omf_browse xy_machine\board_serial.crf --depend xy_machine\board_serial.d)
+I (../BSP/Inc/board_serial.h)(0x6AE9C372)
 I (C:\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x5D9B3488)
 I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5D9B3488)
 I (../Core/Inc/usart.h)(0x6AD8ACA2)
@@ -1229,12 +1229,12 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x67DD529C)
 F (..\App\Inc\app.h)(0x6AE84F67)()
-F (..\App\Src\app.c)(0x6AE98F30)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\app.o --omf_browse xy_machine\app.crf --depend xy_machine\app.d)
+F (..\App\Src\app.c)(0x6AE9C35C)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\app.o --omf_browse xy_machine\app.crf --depend xy_machine\app.d)
 I (../App/Inc/app.h)(0x6AE84F67)
 I (../BSP/Inc/board_motor.h)(0x6AE84F67)
 I (C:\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x5D9B3488)
 I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5D9B3488)
-I (../BSP/Inc/board_serial.h)(0x6AE84F67)
+I (../BSP/Inc/board_serial.h)(0x6AE9C372)
 I (../Core/Inc/main.h)(0x6AE845C4)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x67DD529C)
 I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6AE947ED)
