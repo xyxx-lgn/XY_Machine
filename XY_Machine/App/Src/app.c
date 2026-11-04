@@ -66,9 +66,9 @@ static void app_print_help(void)
 				"  t : read IOIN from three TMC2209 drivers\r\n"
 				"  c : configure test currents, keep drivers disabled\r\n"
 				"  4/5/6 : X/Y/Z waveform test, 100 pulses, drivers disabled\r\n"
-        "  a/b : X motor test, DIR low/high, 16 pulses\r\n"
-        "  d/e : Y motor test, DIR low/high, 16 pulses\r\n"
-        "  f/g : Z motor test, DIR low/high, 16 pulses\r\n"
+        "  a/b : X motor test, DIR low/high, 320 pulses\r\n"
+        "  d/e : Y motor test, DIR low/high, 320 pulses\r\n"
+        "  f/g : Z motor test, DIR low/high, 320 pulses\r\n"
 				"  v : show USART2 RX statistics\r\n"
         "  u : RX test byte, no action\r\n"
     );
