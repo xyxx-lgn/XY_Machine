@@ -21,6 +21,11 @@
 
 #include "grbl.h"
 
+//增加圆周率宏定义
+#ifndef M_PI
+  #define M_PI 3.14159265358979323846f
+#endif
+
 
 // Execute linear motion in absolute millimeter coordinates. Feed rate given in millimeters/second
 // unless invert_feed_rate is true. Then the feed_rate means that the motion should be completed in

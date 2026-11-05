@@ -22,8 +22,8 @@
 #include "grbl.h"
 #include "tim.h"
 #include "MyDelay.h"
-
-#include "cmsis_os2.h"
+//#include "cmsis_os2.h"  当前代码未实现使用，注释掉
+#include "main.h"
 
 #define MAX_INT_DIGITS 8 // Maximum number of digits in int32 (and float)
 
@@ -33,9 +33,11 @@ static void Delay_us(uint16_t us)
 
 }
 
+//GRBL 对外提供的毫秒延时接口
 static void Delay_ms(uint16_t ms)
 {
-	osDelay(ms);
+//	osDelay(ms);
+	MyDelay_ms(ms);
 
 }
 

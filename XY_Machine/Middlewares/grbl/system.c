@@ -349,9 +349,11 @@ uint8_t system_check_travel_limits(float *target)
 
 // Special handlers for setting and clearing Grbl's real-time execution flags.
 void system_set_exec_state_flag(uint8_t mask) {
-  //uint8_t sreg = SREG;
+  //uint8_t sreg = SREG; 
 	uint32_t primask = __get_PRIMASK();
-	cli();
+//	cli();   //AVR函数，STM32中不存在，改成__disable_irq();
+	__disable_irq();  
+	
   	sys_rt_exec_state |= (mask);
   	__set_PRIMASK(primask);
 }
@@ -359,7 +361,8 @@ void system_set_exec_state_flag(uint8_t mask) {
 void system_clear_exec_state_flag(uint8_t mask) {
   //uint8_t sreg = SREG;
 	uint32_t primask = __get_PRIMASK();
-	cli();
+//	cli();
+	__disable_irq();
 	sys_rt_exec_state &= ~(mask);
 	__set_PRIMASK(primask);
 }
@@ -367,7 +370,8 @@ void system_clear_exec_state_flag(uint8_t mask) {
 void system_set_exec_alarm(uint8_t code) {
  // uint8_t sreg = SREG;
 	uint32_t primask = __get_PRIMASK();
-	cli();
+//	cli();
+	__disable_irq();
 	sys_rt_exec_alarm = code;
 	__set_PRIMASK(primask);
 }
@@ -375,7 +379,8 @@ void system_set_exec_alarm(uint8_t code) {
 void system_clear_exec_alarm() {
   //uint8_t sreg = SREG;
 	uint32_t primask = __get_PRIMASK();
-	cli();
+//	cli();
+	__disable_irq();
 	sys_rt_exec_alarm = 0;
 	__set_PRIMASK(primask);
 }
@@ -383,7 +388,8 @@ void system_clear_exec_alarm() {
 void system_set_exec_motion_override_flag(uint8_t mask) {
   //uint8_t sreg = SREG;
 	uint32_t primask = __get_PRIMASK();
-	cli();
+//	cli();
+	__disable_irq();
 	sys_rt_exec_motion_override |= (mask);
 	__set_PRIMASK(primask);
 }
@@ -391,7 +397,8 @@ void system_set_exec_motion_override_flag(uint8_t mask) {
 void system_set_exec_accessory_override_flag(uint8_t mask) {
   //uint8_t sreg = SREG;
 	uint32_t primask = __get_PRIMASK();
-	cli();
+//	cli();
+	__disable_irq();
 	sys_rt_exec_accessory_override |= (mask);
 	__set_PRIMASK(primask);
 }
@@ -399,7 +406,8 @@ void system_set_exec_accessory_override_flag(uint8_t mask) {
 void system_clear_exec_motion_overrides() {
   //uint8_t sreg = SREG;
 	uint32_t primask = __get_PRIMASK();
-	cli();
+//	cli();
+	__disable_irq();
 	sys_rt_exec_motion_override = 0;
 	__set_PRIMASK(primask);
 }
@@ -407,7 +415,8 @@ void system_clear_exec_motion_overrides() {
 void system_clear_exec_accessory_overrides() {
   //uint8_t sreg = SREG;
 	uint32_t primask = __get_PRIMASK();
-	cli();
+//	cli();
+	__disable_irq();
 	sys_rt_exec_accessory_override = 0;
 	__set_PRIMASK(primask);
 }

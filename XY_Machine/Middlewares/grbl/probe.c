@@ -21,6 +21,10 @@
 #include "grbl.h"
 
 
+
+//该文件作用：检测刀具或探针是否接触工件，记录接触坐标
+
+
 // Inverts the probe pin state depending on user settings and probing cycle mode.
 uint8_t probe_invert_mask;
 
@@ -44,6 +48,7 @@ void probe_configure_invert_mask(uint8_t is_probe_away)
 
 
 // Returns the probe pin state. Triggered = true. Called by gcode parser and probe state monitor.
+//当前未安装探针，始终返回未触发；G38.x在解析阶段拒绝
 uint8_t probe_get_state() { return 0; }
 
 

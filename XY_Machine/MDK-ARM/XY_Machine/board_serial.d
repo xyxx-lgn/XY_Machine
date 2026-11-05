@@ -39,4 +39,7 @@ xy_machine\board_serial.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim
 xy_machine\board_serial.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h
 xy_machine\board_serial.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h
 xy_machine\board_serial.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h
+xy_machine\board_serial.o: ..\Middlewares\grbl\grbl_serial.h
+xy_machine\board_serial.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+xy_machine\board_serial.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdarg.h
 xy_machine\board_serial.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h

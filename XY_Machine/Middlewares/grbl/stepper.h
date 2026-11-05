@@ -26,13 +26,12 @@
 #include "gpio.h"
 
 // 时钟转换常量
-#define AVR_TIMER_CLOCK_HZ    2000000UL   // AVR Timer1时钟: 16MHz/8 = 2MHz
-#define STM32_TIM2_CLOCK_HZ   2000000UL   // TIM2时钟: 84MHz/42 = 2MHz (保持一致)
-#define CLOCK_RATIO           (STM32_TIM2_CLOCK_HZ / AVR_TIMER_CLOCK_HZ)  // 应该是1
+//#define AVR_TIMER_CLOCK_HZ    2000000UL   // AVR Timer1时钟: 16MHz/8 = 2MHz
+#define STM32_TIM2_CLOCK_HZ    1000000UL    //TIM2用于产生步进节拍，计数频率为1MHz
 
 // 脉冲宽度定时器配置（AVR Timer0是8分频，16MHz/8=2MHz）
-#define AVR_TIMER0_CLOCK_HZ   2000000UL   // AVR Timer0时钟
-#define STM32_TIM3_CLOCK_HZ   1000000UL   // TIM3时钟: 84MHz/84 = 1MHz
+//#define AVR_TIMER0_CLOCK_HZ   2000000UL   // AVR Timer0时钟
+#define STM32_TIM4_CLOCK_HZ    1000000UL    //TIM4用于结束STEP有效电平，计数频率为1MHz
 
 
 // 硬件抽象宏
@@ -44,35 +43,35 @@
 #endif
 
 // Initialize and setup the stepper motor subsystem
-void stepper_init();
+void stepper_init(void);
 
 // Enable steppers, but cycle does not start unless called by motion control or realtime command.
-void st_wake_up();
+void st_wake_up(void);
 
 // Immediately disables steppers
-void st_go_idle();
-void st_finalize_idle();
+void st_go_idle(void);
+void st_finalize_idle(void);
 
 // Generate the step and direction port invert masks.
-void st_generate_step_dir_invert_masks();
+void st_generate_step_dir_invert_masks(void);
 
 // Reset the stepper subsystem variables
-void st_reset();
+void st_reset(void);
 
 // Changes the run state of the step segment buffer to execute the special parking motion.
-void st_parking_setup_buffer();
+void st_parking_setup_buffer(void);
 
 // Restores the step segment buffer to the normal run state after a parking motion.
-void st_parking_restore_buffer();
+void st_parking_restore_buffer(void);
 
 // Reloads step segment buffer. Called continuously by realtime execution system.
-void st_prep_buffer();
+void st_prep_buffer(void);
 
 // Called by planner_recalculate() when the executing block is updated by the new plan.
-void st_update_plan_block_parameters();
+void st_update_plan_block_parameters(void);
 
 // Called by realtime status reporting if realtime rate reporting is enabled in config.h.
-float st_get_realtime_rate();
+float st_get_realtime_rate(void);
 
 void stepper_timer_interrupt(void);
 void pulse_width_timer_interrupt(void);

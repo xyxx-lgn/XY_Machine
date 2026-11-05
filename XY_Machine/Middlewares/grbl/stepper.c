@@ -21,10 +21,15 @@
 
 #include "grbl.h"
 #include "MyDelay.h"
+#include "tim.h"
+
+#if PEN_LIFT_MODE == PEN_LIFT_SERVO    //Z轴为舵机
 #include "servo.h"
+#endif
+
 
 // Nested interrupt enable inside the stepper ISR corrupts execution state on Cortex-M.
-#define __enable_irq() ((void)0)
+//#define __enable_irq() ((void)0)      //将本文件内的__enable_irq();换成空操作，容易误导，注释掉再修改文件对应部分
 
 // Some useful constants.
 #define DT_SEGMENT (1.0/(ACCELERATION_TICKS_PER_SECOND*60.0)) // min/segment
@@ -39,8 +44,10 @@
 #define PREP_FLAG_PARKING bit(2)
 #define PREP_FLAG_DECEL_OVERRIDE bit(3)
 
-uint8_t servo_up = 0;
-uint8_t servo_down = 0;
+#if PEN_LIFT_MODE == PEN_LIFT_SERVO
+uint8_t servo_up = 0;    //记录已经请求的抬笔状态，避免重复请求
+uint8_t servo_down = 0;  //记录已经请求的落笔状态，避免重复请求
+#endif
 
 
 // Define Adaptive Multi-Axis Step-Smoothing(AMASS) levels and cutoff frequencies. The highest level
@@ -55,9 +62,10 @@ uint8_t servo_down = 0;
 #ifdef ADAPTIVE_MULTI_AXIS_STEP_SMOOTHING
 	#define MAX_AMASS_LEVEL 3
 	// AMASS_LEVEL0: Normal operation. No AMASS. No upper cutoff frequency. Starts at LEVEL1 cutoff frequency.
-	#define AMASS_LEVEL1 (F_CPU/8000) // Over-drives ISR (x2). Defined as F_CPU/(Cutoff frequency in Hz)
-	#define AMASS_LEVEL2 (F_CPU/4000) // Over-drives ISR (x4)
-	#define AMASS_LEVEL3 (F_CPU/2000) // Over-drives ISR (x8)
+	//TIM2计数频率为1MHz，AMASS阈值对应8000Hz、4000Hz和2000Hz步进频率。
+	#define AMASS_LEVEL1 (STM32_TIM2_CLOCK_HZ /8000) // Over-drives ISR (x2). Defined as F_CPU/(Cutoff frequency in Hz)
+	#define AMASS_LEVEL2 (STM32_TIM2_CLOCK_HZ /4000) // Over-drives ISR (x4)
+	#define AMASS_LEVEL3 (STM32_TIM2_CLOCK_HZ /2000) // Over-drives ISR (x8)
 
   #if MAX_AMASS_LEVEL <= 0
     error "AMASS must have 1 or more levels to operate correctly."
@@ -90,6 +98,7 @@ static st_block_t st_block_buffer[SEGMENT_BUFFER_SIZE-1];
 // the planner, where the remaining planner block steps still can.
 typedef struct {
   uint16_t n_step;           // Number of step events to be executed for this segment
+	//TIM2计数周期，一个步进节拍对应的定时器计数值
   uint16_t cycles_per_tick;  // Step distance traveled per ISR tick, aka step rate.
   uint8_t  st_block_index;   // Stepper block data index. Uses this information to execute this segment.
   #ifdef ADAPTIVE_MULTI_AXIS_STEP_SMOOTHING
@@ -114,7 +123,7 @@ typedef struct {
   #endif
 
   uint8_t execute_step;     // Flags step execution for each interrupt.
-  uint8_t step_pulse_time;  // Step pulse reset time after step rise
+  uint8_t step_pulse_time;  // Step pulse reset time after step rise  STEP有效电平持续时间，单位us，TIM4按1MHz计数
   uint8_t step_outbits;         // The next stepping-bits to be output
   uint8_t dir_outbits;
   #ifdef ENABLE_DUAL_AXIS
@@ -255,24 +264,26 @@ void st_wake_up()
 {
   st_deenergize_pending = 0U;
 
-  // Enable stepper drivers. 使能步进驱动
+  // Enable stepper drivers. 使能步进驱动，默认ENN低有效；启用$4反相后，使能电平变为高
   if (bit_istrue(settings.flags,BITFLAG_INVERT_ST_ENABLE))
   {
 	  //STEPPERS_DISABLE_GPIO_PORT |= (1<<STEPPERS_DISABLE_BIT); //
-	  HAL_GPIO_WritePin(STEPPERS_DISABLE_GPIO_PORT, STEPPERS_DISABLE_Pin, 0);
+	  HAL_GPIO_WritePin(STEPPERS_DISABLE_GPIO_PORT, STEPPERS_DISABLE_Pin, GPIO_PIN_SET);
 
   }
   else
   {
 	  //STEPPERS_DISABLE_GPIO_PORT &= ~(1<<STEPPERS_DISABLE_BIT);
-	  HAL_GPIO_WritePin(STEPPERS_DISABLE_GPIO_PORT, STEPPERS_DISABLE_Pin, 0);
+	  HAL_GPIO_WritePin(STEPPERS_DISABLE_GPIO_PORT, STEPPERS_DISABLE_Pin, GPIO_PIN_RESET);
   }
 
   // Initialize stepper output bits to ensure first ISR call does not step.
-  st.step_outbits = step_port_invert_mask;
-
+  st.step_outbits = step_port_invert_mask;   //第一次步进中断只输出空闲电平，不立即产生有效STEP
+ 
   // Initialize step pulse timing from settings. Here to ensure updating after re-writing.
-  #ifdef STEP_PULSE_DELAY
+	//下面属于 AVR 定时器移植残留，当前不再使用
+	/*
+  #ifdef STEP_PULSE_DELAY   
     // Set total step pulse time after direction pin set. Ad hoc computation from oscilloscope.
     st.step_pulse_time = -(((settings.pulse_microseconds+STEP_PULSE_DELAY-2)*TICKS_PER_MICROSECOND) >> 3);
     // Set delay between direction pin write and step command.
@@ -281,8 +292,31 @@ void st_wake_up()
     // Set step pulse time. Ad hoc computation from oscilloscope. Uses two's complement.
     st.step_pulse_time = -(((settings.pulse_microseconds-2)*TICKS_PER_MICROSECOND) >> 3);
   #endif
+	*/
+	
+		//TIM4每个计数为1us，直接保存设置中的脉宽
+    st.step_pulse_time = settings.pulse_microseconds;
+	
+    //防止脉宽为0时，后面的ARR计算发生下溢
+    if (st.step_pulse_time == 0u)
+    {
+        st.step_pulse_time = 1u;
+    }
 
-  // Enable Stepper Driver Interrupt
+    //重新启动前，停止TIM4并清除上一次留下的更新标志
+    HAL_TIM_Base_Stop_IT(&htim4);
+    __HAL_TIM_SET_AUTORELOAD(&htim4, (uint32_t)st.step_pulse_time - 1u);
+    __HAL_TIM_SET_COUNTER(&htim4, 0u);
+    __HAL_TIM_CLEAR_FLAG(&htim4, TIM_FLAG_UPDATE);
+
+    //清除旧计数和更新标志，避免启动后立即进入一次旧中断
+    HAL_TIM_Base_Stop_IT(&htim2);
+    __HAL_TIM_SET_COUNTER(&htim2, 0u);
+    __HAL_TIM_CLEAR_FLAG(&htim2, TIM_FLAG_UPDATE);
+
+
+
+  // Enable Stepper Driver Interrupt   //开启中断
     HAL_TIM_Base_Start_IT(&htim2);
 }
 
@@ -394,42 +428,34 @@ void stepper_timer_interrupt(void)
 
 
 
+		//从零开始计时，经过设定的脉宽后由TIM4恢复STEP空闲电平
+		HAL_TIM_Base_Stop_IT(&htim4);       //关闭定时器4
+    __HAL_TIM_SET_COUNTER(&htim4, 0);		//设置定时器4的初值为0
+		__HAL_TIM_CLEAR_FLAG(&htim4, TIM_FLAG_UPDATE);  //清除标志位
+    HAL_TIM_Base_Start_IT(&htim4); //使能定时器4，在10us后拉低步进引脚
 
-    __HAL_TIM_SET_COUNTER(&htim3, 0);	//设置定时器3的初值为0
-    HAL_TIM_Base_Start_IT(&htim3); //使能定时器3，在10us后拉低步进引脚
-
-    busy = true;	//原为true
-    __enable_irq(); // 重新启用中断，允许脉冲宽度定时器中断准时触发
+    busy = true;	//标记步进中断正在处理
 
 
-    //舵机
-    if(st.steps[X_AXIS]==0 && st.steps[Y_AXIS]==0 && st.steps[Z_AXIS]!=0)
+#if PEN_LIFT_MODE == PEN_LIFT_SERVO
+    //参考工程将纯Z运动转换为舵机抬笔或落笔请求
+    if (st.steps[X_AXIS] == 0 && st.steps[Y_AXIS] == 0 && st.steps[Z_AXIS] != 0)
     {
-    	if(((st.dir_outbits & (1<<Z_DIRECTION_BIT)) != 0) && servo_down == 0)
-    	{
-    		//启动舵机？
+        if (((st.dir_outbits & (1 << Z_DIRECTION_BIT)) != 0) && servo_down == 0)
+        {
+            Servo_RequestPulseUs(PEN_DOWN_POSITION); //提交落笔PWM请求
+            servo_up = 0;
+            servo_down = 1;
+        }
 
-
-    		Servo_RequestPulseUs(PEN_DOWN_POSITION);	//请求更新PWM
-    		servo_up = 0;
-    		servo_down = 1;
-
-
-    	}
-
-    	if(((st.dir_outbits & (1<<Z_DIRECTION_BIT)) == 0) && servo_up == 0)
-    	{
-    	    		//启动舵机？
-
-
-    	    		Servo_RequestPulseUs(PEN_UP_POSITION);		//请求更新PWM
-    	    		servo_up = 1;
-    	    		servo_down = 0;
-
-
-    	 }
-
+        if (((st.dir_outbits & (1 << Z_DIRECTION_BIT)) == 0) && servo_up == 0)
+        {
+            Servo_RequestPulseUs(PEN_UP_POSITION); //提交抬笔PWM请求
+            servo_up = 1;
+            servo_down = 0;
+        }
     }
+#endif
 
 
 
@@ -569,13 +595,17 @@ void stepper_timer_interrupt(void)
     busy = false;
 }
 
-// TIM3比较中断回调函数 - 用于结束脉冲
+// TIM4比较中断回调函数 - 用于结束脉冲
 void pulse_width_timer_interrupt(void)
 {
-    // 脉冲结束，清除步进引脚
-    HAL_GPIO_WritePin(STEP_GPIO_PORT, X_STEP_Pin, GPIO_PIN_RESET);
-    HAL_GPIO_WritePin(STEP_GPIO_PORT, Y_STEP_Pin, GPIO_PIN_RESET);
-    HAL_GPIO_WritePin(STEP_GPIO_PORT, Z_STEP_Pin, GPIO_PIN_RESET);
+	//停止定时器，避免每10us中断一次，要求每个STEP执行一次
+		HAL_TIM_Base_Stop_IT(&htim4);
+    __HAL_TIM_CLEAR_FLAG(&htim4, TIM_FLAG_UPDATE);
+	
+    // 脉冲结束，清除步进引脚，
+    HAL_GPIO_WritePin(STEP_GPIO_PORT, X_STEP_Pin, (step_port_invert_mask & bit(X_STEP_BIT)) ? GPIO_PIN_SET : GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(STEP_GPIO_PORT, Y_STEP_Pin, (step_port_invert_mask & bit(Y_STEP_BIT)) ? GPIO_PIN_SET : GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(STEP_GPIO_PORT, Z_STEP_Pin, (step_port_invert_mask & bit(Z_STEP_BIT)) ? GPIO_PIN_SET : GPIO_PIN_RESET);
 
     // 停止定时器
     //HAL_TIM_OC_Stop_IT(&htim4, TIM_CHANNEL_1);
@@ -1086,9 +1116,10 @@ void st_prep_buffer()
     dt += prep.dt_remainder; // Apply previous segment partial step execute time
     float inv_rate = dt/(last_n_steps_remaining - step_dist_remaining); // Compute adjusted step rate inverse
 
-    // Compute CPU cycles per step for the prepped segment.
+    // Compute CPU cycles per step for the prepped segment.  //计算一个STEP节拍对应的TIM2计数值，TIM2计数频率为1MHz
     uint32_t cycles = ceil( TICKS_PER_MICROSECOND * 60.0 * 1000000.0 * inv_rate ); // (cycles/step)
 
+		//下面作用：根据原始步进周期选择AMASS等级；增加内部中断频率，并增加Bresenham中间事件数
     #ifdef ADAPTIVE_MULTI_AXIS_STEP_SMOOTHING
       // Compute step timing and multi-axis smoothing level.
       // NOTE: AMASS overdrives the timer with each level, so only one prescalar is required.

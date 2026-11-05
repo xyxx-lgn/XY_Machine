@@ -39,13 +39,14 @@ volatile uint8_t sys_rt_exec_accessory_override; // Global realtime executor bit
 int grbl_Start(void)
 {
 	// Initialize system upon power-up.
-	serial_init();   // Setup serial baud rate and interrupts
-	settings_init(); // Load Grbl settings from EEPROM
-	stepper_init();  // Configure stepper pins and interrupt timers
-	system_init();   // Configure pinout pins and pin-change interrupt
+	serial_init();   // Setup serial baud rate and interrupts            //清空 GRBL 串口缓冲区和发送队列，已经把配置和中断启用用HAL库自动完成
+	settings_init(); // Load Grbl settings from EEPROM                   //从 EEPROM 读取 GRBL 参数，例如 steps/mm、速度、加速度
+	stepper_init();  // Configure stepper pins and interrupt timers      //配置步进模块和定时器中断
+	system_init();   // Configure pinout pins and pin-change interrupt   //初始化控制输入和系统状态
 
 	memset(sys_position,0,sizeof(sys_position)); // Clear machine position.
-	sei(); // Enable interrupts
+//	sei(); // Enable interrupts
+	__enable_irq(); // Enable global interrupts，sei()为AVR函数需要改成STM32中函数
 
 	// Initialize system state.
 	#ifdef FORCE_INITIALIZATION_ALARM

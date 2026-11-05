@@ -21,7 +21,9 @@
 
 #include "grbl.h"
 
-#include "servo.h"
+#if PEN_LIFT_MODE == PEN_LIFT_SERVO
+	#include "servo.h"
+#endif
 
 // NOTE: Max line number is defined by the g-code standard to be 99999. It seems to be an
 // arbitrary value, and some GUIs may require more. So we increased it based on a max safe
@@ -322,8 +324,10 @@ uint8_t gc_execute_line(char *line)
           case 'Y': word_bit = WORD_Y; gc_block.values.xyz[Y_AXIS] = value; axis_words |= (1<<Y_AXIS); break;
           case 'Z': word_bit = WORD_Z; gc_block.values.xyz[Z_AXIS] = value; axis_words |= (1<<Z_AXIS); break;
 
+				#if PEN_LIFT_MODE == PEN_LIFT_SERVO   //如果使用舵机控制Z轴时使用指令，下面指令为自定义扩展，不是grbl原有的
           case 'V':  Servo_SetPulseUs(PEN_DOWN_POSITION); break;
           case 'H':  Servo_SetPulseUs(PEN_UP_POSITION); break;
+				#endif
 
 
           default: FAIL(STATUS_GCODE_UNSUPPORTED_COMMAND);

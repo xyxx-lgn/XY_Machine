@@ -38,29 +38,39 @@
   #define DUAL_AXIS_CHECK_TRIGGER_2   bit(2)
 #endif
 
+// GPIO路由、触发边沿和NVIC由CubeMX配置，这里只控制限位中断线是否开放
 void limits_init()
 {
+    limits_disable(); // 先屏蔽限位中断并清除旧的挂起标志。
 
-  if (bit_istrue(settings.flags,BITFLAG_HARD_LIMIT_ENABLE)) {
-	  HAL_NVIC_EnableIRQ(X_LIMIT_EXTI_IRQn);
-	  HAL_NVIC_EnableIRQ(Y_LIMIT_EXTI_IRQn);
-	  HAL_NVIC_EnableIRQ(Z_LIMIT_EXTI_IRQn);
-  } else {
-    limits_disable();
-  }
+    if (bit_istrue(settings.flags, BITFLAG_HARD_LIMIT_ENABLE))
+    {
+#if (LIMIT_PRESENT_MASK & (1<<X_LIMIT_BIT))
+        SET_BIT(EXTI->IMR1, X_LIMIT_PIN); // 已安装X限位，开放EXTI5
+#endif
 
-  //需要去抖？
+#if (LIMIT_PRESENT_MASK & (1<<Y_LIMIT_BIT))
+        SET_BIT(EXTI->IMR1, Y_LIMIT_PIN); // 已安装Y限位，开放EXTI15
+#endif
 
-
+#if (LIMIT_PRESENT_MASK & (1<<Z_LIMIT_BIT))
+        SET_BIT(EXTI->IMR1, Z_LIMIT_PIN); // 只有安装Z限位后才开放EXTI10
+#endif
+    }
 }
 
 
 // Disables hard limits.
-void limits_disable()
+void limits_disable()          // 只屏蔽限位对应的EXTI线，保留共享NVIC入口供其他引脚使用，避免把同入口的其他中断屏蔽
 {
-	HAL_NVIC_DisableIRQ(X_LIMIT_EXTI_IRQn);
-	HAL_NVIC_DisableIRQ(Y_LIMIT_EXTI_IRQn);
-	HAL_NVIC_DisableIRQ(Z_LIMIT_EXTI_IRQn);
+//	HAL_NVIC_DisableIRQ(X_LIMIT_EXTI_IRQn);
+//	HAL_NVIC_DisableIRQ(Y_LIMIT_EXTI_IRQn);
+//	HAL_NVIC_DisableIRQ(Z_LIMIT_EXTI_IRQn);
+	
+    uint32_t limit_lines = X_LIMIT_PIN | Y_LIMIT_PIN | Z_LIMIT_PIN;
+
+    CLEAR_BIT(EXTI->IMR1, limit_lines); // 屏蔽三个限位引脚的中断请求
+    __HAL_GPIO_EXTI_CLEAR_IT(limit_lines); // 清除已有的限位中断挂起标志
 }
 
 
@@ -70,14 +80,18 @@ void limits_disable()
 uint8_t limits_get_state()
 {
   uint8_t limit_state = 0;
-  uint8_t pin = (uint8_t)(((HAL_GPIO_ReadPin(LIMIT_PORT, X_LIMIT_PIN) << X_LIMIT_BIT) | \
-		  	  	  	   (HAL_GPIO_ReadPin(LIMIT_PORT, Y_LIMIT_PIN)  << Y_LIMIT_BIT) | \
-					   (HAL_GPIO_ReadPin(LIMIT_PORT, Z_LIMIT_PIN)  << Z_LIMIT_BIT)) & LIMIT_MASK);
+	//由于三轴限位开关的硬件端口号不一致，所以需要找到对应端口进行读取，同时使用LIMIT_MASK掩码得到grbl使用到的限位开关映射位图
+  uint8_t pin = (uint8_t)(((HAL_GPIO_ReadPin(X_LIMIT_GPIO_PORT, X_LIMIT_PIN) << X_LIMIT_BIT) | \
+                           (HAL_GPIO_ReadPin(Y_LIMIT_GPIO_PORT, Y_LIMIT_PIN) << Y_LIMIT_BIT) | \
+                           (HAL_GPIO_ReadPin(Z_LIMIT_GPIO_PORT, Z_LIMIT_PIN) << Z_LIMIT_BIT)) & LIMIT_MASK);
 
-	#ifdef INVERT_LIMIT_PIN_MASK
+	#ifdef INVERT_LIMIT_PIN_MASK     //如果硬件电平与GRBL默认逻辑不一致时反相操作
 		pin ^= INVERT_LIMIT_PIN_MASK;
 	#endif
   if (bit_isfalse(settings.flags,BITFLAG_INVERT_LIMIT_PINS)) { pin ^= LIMIT_MASK; }
+	
+	pin &= LIMIT_PRESENT_MASK;    //屏蔽未安装的Z限位，新增限位掩码操作，根据实际限位开关使用情况修改掩码值，我此处只使用了XY轴限位开关
+	
   if (pin) {
     uint8_t idx;
     for (idx=0; idx<N_AXIS; idx++) {
@@ -103,66 +117,61 @@ uint8_t limits_get_state()
 // special pinout for an e-stop, but it is generally recommended to just directly connect
 // your e-stop switch to the Arduino reset pin, since it is the most correct way to do this.
 #ifndef ENABLE_SOFTWARE_DEBOUNCE
+/*
+ * 已安装的限位引脚触发中断后，按GRBL硬限位流程停止运动并提交报警
+ * 回零过程自行读取限位状态，不通过这里触发硬限位报警
+ */
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
-	switch(GPIO_Pin)
-	{
-		case X_LIMIT_Pin:
-		    if (sys.state != STATE_ALARM) {
-		      if (!(sys_rt_exec_alarm)) {
-		        #ifdef HARD_LIMIT_FORCE_STATE_CHECK
-		          // Check limit pin state.
-		          if (limits_get_state()) {
-		            mc_reset(); // Initiate system kill.
-		            system_set_exec_alarm(EXEC_ALARM_HARD_LIMIT); // Indicate hard limit critical event
-		          }
-		        #else
-		          mc_reset(); // Initiate system kill.
-		          system_set_exec_alarm(EXEC_ALARM_HARD_LIMIT); // Indicate hard limit critical event
-		        #endif
-		      }
-		    }
-		    break;
+    // 未启用硬限位时，不执行硬限位报警
+    if (bit_isfalse(settings.flags, BITFLAG_HARD_LIMIT_ENABLE))
+    {
+        return;
+    }
 
-		case Y_LIMIT_Pin:
-		    if (sys.state != STATE_ALARM) {
-		      if (!(sys_rt_exec_alarm)) {
-		        #ifdef HARD_LIMIT_FORCE_STATE_CHECK
-		          // Check limit pin state.
-		          if (limits_get_state()) {
-		            mc_reset(); // Initiate system kill.
-		            system_set_exec_alarm(EXEC_ALARM_HARD_LIMIT); // Indicate hard limit critical event
-		          }
-		        #else
-		          mc_reset(); // Initiate system kill.
-		          system_set_exec_alarm(EXEC_ALARM_HARD_LIMIT); // Indicate hard limit critical event
-		        #endif
-		      }
-		    }
-		    break;
+    // 回零期间的限位触发属于正常定位过程
+    if (sys.state & STATE_HOMING)
+    {
+        return;
+    }
 
-		case Z_LIMIT_Pin:
-		    if (sys.state != STATE_ALARM) {
-		      if (!(sys_rt_exec_alarm)) {
-		        #ifdef HARD_LIMIT_FORCE_STATE_CHECK
-		          // Check limit pin state.
-		          if (limits_get_state()) {
-		            mc_reset(); // Initiate system kill.
-		            system_set_exec_alarm(EXEC_ALARM_HARD_LIMIT); // Indicate hard limit critical event
-		          }
-		        #else
-		          mc_reset(); // Initiate system kill.
-		          system_set_exec_alarm(EXEC_ALARM_HARD_LIMIT); // Indicate hard limit critical event
-		        #endif
-		      }
-		    }
-		    break;
+    // 已经处于报警状态或已有待处理报警时，不重复提交
+    if ((sys.state == STATE_ALARM) || sys_rt_exec_alarm)
+    {
+        return;
+    }
 
+    switch (GPIO_Pin)
+    {
+#if (LIMIT_PRESENT_MASK & (1<<X_LIMIT_BIT))
+        case X_LIMIT_PIN:
+#endif
 
-	}
+#if (LIMIT_PRESENT_MASK & (1<<Y_LIMIT_BIT))
+        case Y_LIMIT_PIN:
+#endif
 
-	//暂未消抖
+#if (LIMIT_PRESENT_MASK & (1<<Z_LIMIT_BIT))
+        case Z_LIMIT_PIN:
+#endif
+
+#ifdef HARD_LIMIT_FORCE_STATE_CHECK
+            // 可选配置：再次读取限位状态，确认至少一个限位仍处于触发状态
+            if (!limits_get_state())
+            {
+                break;
+            }
+#endif
+
+            mc_reset(); // 停止运动并提交GRBL复位请求
+            system_set_exec_alarm(EXEC_ALARM_HARD_LIMIT); // 提交硬限位报警
+            break;
+
+        default:
+            break; // 当前不在这里处理触摸等其他EXTI引脚
+    }
 }
+
 #else // OPTIONAL: Software debounce limit pin routine.
   // Upon limit pin change, enable watchdog timer to create a short delay. 
   ISR(LIMIT_INT_vect) { if (!(WDTCSR & (1<<WDIE))) { WDTCSR |= (1<<WDIE); } }

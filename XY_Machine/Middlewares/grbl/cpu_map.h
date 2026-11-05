@@ -273,6 +273,13 @@
     #error "Invalid PEN_LIFT_MODE"
 
   #endif
+	
+	
+	
+	//当前暂不启用激光输出，后续完成PWM引脚映射后改为1。
+	#define GRBL_LASER_OUTPUT_ENABLE    0
+	
+	
 
 #endif
 

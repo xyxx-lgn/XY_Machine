@@ -340,7 +340,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32G431xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../Drivers/STM32G4xx_HAL_Driver/Inc;../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32G4xx/Include;../Drivers/CMSIS/Include;../BSP/Inc;../BSP/Src;../App/Inc;../App/Src;../Components/TMC2209;..\Middlewares\grbl</IncludePath>
+              <IncludePath>../Core/Inc;../Drivers/STM32G4xx_HAL_Driver/Inc;../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32G4xx/Include;../Drivers/CMSIS/Include;../BSP/Inc;../BSP/Src;../App/Inc;../App/Src;../Components/TMC2209;..\Middlewares\grbl;..\Components\AT24C64</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -611,19 +611,14 @@
           <GroupName>BSP</GroupName>
           <Files>
             <File>
-              <FileName>board_motor.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\BSP\Inc\board_motor.h</FilePath>
-            </File>
-            <File>
               <FileName>board_motor.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\BSP\Src\board_motor.c</FilePath>
             </File>
             <File>
-              <FileName>board_serial.h</FileName>
+              <FileName>board_motor.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\BSP\Inc\board_serial.h</FilePath>
+              <FilePath>..\BSP\Inc\board_motor.h</FilePath>
             </File>
             <File>
               <FileName>board_serial.c</FileName>
@@ -631,14 +626,29 @@
               <FilePath>..\BSP\Src\board_serial.c</FilePath>
             </File>
             <File>
-              <FileName>board_step_test.h</FileName>
+              <FileName>board_serial.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\BSP\Inc\board_step_test.h</FilePath>
+              <FilePath>..\BSP\Inc\board_serial.h</FilePath>
             </File>
             <File>
               <FileName>board_step_test.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\BSP\Src\board_step_test.c</FilePath>
+            </File>
+            <File>
+              <FileName>board_step_test.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\BSP\Inc\board_step_test.h</FilePath>
+            </File>
+            <File>
+              <FileName>MyDelay.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\BSP\Src\MyDelay.c</FilePath>
+            </File>
+            <File>
+              <FileName>MyDelay.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\BSP\Inc\MyDelay.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -646,14 +656,14 @@
           <GroupName>App</GroupName>
           <Files>
             <File>
-              <FileName>app.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\App\Inc\app.h</FilePath>
-            </File>
-            <File>
               <FileName>app.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\App\Src\app.c</FilePath>
+            </File>
+            <File>
+              <FileName>app.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\App\Inc\app.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -661,14 +671,24 @@
           <GroupName>Components</GroupName>
           <Files>
             <File>
+              <FileName>tmc2209.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Components\TMC2209\tmc2209.c</FilePath>
+            </File>
+            <File>
               <FileName>tmc2209.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\Components\TMC2209\tmc2209.h</FilePath>
             </File>
             <File>
-              <FileName>tmc2209.c</FileName>
+              <FileName>AT24C64.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Components\TMC2209\tmc2209.c</FilePath>
+              <FilePath>..\Components\AT24C64\AT24C64.c</FilePath>
+            </File>
+            <File>
+              <FileName>AT24C64.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Components\AT24C64\AT24C64.h</FilePath>
             </File>
           </Files>
         </Group>

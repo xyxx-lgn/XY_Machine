@@ -1,7 +1,7 @@
 Dependencies for Project 'XY_Machine', Target 'XY_Machine': (DO NOT MODIFY !)
 CompilerVersion: 5060750::V5.06 update 6 (build 750)::.\ARMCC
 F (startup_stm32g431xx.s)(0x6AE947F0)(--cpu Cortex-M4.fp.sp -g --apcs=interwork -I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include--pd "__UVISION_VERSION SETA 538" --pd "_RTE_ SETA 1" --pd "STM32G431xx SETA 1" --pd "_RTE_ SETA 1"--list startup_stm32g431xx.lst --xref -o xy_machine\startup_stm32g431xx.o --depend xy_machine\startup_stm32g431xx.d)
-F (../Core/Src/main.c)(0x6AE98ACD)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\main.o --omf_browse xy_machine\main.crf --depend xy_machine\main.d)
+F (../Core/Src/main.c)(0x6AEC81FA)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209 -I ..\Middlewares\grbl -I ..\Components\AT24C64-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\main.o --omf_browse xy_machine\main.crf --depend xy_machine\main.d)
 I (../Core/Inc/main.h)(0x6AE845C4)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x67DD529C)
 I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6AE947ED)
@@ -47,7 +47,10 @@ I (../App/Inc/app.h)(0x6AE84F67)
 I (../BSP/Inc/board_step_test.h)(0x6AE98AED)
 I (../BSP/Inc/board_motor.h)(0x6AE84F67)
 I (C:\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x5D9B3488)
-F (../Core/Src/gpio.c)(0x6AE845C1)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\gpio.o --omf_browse xy_machine\gpio.crf --depend xy_machine\gpio.d)
+I (../BSP/Inc/MyDelay.h)(0x6AEB442E)
+I (..\Middlewares\grbl\stepper.h)(0x6AEC3E65)
+I (../BSP/Inc/board_serial.h)(0x6AEC8224)
+F (../Core/Src/gpio.c)(0x6AE845C1)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209 -I ..\Middlewares\grbl -I ..\Components\AT24C64-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\gpio.o --omf_browse xy_machine\gpio.crf --depend xy_machine\gpio.d)
 I (../Core/Inc/gpio.h)(0x6AD8ACA0)
 I (../Core/Inc/main.h)(0x6AE845C4)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x67DD529C)
@@ -85,7 +88,7 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x67DD529C)
-F (../Core/Src/i2c.c)(0x6AE7FB6B)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\i2c.o --omf_browse xy_machine\i2c.crf --depend xy_machine\i2c.d)
+F (../Core/Src/i2c.c)(0x6AE7FB6B)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209 -I ..\Middlewares\grbl -I ..\Components\AT24C64-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\i2c.o --omf_browse xy_machine\i2c.crf --depend xy_machine\i2c.d)
 I (../Core/Inc/i2c.h)(0x6AD8ACA1)
 I (../Core/Inc/main.h)(0x6AE845C4)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x67DD529C)
@@ -123,7 +126,7 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x67DD529C)
-F (../Core/Src/spi.c)(0x6AE7FB6C)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\spi.o --omf_browse xy_machine\spi.crf --depend xy_machine\spi.d)
+F (../Core/Src/spi.c)(0x6AE7FB6C)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209 -I ..\Middlewares\grbl -I ..\Components\AT24C64-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\spi.o --omf_browse xy_machine\spi.crf --depend xy_machine\spi.d)
 I (../Core/Inc/spi.h)(0x6AD8ACA2)
 I (../Core/Inc/main.h)(0x6AE845C4)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x67DD529C)
@@ -161,7 +164,7 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x67DD529C)
-F (../Core/Src/tim.c)(0x6AE947EB)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\tim.o --omf_browse xy_machine\tim.crf --depend xy_machine\tim.d)
+F (../Core/Src/tim.c)(0x6AE947EB)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209 -I ..\Middlewares\grbl -I ..\Components\AT24C64-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\tim.o --omf_browse xy_machine\tim.crf --depend xy_machine\tim.d)
 I (../Core/Inc/tim.h)(0x6AE947EB)
 I (../Core/Inc/main.h)(0x6AE845C4)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x67DD529C)
@@ -199,7 +202,7 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x67DD529C)
-F (../Core/Src/usart.c)(0x6AD8ACA2)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\usart.o --omf_browse xy_machine\usart.crf --depend xy_machine\usart.d)
+F (../Core/Src/usart.c)(0x6AD8ACA2)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209 -I ..\Middlewares\grbl -I ..\Components\AT24C64-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\usart.o --omf_browse xy_machine\usart.crf --depend xy_machine\usart.d)
 I (../Core/Inc/usart.h)(0x6AD8ACA2)
 I (../Core/Inc/main.h)(0x6AE845C4)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x67DD529C)
@@ -237,7 +240,7 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x67DD529C)
-F (../Core/Src/stm32g4xx_it.c)(0x6AE947EC)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\stm32g4xx_it.o --omf_browse xy_machine\stm32g4xx_it.crf --depend xy_machine\stm32g4xx_it.d)
+F (../Core/Src/stm32g4xx_it.c)(0x6AE947EC)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209 -I ..\Middlewares\grbl -I ..\Components\AT24C64-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\stm32g4xx_it.o --omf_browse xy_machine\stm32g4xx_it.crf --depend xy_machine\stm32g4xx_it.d)
 I (../Core/Inc/main.h)(0x6AE845C4)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x67DD529C)
 I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6AE947ED)
@@ -275,7 +278,7 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x67DD529C)
 I (../Core/Inc/stm32g4xx_it.h)(0x6AE947EC)
-F (../Core/Src/stm32g4xx_hal_msp.c)(0x6AD8ACA3)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\stm32g4xx_hal_msp.o --omf_browse xy_machine\stm32g4xx_hal_msp.crf --depend xy_machine\stm32g4xx_hal_msp.d)
+F (../Core/Src/stm32g4xx_hal_msp.c)(0x6AD8ACA3)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209 -I ..\Middlewares\grbl -I ..\Components\AT24C64-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\stm32g4xx_hal_msp.o --omf_browse xy_machine\stm32g4xx_hal_msp.crf --depend xy_machine\stm32g4xx_hal_msp.d)
 I (../Core/Inc/main.h)(0x6AE845C4)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x67DD529C)
 I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6AE947ED)
@@ -312,7 +315,7 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x67DD529C)
-F (../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_i2c.c)(0x67DD529C)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\stm32g4xx_hal_i2c.o --omf_browse xy_machine\stm32g4xx_hal_i2c.crf --depend xy_machine\stm32g4xx_hal_i2c.d)
+F (../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_i2c.c)(0x67DD529C)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209 -I ..\Middlewares\grbl -I ..\Components\AT24C64-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\stm32g4xx_hal_i2c.o --omf_browse xy_machine\stm32g4xx_hal_i2c.crf --depend xy_machine\stm32g4xx_hal_i2c.d)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x67DD529C)
 I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6AE947ED)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x67DD529C)
@@ -348,7 +351,7 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x67DD529C)
-F (../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_i2c_ex.c)(0x67DD529C)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\stm32g4xx_hal_i2c_ex.o --omf_browse xy_machine\stm32g4xx_hal_i2c_ex.crf --depend xy_machine\stm32g4xx_hal_i2c_ex.d)
+F (../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_i2c_ex.c)(0x67DD529C)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209 -I ..\Middlewares\grbl -I ..\Components\AT24C64-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\stm32g4xx_hal_i2c_ex.o --omf_browse xy_machine\stm32g4xx_hal_i2c_ex.crf --depend xy_machine\stm32g4xx_hal_i2c_ex.d)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x67DD529C)
 I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6AE947ED)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x67DD529C)
@@ -384,7 +387,7 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x67DD529C)
-F (../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c)(0x67DD529C)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\stm32g4xx_hal.o --omf_browse xy_machine\stm32g4xx_hal.crf --depend xy_machine\stm32g4xx_hal.d)
+F (../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c)(0x67DD529C)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209 -I ..\Middlewares\grbl -I ..\Components\AT24C64-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\stm32g4xx_hal.o --omf_browse xy_machine\stm32g4xx_hal.crf --depend xy_machine\stm32g4xx_hal.d)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x67DD529C)
 I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6AE947ED)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x67DD529C)
@@ -420,7 +423,7 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x67DD529C)
-F (../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_rcc.c)(0x67DD529C)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\stm32g4xx_hal_rcc.o --omf_browse xy_machine\stm32g4xx_hal_rcc.crf --depend xy_machine\stm32g4xx_hal_rcc.d)
+F (../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_rcc.c)(0x67DD529C)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209 -I ..\Middlewares\grbl -I ..\Components\AT24C64-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\stm32g4xx_hal_rcc.o --omf_browse xy_machine\stm32g4xx_hal_rcc.crf --depend xy_machine\stm32g4xx_hal_rcc.d)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x67DD529C)
 I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6AE947ED)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x67DD529C)
@@ -456,7 +459,7 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x67DD529C)
-F (../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_rcc_ex.c)(0x67DD529C)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\stm32g4xx_hal_rcc_ex.o --omf_browse xy_machine\stm32g4xx_hal_rcc_ex.crf --depend xy_machine\stm32g4xx_hal_rcc_ex.d)
+F (../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_rcc_ex.c)(0x67DD529C)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209 -I ..\Middlewares\grbl -I ..\Components\AT24C64-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\stm32g4xx_hal_rcc_ex.o --omf_browse xy_machine\stm32g4xx_hal_rcc_ex.crf --depend xy_machine\stm32g4xx_hal_rcc_ex.d)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x67DD529C)
 I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6AE947ED)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x67DD529C)
@@ -492,7 +495,7 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x67DD529C)
-F (../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash.c)(0x67DD529C)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\stm32g4xx_hal_flash.o --omf_browse xy_machine\stm32g4xx_hal_flash.crf --depend xy_machine\stm32g4xx_hal_flash.d)
+F (../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash.c)(0x67DD529C)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209 -I ..\Middlewares\grbl -I ..\Components\AT24C64-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\stm32g4xx_hal_flash.o --omf_browse xy_machine\stm32g4xx_hal_flash.crf --depend xy_machine\stm32g4xx_hal_flash.d)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x67DD529C)
 I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6AE947ED)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x67DD529C)
@@ -528,7 +531,7 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x67DD529C)
-F (../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash_ex.c)(0x67DD529C)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\stm32g4xx_hal_flash_ex.o --omf_browse xy_machine\stm32g4xx_hal_flash_ex.crf --depend xy_machine\stm32g4xx_hal_flash_ex.d)
+F (../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash_ex.c)(0x67DD529C)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209 -I ..\Middlewares\grbl -I ..\Components\AT24C64-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\stm32g4xx_hal_flash_ex.o --omf_browse xy_machine\stm32g4xx_hal_flash_ex.crf --depend xy_machine\stm32g4xx_hal_flash_ex.d)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x67DD529C)
 I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6AE947ED)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x67DD529C)
@@ -564,7 +567,7 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x67DD529C)
-F (../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash_ramfunc.c)(0x67DD529C)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\stm32g4xx_hal_flash_ramfunc.o --omf_browse xy_machine\stm32g4xx_hal_flash_ramfunc.crf --depend xy_machine\stm32g4xx_hal_flash_ramfunc.d)
+F (../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash_ramfunc.c)(0x67DD529C)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209 -I ..\Middlewares\grbl -I ..\Components\AT24C64-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\stm32g4xx_hal_flash_ramfunc.o --omf_browse xy_machine\stm32g4xx_hal_flash_ramfunc.crf --depend xy_machine\stm32g4xx_hal_flash_ramfunc.d)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x67DD529C)
 I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6AE947ED)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x67DD529C)
@@ -600,7 +603,7 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x67DD529C)
-F (../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_gpio.c)(0x67DD529C)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\stm32g4xx_hal_gpio.o --omf_browse xy_machine\stm32g4xx_hal_gpio.crf --depend xy_machine\stm32g4xx_hal_gpio.d)
+F (../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_gpio.c)(0x67DD529C)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209 -I ..\Middlewares\grbl -I ..\Components\AT24C64-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\stm32g4xx_hal_gpio.o --omf_browse xy_machine\stm32g4xx_hal_gpio.crf --depend xy_machine\stm32g4xx_hal_gpio.d)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x67DD529C)
 I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6AE947ED)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x67DD529C)
@@ -636,7 +639,7 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x67DD529C)
-F (../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_exti.c)(0x67DD529C)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\stm32g4xx_hal_exti.o --omf_browse xy_machine\stm32g4xx_hal_exti.crf --depend xy_machine\stm32g4xx_hal_exti.d)
+F (../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_exti.c)(0x67DD529C)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209 -I ..\Middlewares\grbl -I ..\Components\AT24C64-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\stm32g4xx_hal_exti.o --omf_browse xy_machine\stm32g4xx_hal_exti.crf --depend xy_machine\stm32g4xx_hal_exti.d)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x67DD529C)
 I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6AE947ED)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x67DD529C)
@@ -672,7 +675,7 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x67DD529C)
-F (../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dma.c)(0x67DD529C)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\stm32g4xx_hal_dma.o --omf_browse xy_machine\stm32g4xx_hal_dma.crf --depend xy_machine\stm32g4xx_hal_dma.d)
+F (../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dma.c)(0x67DD529C)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209 -I ..\Middlewares\grbl -I ..\Components\AT24C64-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\stm32g4xx_hal_dma.o --omf_browse xy_machine\stm32g4xx_hal_dma.crf --depend xy_machine\stm32g4xx_hal_dma.d)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x67DD529C)
 I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6AE947ED)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x67DD529C)
@@ -708,7 +711,7 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x67DD529C)
-F (../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dma_ex.c)(0x67DD529C)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\stm32g4xx_hal_dma_ex.o --omf_browse xy_machine\stm32g4xx_hal_dma_ex.crf --depend xy_machine\stm32g4xx_hal_dma_ex.d)
+F (../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dma_ex.c)(0x67DD529C)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209 -I ..\Middlewares\grbl -I ..\Components\AT24C64-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\stm32g4xx_hal_dma_ex.o --omf_browse xy_machine\stm32g4xx_hal_dma_ex.crf --depend xy_machine\stm32g4xx_hal_dma_ex.d)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x67DD529C)
 I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6AE947ED)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x67DD529C)
@@ -744,7 +747,7 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x67DD529C)
-F (../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_pwr.c)(0x67DD529C)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\stm32g4xx_hal_pwr.o --omf_browse xy_machine\stm32g4xx_hal_pwr.crf --depend xy_machine\stm32g4xx_hal_pwr.d)
+F (../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_pwr.c)(0x67DD529C)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209 -I ..\Middlewares\grbl -I ..\Components\AT24C64-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\stm32g4xx_hal_pwr.o --omf_browse xy_machine\stm32g4xx_hal_pwr.crf --depend xy_machine\stm32g4xx_hal_pwr.d)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x67DD529C)
 I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6AE947ED)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x67DD529C)
@@ -780,7 +783,7 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x67DD529C)
-F (../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_pwr_ex.c)(0x67DD529C)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\stm32g4xx_hal_pwr_ex.o --omf_browse xy_machine\stm32g4xx_hal_pwr_ex.crf --depend xy_machine\stm32g4xx_hal_pwr_ex.d)
+F (../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_pwr_ex.c)(0x67DD529C)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209 -I ..\Middlewares\grbl -I ..\Components\AT24C64-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\stm32g4xx_hal_pwr_ex.o --omf_browse xy_machine\stm32g4xx_hal_pwr_ex.crf --depend xy_machine\stm32g4xx_hal_pwr_ex.d)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x67DD529C)
 I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6AE947ED)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x67DD529C)
@@ -816,7 +819,7 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x67DD529C)
-F (../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_cortex.c)(0x67DD529C)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\stm32g4xx_hal_cortex.o --omf_browse xy_machine\stm32g4xx_hal_cortex.crf --depend xy_machine\stm32g4xx_hal_cortex.d)
+F (../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_cortex.c)(0x67DD529C)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209 -I ..\Middlewares\grbl -I ..\Components\AT24C64-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\stm32g4xx_hal_cortex.o --omf_browse xy_machine\stm32g4xx_hal_cortex.crf --depend xy_machine\stm32g4xx_hal_cortex.d)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x67DD529C)
 I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6AE947ED)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x67DD529C)
@@ -852,7 +855,7 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x67DD529C)
-F (../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_spi.c)(0x67DD529C)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\stm32g4xx_hal_spi.o --omf_browse xy_machine\stm32g4xx_hal_spi.crf --depend xy_machine\stm32g4xx_hal_spi.d)
+F (../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_spi.c)(0x67DD529C)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209 -I ..\Middlewares\grbl -I ..\Components\AT24C64-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\stm32g4xx_hal_spi.o --omf_browse xy_machine\stm32g4xx_hal_spi.crf --depend xy_machine\stm32g4xx_hal_spi.d)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x67DD529C)
 I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6AE947ED)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x67DD529C)
@@ -888,7 +891,7 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x67DD529C)
-F (../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_spi_ex.c)(0x67DD529C)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\stm32g4xx_hal_spi_ex.o --omf_browse xy_machine\stm32g4xx_hal_spi_ex.crf --depend xy_machine\stm32g4xx_hal_spi_ex.d)
+F (../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_spi_ex.c)(0x67DD529C)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209 -I ..\Middlewares\grbl -I ..\Components\AT24C64-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\stm32g4xx_hal_spi_ex.o --omf_browse xy_machine\stm32g4xx_hal_spi_ex.crf --depend xy_machine\stm32g4xx_hal_spi_ex.d)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x67DD529C)
 I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6AE947ED)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x67DD529C)
@@ -924,7 +927,7 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x67DD529C)
-F (../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_tim.c)(0x67DD529C)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\stm32g4xx_hal_tim.o --omf_browse xy_machine\stm32g4xx_hal_tim.crf --depend xy_machine\stm32g4xx_hal_tim.d)
+F (../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_tim.c)(0x67DD529C)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209 -I ..\Middlewares\grbl -I ..\Components\AT24C64-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\stm32g4xx_hal_tim.o --omf_browse xy_machine\stm32g4xx_hal_tim.crf --depend xy_machine\stm32g4xx_hal_tim.d)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x67DD529C)
 I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6AE947ED)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x67DD529C)
@@ -960,7 +963,7 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x67DD529C)
-F (../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_tim_ex.c)(0x67DD529C)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\stm32g4xx_hal_tim_ex.o --omf_browse xy_machine\stm32g4xx_hal_tim_ex.crf --depend xy_machine\stm32g4xx_hal_tim_ex.d)
+F (../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_tim_ex.c)(0x67DD529C)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209 -I ..\Middlewares\grbl -I ..\Components\AT24C64-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\stm32g4xx_hal_tim_ex.o --omf_browse xy_machine\stm32g4xx_hal_tim_ex.crf --depend xy_machine\stm32g4xx_hal_tim_ex.d)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x67DD529C)
 I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6AE947ED)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x67DD529C)
@@ -996,7 +999,7 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x67DD529C)
-F (../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_uart.c)(0x67DD529C)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\stm32g4xx_hal_uart.o --omf_browse xy_machine\stm32g4xx_hal_uart.crf --depend xy_machine\stm32g4xx_hal_uart.d)
+F (../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_uart.c)(0x67DD529C)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209 -I ..\Middlewares\grbl -I ..\Components\AT24C64-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\stm32g4xx_hal_uart.o --omf_browse xy_machine\stm32g4xx_hal_uart.crf --depend xy_machine\stm32g4xx_hal_uart.d)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x67DD529C)
 I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6AE947ED)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x67DD529C)
@@ -1032,7 +1035,7 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x67DD529C)
-F (../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_uart_ex.c)(0x67DD529C)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\stm32g4xx_hal_uart_ex.o --omf_browse xy_machine\stm32g4xx_hal_uart_ex.crf --depend xy_machine\stm32g4xx_hal_uart_ex.d)
+F (../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_uart_ex.c)(0x67DD529C)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209 -I ..\Middlewares\grbl -I ..\Components\AT24C64-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\stm32g4xx_hal_uart_ex.o --omf_browse xy_machine\stm32g4xx_hal_uart_ex.crf --depend xy_machine\stm32g4xx_hal_uart_ex.d)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x67DD529C)
 I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6AE947ED)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x67DD529C)
@@ -1068,7 +1071,7 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x67DD529C)
-F (../Core/Src/system_stm32g4xx.c)(0x67DD529C)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\system_stm32g4xx.o --omf_browse xy_machine\system_stm32g4xx.crf --depend xy_machine\system_stm32g4xx.d)
+F (../Core/Src/system_stm32g4xx.c)(0x67DD529C)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209 -I ..\Middlewares\grbl -I ..\Components\AT24C64-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\system_stm32g4xx.o --omf_browse xy_machine\system_stm32g4xx.crf --depend xy_machine\system_stm32g4xx.d)
 I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g4xx.h)(0x67DD529C)
 I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g431xx.h)(0x67DD529C)
 I (../Drivers/CMSIS/Include/core_cm4.h)(0x67DD527E)
@@ -1104,8 +1107,7 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x67DD529C)
-F (..\BSP\Inc\board_motor.h)(0x6AE84F67)()
-F (..\BSP\Src\board_motor.c)(0x6AE84F67)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\board_motor.o --omf_browse xy_machine\board_motor.crf --depend xy_machine\board_motor.d)
+F (..\BSP\Src\board_motor.c)(0x6AE84F67)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209 -I ..\Middlewares\grbl -I ..\Components\AT24C64-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\board_motor.o --omf_browse xy_machine\board_motor.crf --depend xy_machine\board_motor.d)
 I (../BSP/Inc/board_motor.h)(0x6AE84F67)
 I (C:\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x5D9B3488)
 I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5D9B3488)
@@ -1144,9 +1146,9 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x67DD529C)
-F (..\BSP\Inc\board_serial.h)(0x6AE9C372)()
-F (..\BSP\Src\board_serial.c)(0x6AE9C372)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\board_serial.o --omf_browse xy_machine\board_serial.crf --depend xy_machine\board_serial.d)
-I (../BSP/Inc/board_serial.h)(0x6AE9C372)
+F (..\BSP\Inc\board_motor.h)(0x6AE84F67)()
+F (..\BSP\Src\board_serial.c)(0x6AEC75D2)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209 -I ..\Middlewares\grbl -I ..\Components\AT24C64-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\board_serial.o --omf_browse xy_machine\board_serial.crf --depend xy_machine\board_serial.d)
+I (../BSP/Inc/board_serial.h)(0x6AEC8224)
 I (C:\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x5D9B3488)
 I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5D9B3488)
 I (../Core/Inc/usart.h)(0x6AD8ACA2)
@@ -1185,9 +1187,12 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x67DD529C)
+I (..\Middlewares\grbl\grbl_serial.h)(0x6AEC739A)
+I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5D9B348A)
+I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x5D9B348A)
 I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x5D9B3488)
-F (..\BSP\Inc\board_step_test.h)(0x6AE98AED)()
-F (..\BSP\Src\board_step_test.c)(0x6AE98AED)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\board_step_test.o --omf_browse xy_machine\board_step_test.crf --depend xy_machine\board_step_test.d)
+F (..\BSP\Inc\board_serial.h)(0x6AEC8224)()
+F (..\BSP\Src\board_step_test.c)(0x6AE98AED)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209 -I ..\Middlewares\grbl -I ..\Components\AT24C64-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\board_step_test.o --omf_browse xy_machine\board_step_test.crf --depend xy_machine\board_step_test.d)
 I (../BSP/Inc/board_step_test.h)(0x6AE98AED)
 I (../BSP/Inc/board_motor.h)(0x6AE84F67)
 I (C:\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x5D9B3488)
@@ -1228,13 +1233,52 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x67DD529C)
-F (..\App\Inc\app.h)(0x6AE84F67)()
-F (..\App\Src\app.c)(0x6AE9C35C)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\app.o --omf_browse xy_machine\app.crf --depend xy_machine\app.d)
+F (..\BSP\Inc\board_step_test.h)(0x6AE98AED)()
+F (..\BSP\Src\MyDelay.c)(0x6AEB4432)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209 -I ..\Middlewares\grbl -I ..\Components\AT24C64-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\mydelay.o --omf_browse xy_machine\mydelay.crf --depend xy_machine\mydelay.d)
+I (../BSP/Inc/MyDelay.h)(0x6AEB442E)
+I (../Core/Inc/main.h)(0x6AE845C4)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x67DD529C)
+I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6AE947ED)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_def.h)(0x67DD529C)
+I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g4xx.h)(0x67DD529C)
+I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g431xx.h)(0x67DD529C)
+I (../Drivers/CMSIS/Include/core_cm4.h)(0x67DD527E)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5D9B3488)
+I (../Drivers/CMSIS/Include/cmsis_version.h)(0x67DD527E)
+I (../Drivers/CMSIS/Include/cmsis_compiler.h)(0x67DD527E)
+I (../Drivers/CMSIS/Include/cmsis_armcc.h)(0x67DD527E)
+I (../Drivers/CMSIS/Include/mpu_armv7.h)(0x67DD527E)
+I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/system_stm32g4xx.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h)(0x67DD529C)
+I (C:\Keil_v5\ARM\ARMCC\include\stddef.h)(0x5D9B3488)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_gpio.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_gpio_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_dma.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_dma_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_cortex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_exti.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash_ramfunc.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_i2c.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_i2c_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_pwr.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_pwr_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x67DD529C)
+F (..\BSP\Inc\MyDelay.h)(0x6AEB442E)()
+F (..\App\Src\app.c)(0x6AE9D029)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209 -I ..\Middlewares\grbl -I ..\Components\AT24C64-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\app.o --omf_browse xy_machine\app.crf --depend xy_machine\app.d)
 I (../App/Inc/app.h)(0x6AE84F67)
 I (../BSP/Inc/board_motor.h)(0x6AE84F67)
 I (C:\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x5D9B3488)
 I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5D9B3488)
-I (../BSP/Inc/board_serial.h)(0x6AE9C372)
+I (../BSP/Inc/board_serial.h)(0x6AEC8224)
 I (../Core/Inc/main.h)(0x6AE845C4)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x67DD529C)
 I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6AE947ED)
@@ -1273,8 +1317,8 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x67DD529C)
 I (../Components/TMC2209/tmc2209.h)(0x6AE89EFA)
 I (../BSP/Inc/board_step_test.h)(0x6AE98AED)
 I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5D9B348A)
-F (..\Components\TMC2209\tmc2209.h)(0x6AE89EFA)()
-F (..\Components\TMC2209\tmc2209.c)(0x6AE89EFA)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\tmc2209.o --omf_browse xy_machine\tmc2209.crf --depend xy_machine\tmc2209.d)
+F (..\App\Inc\app.h)(0x6AE84F67)()
+F (..\Components\TMC2209\tmc2209.c)(0x6AE89EFA)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209 -I ..\Middlewares\grbl -I ..\Components\AT24C64-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\tmc2209.o --omf_browse xy_machine\tmc2209.crf --depend xy_machine\tmc2209.d)
 I (..\Components\TMC2209\tmc2209.h)(0x6AE89EFA)
 I (C:\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x5D9B3488)
 I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5D9B3488)
@@ -1315,3 +1359,1362 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x67DD529C)
 I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x5D9B3488)
+F (..\Components\TMC2209\tmc2209.h)(0x6AE89EFA)()
+F (..\Components\AT24C64\AT24C64.c)(0x6AEBFBD9)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209 -I ..\Middlewares\grbl -I ..\Components\AT24C64-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\at24c64.o --omf_browse xy_machine\at24c64.crf --depend xy_machine\at24c64.d)
+I (..\Components\AT24C64\AT24C64.h)(0x6AEBF9F4)
+I (../Core/Inc/main.h)(0x6AE845C4)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x67DD529C)
+I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6AE947ED)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_def.h)(0x67DD529C)
+I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g4xx.h)(0x67DD529C)
+I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g431xx.h)(0x67DD529C)
+I (../Drivers/CMSIS/Include/core_cm4.h)(0x67DD527E)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5D9B3488)
+I (../Drivers/CMSIS/Include/cmsis_version.h)(0x67DD527E)
+I (../Drivers/CMSIS/Include/cmsis_compiler.h)(0x67DD527E)
+I (../Drivers/CMSIS/Include/cmsis_armcc.h)(0x67DD527E)
+I (../Drivers/CMSIS/Include/mpu_armv7.h)(0x67DD527E)
+I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/system_stm32g4xx.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h)(0x67DD529C)
+I (C:\Keil_v5\ARM\ARMCC\include\stddef.h)(0x5D9B3488)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_gpio.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_gpio_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_dma.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_dma_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_cortex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_exti.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash_ramfunc.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_i2c.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_i2c_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_pwr.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_pwr_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x67DD529C)
+I (../Core/Inc/i2c.h)(0x6AD8ACA1)
+F (..\Components\AT24C64\AT24C64.h)(0x6AEBF9F4)()
+F (..\Middlewares\grbl\config.h)(0x6AEC7911)()
+F (..\Middlewares\grbl\coolant_control.c)(0x6AEC6A7B)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209 -I ..\Middlewares\grbl -I ..\Components\AT24C64-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\coolant_control.o --omf_browse xy_machine\coolant_control.crf --depend xy_machine\coolant_control.d)
+I (..\Middlewares\grbl\grbl.h)(0x6AE9E91F)
+I (C:\Keil_v5\ARM\ARMCC\include\math.h)(0x5D9B3482)
+I (C:\Keil_v5\ARM\ARMCC\include\inttypes.h)(0x5D9B3488)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5D9B3488)
+I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x5D9B3488)
+I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x5D9B348A)
+I (C:\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x5D9B3488)
+I (../Core/Inc/main.h)(0x6AE845C4)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x67DD529C)
+I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6AE947ED)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_def.h)(0x67DD529C)
+I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g4xx.h)(0x67DD529C)
+I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g431xx.h)(0x67DD529C)
+I (../Drivers/CMSIS/Include/core_cm4.h)(0x67DD527E)
+I (../Drivers/CMSIS/Include/cmsis_version.h)(0x67DD527E)
+I (../Drivers/CMSIS/Include/cmsis_compiler.h)(0x67DD527E)
+I (../Drivers/CMSIS/Include/cmsis_armcc.h)(0x67DD527E)
+I (../Drivers/CMSIS/Include/mpu_armv7.h)(0x67DD527E)
+I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/system_stm32g4xx.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h)(0x67DD529C)
+I (C:\Keil_v5\ARM\ARMCC\include\stddef.h)(0x5D9B3488)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_gpio.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_gpio_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_dma.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_dma_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_cortex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_exti.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash_ramfunc.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_i2c.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_i2c_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_pwr.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_pwr_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x67DD529C)
+I (..\Middlewares\grbl\config.h)(0x6AEC7911)
+I (..\Middlewares\grbl\nuts_bolts.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\settings.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\system.h)(0x6AEB3B46)
+I (..\Middlewares\grbl\defaults.h)(0x6AEC7C72)
+I (..\Middlewares\grbl\cpu_map.h)(0x6AEC4B77)
+I (..\Middlewares\grbl\planner.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\coolant_control.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\eeprom.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\gcode.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\grbl_limits.h)(0x6AEB2B5D)
+I (..\Middlewares\grbl\motion_control.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\print.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\probe.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\protocol.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\report.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\grbl_serial.h)(0x6AEC739A)
+I (../Core/Inc/usart.h)(0x6AD8ACA2)
+I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5D9B348A)
+I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x5D9B348A)
+I (..\Middlewares\grbl\spindle_control.h)(0x6AEC4D02)
+I (..\Middlewares\grbl\stepper.h)(0x6AEC3E65)
+I (../Core/Inc/tim.h)(0x6AE947EB)
+I (../Core/Inc/gpio.h)(0x6AD8ACA0)
+I (..\Middlewares\grbl\jog.h)(0x6AD5C99D)
+F (..\Middlewares\grbl\coolant_control.h)(0x6AD5C99D)()
+F (..\Middlewares\grbl\cpu_map.h)(0x6AEC4B77)()
+F (..\Middlewares\grbl\defaults.h)(0x6AEC7C72)()
+F (..\Middlewares\grbl\eeprom.c)(0x6AEC1186)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209 -I ..\Middlewares\grbl -I ..\Components\AT24C64-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\eeprom.o --omf_browse xy_machine\eeprom.crf --depend xy_machine\eeprom.d)
+I (..\Components\AT24C64\AT24C64.h)(0x6AEBF9F4)
+I (../Core/Inc/main.h)(0x6AE845C4)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x67DD529C)
+I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6AE947ED)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_def.h)(0x67DD529C)
+I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g4xx.h)(0x67DD529C)
+I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g431xx.h)(0x67DD529C)
+I (../Drivers/CMSIS/Include/core_cm4.h)(0x67DD527E)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5D9B3488)
+I (../Drivers/CMSIS/Include/cmsis_version.h)(0x67DD527E)
+I (../Drivers/CMSIS/Include/cmsis_compiler.h)(0x67DD527E)
+I (../Drivers/CMSIS/Include/cmsis_armcc.h)(0x67DD527E)
+I (../Drivers/CMSIS/Include/mpu_armv7.h)(0x67DD527E)
+I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/system_stm32g4xx.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h)(0x67DD529C)
+I (C:\Keil_v5\ARM\ARMCC\include\stddef.h)(0x5D9B3488)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_gpio.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_gpio_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_dma.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_dma_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_cortex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_exti.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash_ramfunc.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_i2c.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_i2c_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_pwr.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_pwr_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x67DD529C)
+I (..\Middlewares\grbl\settings.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\grbl.h)(0x6AE9E91F)
+I (C:\Keil_v5\ARM\ARMCC\include\math.h)(0x5D9B3482)
+I (C:\Keil_v5\ARM\ARMCC\include\inttypes.h)(0x5D9B3488)
+I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x5D9B3488)
+I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x5D9B348A)
+I (C:\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x5D9B3488)
+I (..\Middlewares\grbl\config.h)(0x6AEC7911)
+I (..\Middlewares\grbl\nuts_bolts.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\system.h)(0x6AEB3B46)
+I (..\Middlewares\grbl\defaults.h)(0x6AEC7C72)
+I (..\Middlewares\grbl\cpu_map.h)(0x6AEC4B77)
+I (..\Middlewares\grbl\planner.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\coolant_control.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\eeprom.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\gcode.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\grbl_limits.h)(0x6AEB2B5D)
+I (..\Middlewares\grbl\motion_control.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\print.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\probe.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\protocol.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\report.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\grbl_serial.h)(0x6AEC739A)
+I (../Core/Inc/usart.h)(0x6AD8ACA2)
+I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5D9B348A)
+I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x5D9B348A)
+I (..\Middlewares\grbl\spindle_control.h)(0x6AEC4D02)
+I (..\Middlewares\grbl\stepper.h)(0x6AEC3E65)
+I (../Core/Inc/tim.h)(0x6AE947EB)
+I (../Core/Inc/gpio.h)(0x6AD8ACA0)
+I (..\Middlewares\grbl\jog.h)(0x6AD5C99D)
+F (..\Middlewares\grbl\eeprom.h)(0x6AD5C99D)()
+F (..\Middlewares\grbl\gcode.c)(0x6AEC1254)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209 -I ..\Middlewares\grbl -I ..\Components\AT24C64-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\gcode.o --omf_browse xy_machine\gcode.crf --depend xy_machine\gcode.d)
+I (..\Middlewares\grbl\grbl.h)(0x6AE9E91F)
+I (C:\Keil_v5\ARM\ARMCC\include\math.h)(0x5D9B3482)
+I (C:\Keil_v5\ARM\ARMCC\include\inttypes.h)(0x5D9B3488)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5D9B3488)
+I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x5D9B3488)
+I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x5D9B348A)
+I (C:\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x5D9B3488)
+I (../Core/Inc/main.h)(0x6AE845C4)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x67DD529C)
+I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6AE947ED)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_def.h)(0x67DD529C)
+I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g4xx.h)(0x67DD529C)
+I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g431xx.h)(0x67DD529C)
+I (../Drivers/CMSIS/Include/core_cm4.h)(0x67DD527E)
+I (../Drivers/CMSIS/Include/cmsis_version.h)(0x67DD527E)
+I (../Drivers/CMSIS/Include/cmsis_compiler.h)(0x67DD527E)
+I (../Drivers/CMSIS/Include/cmsis_armcc.h)(0x67DD527E)
+I (../Drivers/CMSIS/Include/mpu_armv7.h)(0x67DD527E)
+I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/system_stm32g4xx.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h)(0x67DD529C)
+I (C:\Keil_v5\ARM\ARMCC\include\stddef.h)(0x5D9B3488)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_gpio.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_gpio_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_dma.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_dma_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_cortex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_exti.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash_ramfunc.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_i2c.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_i2c_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_pwr.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_pwr_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x67DD529C)
+I (..\Middlewares\grbl\config.h)(0x6AEC7911)
+I (..\Middlewares\grbl\nuts_bolts.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\settings.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\system.h)(0x6AEB3B46)
+I (..\Middlewares\grbl\defaults.h)(0x6AEC7C72)
+I (..\Middlewares\grbl\cpu_map.h)(0x6AEC4B77)
+I (..\Middlewares\grbl\planner.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\coolant_control.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\eeprom.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\gcode.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\grbl_limits.h)(0x6AEB2B5D)
+I (..\Middlewares\grbl\motion_control.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\print.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\probe.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\protocol.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\report.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\grbl_serial.h)(0x6AEC739A)
+I (../Core/Inc/usart.h)(0x6AD8ACA2)
+I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5D9B348A)
+I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x5D9B348A)
+I (..\Middlewares\grbl\spindle_control.h)(0x6AEC4D02)
+I (..\Middlewares\grbl\stepper.h)(0x6AEC3E65)
+I (../Core/Inc/tim.h)(0x6AE947EB)
+I (../Core/Inc/gpio.h)(0x6AD8ACA0)
+I (..\Middlewares\grbl\jog.h)(0x6AD5C99D)
+F (..\Middlewares\grbl\gcode.h)(0x6AD5C99D)()
+F (..\Middlewares\grbl\grbl.h)(0x6AE9E91F)()
+F (..\Middlewares\grbl\grbl_limits.c)(0x6AEC7F2A)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209 -I ..\Middlewares\grbl -I ..\Components\AT24C64-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\grbl_limits.o --omf_browse xy_machine\grbl_limits.crf --depend xy_machine\grbl_limits.d)
+I (..\Middlewares\grbl\grbl.h)(0x6AE9E91F)
+I (C:\Keil_v5\ARM\ARMCC\include\math.h)(0x5D9B3482)
+I (C:\Keil_v5\ARM\ARMCC\include\inttypes.h)(0x5D9B3488)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5D9B3488)
+I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x5D9B3488)
+I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x5D9B348A)
+I (C:\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x5D9B3488)
+I (../Core/Inc/main.h)(0x6AE845C4)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x67DD529C)
+I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6AE947ED)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_def.h)(0x67DD529C)
+I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g4xx.h)(0x67DD529C)
+I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g431xx.h)(0x67DD529C)
+I (../Drivers/CMSIS/Include/core_cm4.h)(0x67DD527E)
+I (../Drivers/CMSIS/Include/cmsis_version.h)(0x67DD527E)
+I (../Drivers/CMSIS/Include/cmsis_compiler.h)(0x67DD527E)
+I (../Drivers/CMSIS/Include/cmsis_armcc.h)(0x67DD527E)
+I (../Drivers/CMSIS/Include/mpu_armv7.h)(0x67DD527E)
+I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/system_stm32g4xx.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h)(0x67DD529C)
+I (C:\Keil_v5\ARM\ARMCC\include\stddef.h)(0x5D9B3488)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_gpio.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_gpio_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_dma.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_dma_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_cortex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_exti.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash_ramfunc.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_i2c.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_i2c_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_pwr.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_pwr_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x67DD529C)
+I (..\Middlewares\grbl\config.h)(0x6AEC7911)
+I (..\Middlewares\grbl\nuts_bolts.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\settings.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\system.h)(0x6AEB3B46)
+I (..\Middlewares\grbl\defaults.h)(0x6AEC7C72)
+I (..\Middlewares\grbl\cpu_map.h)(0x6AEC4B77)
+I (..\Middlewares\grbl\planner.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\coolant_control.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\eeprom.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\gcode.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\grbl_limits.h)(0x6AEB2B5D)
+I (..\Middlewares\grbl\motion_control.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\print.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\probe.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\protocol.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\report.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\grbl_serial.h)(0x6AEC739A)
+I (../Core/Inc/usart.h)(0x6AD8ACA2)
+I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5D9B348A)
+I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x5D9B348A)
+I (..\Middlewares\grbl\spindle_control.h)(0x6AEC4D02)
+I (..\Middlewares\grbl\stepper.h)(0x6AEC3E65)
+I (../Core/Inc/tim.h)(0x6AE947EB)
+I (../Core/Inc/gpio.h)(0x6AD8ACA0)
+I (..\Middlewares\grbl\jog.h)(0x6AD5C99D)
+F (..\Middlewares\grbl\grbl_limits.h)(0x6AEB2B5D)()
+F (..\Middlewares\grbl\grbl_serial.c)(0x6AEC736A)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209 -I ..\Middlewares\grbl -I ..\Components\AT24C64-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\grbl_serial.o --omf_browse xy_machine\grbl_serial.crf --depend xy_machine\grbl_serial.d)
+I (..\Middlewares\grbl\grbl.h)(0x6AE9E91F)
+I (C:\Keil_v5\ARM\ARMCC\include\math.h)(0x5D9B3482)
+I (C:\Keil_v5\ARM\ARMCC\include\inttypes.h)(0x5D9B3488)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5D9B3488)
+I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x5D9B3488)
+I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x5D9B348A)
+I (C:\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x5D9B3488)
+I (../Core/Inc/main.h)(0x6AE845C4)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x67DD529C)
+I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6AE947ED)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_def.h)(0x67DD529C)
+I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g4xx.h)(0x67DD529C)
+I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g431xx.h)(0x67DD529C)
+I (../Drivers/CMSIS/Include/core_cm4.h)(0x67DD527E)
+I (../Drivers/CMSIS/Include/cmsis_version.h)(0x67DD527E)
+I (../Drivers/CMSIS/Include/cmsis_compiler.h)(0x67DD527E)
+I (../Drivers/CMSIS/Include/cmsis_armcc.h)(0x67DD527E)
+I (../Drivers/CMSIS/Include/mpu_armv7.h)(0x67DD527E)
+I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/system_stm32g4xx.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h)(0x67DD529C)
+I (C:\Keil_v5\ARM\ARMCC\include\stddef.h)(0x5D9B3488)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_gpio.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_gpio_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_dma.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_dma_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_cortex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_exti.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash_ramfunc.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_i2c.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_i2c_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_pwr.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_pwr_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x67DD529C)
+I (..\Middlewares\grbl\config.h)(0x6AEC7911)
+I (..\Middlewares\grbl\nuts_bolts.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\settings.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\system.h)(0x6AEB3B46)
+I (..\Middlewares\grbl\defaults.h)(0x6AEC7C72)
+I (..\Middlewares\grbl\cpu_map.h)(0x6AEC4B77)
+I (..\Middlewares\grbl\planner.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\coolant_control.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\eeprom.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\gcode.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\grbl_limits.h)(0x6AEB2B5D)
+I (..\Middlewares\grbl\motion_control.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\print.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\probe.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\protocol.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\report.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\grbl_serial.h)(0x6AEC739A)
+I (../Core/Inc/usart.h)(0x6AD8ACA2)
+I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5D9B348A)
+I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x5D9B348A)
+I (..\Middlewares\grbl\spindle_control.h)(0x6AEC4D02)
+I (..\Middlewares\grbl\stepper.h)(0x6AEC3E65)
+I (../Core/Inc/tim.h)(0x6AE947EB)
+I (../Core/Inc/gpio.h)(0x6AD8ACA0)
+I (..\Middlewares\grbl\jog.h)(0x6AD5C99D)
+F (..\Middlewares\grbl\grbl_serial.h)(0x6AEC739A)()
+F (..\Middlewares\grbl\grbl_start.c)(0x6AEBE89B)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209 -I ..\Middlewares\grbl -I ..\Components\AT24C64-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\grbl_start.o --omf_browse xy_machine\grbl_start.crf --depend xy_machine\grbl_start.d)
+I (..\Middlewares\grbl\grbl.h)(0x6AE9E91F)
+I (C:\Keil_v5\ARM\ARMCC\include\math.h)(0x5D9B3482)
+I (C:\Keil_v5\ARM\ARMCC\include\inttypes.h)(0x5D9B3488)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5D9B3488)
+I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x5D9B3488)
+I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x5D9B348A)
+I (C:\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x5D9B3488)
+I (../Core/Inc/main.h)(0x6AE845C4)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x67DD529C)
+I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6AE947ED)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_def.h)(0x67DD529C)
+I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g4xx.h)(0x67DD529C)
+I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g431xx.h)(0x67DD529C)
+I (../Drivers/CMSIS/Include/core_cm4.h)(0x67DD527E)
+I (../Drivers/CMSIS/Include/cmsis_version.h)(0x67DD527E)
+I (../Drivers/CMSIS/Include/cmsis_compiler.h)(0x67DD527E)
+I (../Drivers/CMSIS/Include/cmsis_armcc.h)(0x67DD527E)
+I (../Drivers/CMSIS/Include/mpu_armv7.h)(0x67DD527E)
+I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/system_stm32g4xx.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h)(0x67DD529C)
+I (C:\Keil_v5\ARM\ARMCC\include\stddef.h)(0x5D9B3488)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_gpio.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_gpio_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_dma.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_dma_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_cortex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_exti.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash_ramfunc.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_i2c.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_i2c_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_pwr.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_pwr_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x67DD529C)
+I (..\Middlewares\grbl\config.h)(0x6AEC7911)
+I (..\Middlewares\grbl\nuts_bolts.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\settings.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\system.h)(0x6AEB3B46)
+I (..\Middlewares\grbl\defaults.h)(0x6AEC7C72)
+I (..\Middlewares\grbl\cpu_map.h)(0x6AEC4B77)
+I (..\Middlewares\grbl\planner.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\coolant_control.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\eeprom.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\gcode.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\grbl_limits.h)(0x6AEB2B5D)
+I (..\Middlewares\grbl\motion_control.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\print.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\probe.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\protocol.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\report.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\grbl_serial.h)(0x6AEC739A)
+I (../Core/Inc/usart.h)(0x6AD8ACA2)
+I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5D9B348A)
+I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x5D9B348A)
+I (..\Middlewares\grbl\spindle_control.h)(0x6AEC4D02)
+I (..\Middlewares\grbl\stepper.h)(0x6AEC3E65)
+I (../Core/Inc/tim.h)(0x6AE947EB)
+I (../Core/Inc/gpio.h)(0x6AD8ACA0)
+I (..\Middlewares\grbl\jog.h)(0x6AD5C99D)
+F (..\Middlewares\grbl\jog.c)(0x6AD5C99D)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209 -I ..\Middlewares\grbl -I ..\Components\AT24C64-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\jog.o --omf_browse xy_machine\jog.crf --depend xy_machine\jog.d)
+I (..\Middlewares\grbl\grbl.h)(0x6AE9E91F)
+I (C:\Keil_v5\ARM\ARMCC\include\math.h)(0x5D9B3482)
+I (C:\Keil_v5\ARM\ARMCC\include\inttypes.h)(0x5D9B3488)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5D9B3488)
+I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x5D9B3488)
+I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x5D9B348A)
+I (C:\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x5D9B3488)
+I (../Core/Inc/main.h)(0x6AE845C4)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x67DD529C)
+I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6AE947ED)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_def.h)(0x67DD529C)
+I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g4xx.h)(0x67DD529C)
+I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g431xx.h)(0x67DD529C)
+I (../Drivers/CMSIS/Include/core_cm4.h)(0x67DD527E)
+I (../Drivers/CMSIS/Include/cmsis_version.h)(0x67DD527E)
+I (../Drivers/CMSIS/Include/cmsis_compiler.h)(0x67DD527E)
+I (../Drivers/CMSIS/Include/cmsis_armcc.h)(0x67DD527E)
+I (../Drivers/CMSIS/Include/mpu_armv7.h)(0x67DD527E)
+I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/system_stm32g4xx.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h)(0x67DD529C)
+I (C:\Keil_v5\ARM\ARMCC\include\stddef.h)(0x5D9B3488)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_gpio.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_gpio_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_dma.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_dma_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_cortex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_exti.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash_ramfunc.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_i2c.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_i2c_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_pwr.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_pwr_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x67DD529C)
+I (..\Middlewares\grbl\config.h)(0x6AEC7911)
+I (..\Middlewares\grbl\nuts_bolts.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\settings.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\system.h)(0x6AEB3B46)
+I (..\Middlewares\grbl\defaults.h)(0x6AEC7C72)
+I (..\Middlewares\grbl\cpu_map.h)(0x6AEC4B77)
+I (..\Middlewares\grbl\planner.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\coolant_control.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\eeprom.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\gcode.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\grbl_limits.h)(0x6AEB2B5D)
+I (..\Middlewares\grbl\motion_control.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\print.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\probe.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\protocol.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\report.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\grbl_serial.h)(0x6AEC739A)
+I (../Core/Inc/usart.h)(0x6AD8ACA2)
+I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5D9B348A)
+I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x5D9B348A)
+I (..\Middlewares\grbl\spindle_control.h)(0x6AEC4D02)
+I (..\Middlewares\grbl\stepper.h)(0x6AEC3E65)
+I (../Core/Inc/tim.h)(0x6AE947EB)
+I (../Core/Inc/gpio.h)(0x6AD8ACA0)
+I (..\Middlewares\grbl\jog.h)(0x6AD5C99D)
+F (..\Middlewares\grbl\jog.h)(0x6AD5C99D)()
+F (..\Middlewares\grbl\main.c)(0x6AD5C99D)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209 -I ..\Middlewares\grbl -I ..\Components\AT24C64-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\main_1.o --omf_browse xy_machine\main_1.crf --depend xy_machine\main_1.d)
+I (..\Middlewares\grbl\grbl.h)(0x6AE9E91F)
+I (C:\Keil_v5\ARM\ARMCC\include\math.h)(0x5D9B3482)
+I (C:\Keil_v5\ARM\ARMCC\include\inttypes.h)(0x5D9B3488)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5D9B3488)
+I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x5D9B3488)
+I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x5D9B348A)
+I (C:\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x5D9B3488)
+I (../Core/Inc/main.h)(0x6AE845C4)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x67DD529C)
+I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6AE947ED)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_def.h)(0x67DD529C)
+I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g4xx.h)(0x67DD529C)
+I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g431xx.h)(0x67DD529C)
+I (../Drivers/CMSIS/Include/core_cm4.h)(0x67DD527E)
+I (../Drivers/CMSIS/Include/cmsis_version.h)(0x67DD527E)
+I (../Drivers/CMSIS/Include/cmsis_compiler.h)(0x67DD527E)
+I (../Drivers/CMSIS/Include/cmsis_armcc.h)(0x67DD527E)
+I (../Drivers/CMSIS/Include/mpu_armv7.h)(0x67DD527E)
+I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/system_stm32g4xx.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h)(0x67DD529C)
+I (C:\Keil_v5\ARM\ARMCC\include\stddef.h)(0x5D9B3488)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_gpio.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_gpio_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_dma.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_dma_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_cortex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_exti.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash_ramfunc.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_i2c.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_i2c_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_pwr.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_pwr_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x67DD529C)
+I (..\Middlewares\grbl\config.h)(0x6AEC7911)
+I (..\Middlewares\grbl\nuts_bolts.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\settings.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\system.h)(0x6AEB3B46)
+I (..\Middlewares\grbl\defaults.h)(0x6AEC7C72)
+I (..\Middlewares\grbl\cpu_map.h)(0x6AEC4B77)
+I (..\Middlewares\grbl\planner.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\coolant_control.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\eeprom.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\gcode.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\grbl_limits.h)(0x6AEB2B5D)
+I (..\Middlewares\grbl\motion_control.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\print.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\probe.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\protocol.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\report.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\grbl_serial.h)(0x6AEC739A)
+I (../Core/Inc/usart.h)(0x6AD8ACA2)
+I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5D9B348A)
+I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x5D9B348A)
+I (..\Middlewares\grbl\spindle_control.h)(0x6AEC4D02)
+I (..\Middlewares\grbl\stepper.h)(0x6AEC3E65)
+I (../Core/Inc/tim.h)(0x6AE947EB)
+I (../Core/Inc/gpio.h)(0x6AD8ACA0)
+I (..\Middlewares\grbl\jog.h)(0x6AD5C99D)
+F (..\Middlewares\grbl\motion_control.c)(0x6AEBE9A0)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209 -I ..\Middlewares\grbl -I ..\Components\AT24C64-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\motion_control.o --omf_browse xy_machine\motion_control.crf --depend xy_machine\motion_control.d)
+I (..\Middlewares\grbl\grbl.h)(0x6AE9E91F)
+I (C:\Keil_v5\ARM\ARMCC\include\math.h)(0x5D9B3482)
+I (C:\Keil_v5\ARM\ARMCC\include\inttypes.h)(0x5D9B3488)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5D9B3488)
+I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x5D9B3488)
+I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x5D9B348A)
+I (C:\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x5D9B3488)
+I (../Core/Inc/main.h)(0x6AE845C4)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x67DD529C)
+I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6AE947ED)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_def.h)(0x67DD529C)
+I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g4xx.h)(0x67DD529C)
+I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g431xx.h)(0x67DD529C)
+I (../Drivers/CMSIS/Include/core_cm4.h)(0x67DD527E)
+I (../Drivers/CMSIS/Include/cmsis_version.h)(0x67DD527E)
+I (../Drivers/CMSIS/Include/cmsis_compiler.h)(0x67DD527E)
+I (../Drivers/CMSIS/Include/cmsis_armcc.h)(0x67DD527E)
+I (../Drivers/CMSIS/Include/mpu_armv7.h)(0x67DD527E)
+I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/system_stm32g4xx.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h)(0x67DD529C)
+I (C:\Keil_v5\ARM\ARMCC\include\stddef.h)(0x5D9B3488)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_gpio.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_gpio_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_dma.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_dma_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_cortex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_exti.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash_ramfunc.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_i2c.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_i2c_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_pwr.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_pwr_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x67DD529C)
+I (..\Middlewares\grbl\config.h)(0x6AEC7911)
+I (..\Middlewares\grbl\nuts_bolts.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\settings.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\system.h)(0x6AEB3B46)
+I (..\Middlewares\grbl\defaults.h)(0x6AEC7C72)
+I (..\Middlewares\grbl\cpu_map.h)(0x6AEC4B77)
+I (..\Middlewares\grbl\planner.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\coolant_control.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\eeprom.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\gcode.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\grbl_limits.h)(0x6AEB2B5D)
+I (..\Middlewares\grbl\motion_control.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\print.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\probe.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\protocol.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\report.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\grbl_serial.h)(0x6AEC739A)
+I (../Core/Inc/usart.h)(0x6AD8ACA2)
+I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5D9B348A)
+I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x5D9B348A)
+I (..\Middlewares\grbl\spindle_control.h)(0x6AEC4D02)
+I (..\Middlewares\grbl\stepper.h)(0x6AEC3E65)
+I (../Core/Inc/tim.h)(0x6AE947EB)
+I (../Core/Inc/gpio.h)(0x6AD8ACA0)
+I (..\Middlewares\grbl\jog.h)(0x6AD5C99D)
+F (..\Middlewares\grbl\motion_control.h)(0x6AD5C99D)()
+F (..\Middlewares\grbl\nuts_bolts.c)(0x6AEB44D7)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209 -I ..\Middlewares\grbl -I ..\Components\AT24C64-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\nuts_bolts.o --omf_browse xy_machine\nuts_bolts.crf --depend xy_machine\nuts_bolts.d)
+I (..\Middlewares\grbl\grbl.h)(0x6AE9E91F)
+I (C:\Keil_v5\ARM\ARMCC\include\math.h)(0x5D9B3482)
+I (C:\Keil_v5\ARM\ARMCC\include\inttypes.h)(0x5D9B3488)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5D9B3488)
+I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x5D9B3488)
+I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x5D9B348A)
+I (C:\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x5D9B3488)
+I (../Core/Inc/main.h)(0x6AE845C4)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x67DD529C)
+I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6AE947ED)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_def.h)(0x67DD529C)
+I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g4xx.h)(0x67DD529C)
+I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g431xx.h)(0x67DD529C)
+I (../Drivers/CMSIS/Include/core_cm4.h)(0x67DD527E)
+I (../Drivers/CMSIS/Include/cmsis_version.h)(0x67DD527E)
+I (../Drivers/CMSIS/Include/cmsis_compiler.h)(0x67DD527E)
+I (../Drivers/CMSIS/Include/cmsis_armcc.h)(0x67DD527E)
+I (../Drivers/CMSIS/Include/mpu_armv7.h)(0x67DD527E)
+I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/system_stm32g4xx.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h)(0x67DD529C)
+I (C:\Keil_v5\ARM\ARMCC\include\stddef.h)(0x5D9B3488)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_gpio.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_gpio_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_dma.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_dma_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_cortex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_exti.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash_ramfunc.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_i2c.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_i2c_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_pwr.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_pwr_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x67DD529C)
+I (..\Middlewares\grbl\config.h)(0x6AEC7911)
+I (..\Middlewares\grbl\nuts_bolts.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\settings.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\system.h)(0x6AEB3B46)
+I (..\Middlewares\grbl\defaults.h)(0x6AEC7C72)
+I (..\Middlewares\grbl\cpu_map.h)(0x6AEC4B77)
+I (..\Middlewares\grbl\planner.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\coolant_control.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\eeprom.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\gcode.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\grbl_limits.h)(0x6AEB2B5D)
+I (..\Middlewares\grbl\motion_control.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\print.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\probe.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\protocol.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\report.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\grbl_serial.h)(0x6AEC739A)
+I (../Core/Inc/usart.h)(0x6AD8ACA2)
+I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5D9B348A)
+I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x5D9B348A)
+I (..\Middlewares\grbl\spindle_control.h)(0x6AEC4D02)
+I (..\Middlewares\grbl\stepper.h)(0x6AEC3E65)
+I (../Core/Inc/tim.h)(0x6AE947EB)
+I (../Core/Inc/gpio.h)(0x6AD8ACA0)
+I (..\Middlewares\grbl\jog.h)(0x6AD5C99D)
+I (../BSP/Inc/MyDelay.h)(0x6AEB442E)
+F (..\Middlewares\grbl\nuts_bolts.h)(0x6AD5C99D)()
+F (..\Middlewares\grbl\planner.c)(0x6AD5C99D)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209 -I ..\Middlewares\grbl -I ..\Components\AT24C64-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\planner.o --omf_browse xy_machine\planner.crf --depend xy_machine\planner.d)
+I (..\Middlewares\grbl\grbl.h)(0x6AE9E91F)
+I (C:\Keil_v5\ARM\ARMCC\include\math.h)(0x5D9B3482)
+I (C:\Keil_v5\ARM\ARMCC\include\inttypes.h)(0x5D9B3488)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5D9B3488)
+I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x5D9B3488)
+I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x5D9B348A)
+I (C:\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x5D9B3488)
+I (../Core/Inc/main.h)(0x6AE845C4)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x67DD529C)
+I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6AE947ED)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_def.h)(0x67DD529C)
+I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g4xx.h)(0x67DD529C)
+I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g431xx.h)(0x67DD529C)
+I (../Drivers/CMSIS/Include/core_cm4.h)(0x67DD527E)
+I (../Drivers/CMSIS/Include/cmsis_version.h)(0x67DD527E)
+I (../Drivers/CMSIS/Include/cmsis_compiler.h)(0x67DD527E)
+I (../Drivers/CMSIS/Include/cmsis_armcc.h)(0x67DD527E)
+I (../Drivers/CMSIS/Include/mpu_armv7.h)(0x67DD527E)
+I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/system_stm32g4xx.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h)(0x67DD529C)
+I (C:\Keil_v5\ARM\ARMCC\include\stddef.h)(0x5D9B3488)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_gpio.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_gpio_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_dma.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_dma_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_cortex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_exti.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash_ramfunc.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_i2c.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_i2c_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_pwr.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_pwr_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x67DD529C)
+I (..\Middlewares\grbl\config.h)(0x6AEC7911)
+I (..\Middlewares\grbl\nuts_bolts.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\settings.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\system.h)(0x6AEB3B46)
+I (..\Middlewares\grbl\defaults.h)(0x6AEC7C72)
+I (..\Middlewares\grbl\cpu_map.h)(0x6AEC4B77)
+I (..\Middlewares\grbl\planner.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\coolant_control.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\eeprom.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\gcode.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\grbl_limits.h)(0x6AEB2B5D)
+I (..\Middlewares\grbl\motion_control.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\print.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\probe.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\protocol.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\report.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\grbl_serial.h)(0x6AEC739A)
+I (../Core/Inc/usart.h)(0x6AD8ACA2)
+I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5D9B348A)
+I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x5D9B348A)
+I (..\Middlewares\grbl\spindle_control.h)(0x6AEC4D02)
+I (..\Middlewares\grbl\stepper.h)(0x6AEC3E65)
+I (../Core/Inc/tim.h)(0x6AE947EB)
+I (../Core/Inc/gpio.h)(0x6AD8ACA0)
+I (..\Middlewares\grbl\jog.h)(0x6AD5C99D)
+F (..\Middlewares\grbl\planner.h)(0x6AD5C99D)()
+F (..\Middlewares\grbl\print.c)(0x6AEC48E2)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209 -I ..\Middlewares\grbl -I ..\Components\AT24C64-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\print.o --omf_browse xy_machine\print.crf --depend xy_machine\print.d)
+I (..\Middlewares\grbl\grbl.h)(0x6AE9E91F)
+I (C:\Keil_v5\ARM\ARMCC\include\math.h)(0x5D9B3482)
+I (C:\Keil_v5\ARM\ARMCC\include\inttypes.h)(0x5D9B3488)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5D9B3488)
+I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x5D9B3488)
+I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x5D9B348A)
+I (C:\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x5D9B3488)
+I (../Core/Inc/main.h)(0x6AE845C4)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x67DD529C)
+I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6AE947ED)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_def.h)(0x67DD529C)
+I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g4xx.h)(0x67DD529C)
+I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g431xx.h)(0x67DD529C)
+I (../Drivers/CMSIS/Include/core_cm4.h)(0x67DD527E)
+I (../Drivers/CMSIS/Include/cmsis_version.h)(0x67DD527E)
+I (../Drivers/CMSIS/Include/cmsis_compiler.h)(0x67DD527E)
+I (../Drivers/CMSIS/Include/cmsis_armcc.h)(0x67DD527E)
+I (../Drivers/CMSIS/Include/mpu_armv7.h)(0x67DD527E)
+I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/system_stm32g4xx.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h)(0x67DD529C)
+I (C:\Keil_v5\ARM\ARMCC\include\stddef.h)(0x5D9B3488)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_gpio.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_gpio_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_dma.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_dma_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_cortex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_exti.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash_ramfunc.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_i2c.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_i2c_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_pwr.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_pwr_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x67DD529C)
+I (..\Middlewares\grbl\config.h)(0x6AEC7911)
+I (..\Middlewares\grbl\nuts_bolts.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\settings.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\system.h)(0x6AEB3B46)
+I (..\Middlewares\grbl\defaults.h)(0x6AEC7C72)
+I (..\Middlewares\grbl\cpu_map.h)(0x6AEC4B77)
+I (..\Middlewares\grbl\planner.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\coolant_control.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\eeprom.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\gcode.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\grbl_limits.h)(0x6AEB2B5D)
+I (..\Middlewares\grbl\motion_control.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\print.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\probe.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\protocol.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\report.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\grbl_serial.h)(0x6AEC739A)
+I (../Core/Inc/usart.h)(0x6AD8ACA2)
+I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5D9B348A)
+I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x5D9B348A)
+I (..\Middlewares\grbl\spindle_control.h)(0x6AEC4D02)
+I (..\Middlewares\grbl\stepper.h)(0x6AEC3E65)
+I (../Core/Inc/tim.h)(0x6AE947EB)
+I (../Core/Inc/gpio.h)(0x6AD8ACA0)
+I (..\Middlewares\grbl\jog.h)(0x6AD5C99D)
+F (..\Middlewares\grbl\print.h)(0x6AD5C99D)()
+F (..\Middlewares\grbl\probe.c)(0x6AEC6D64)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209 -I ..\Middlewares\grbl -I ..\Components\AT24C64-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\probe.o --omf_browse xy_machine\probe.crf --depend xy_machine\probe.d)
+I (..\Middlewares\grbl\grbl.h)(0x6AE9E91F)
+I (C:\Keil_v5\ARM\ARMCC\include\math.h)(0x5D9B3482)
+I (C:\Keil_v5\ARM\ARMCC\include\inttypes.h)(0x5D9B3488)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5D9B3488)
+I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x5D9B3488)
+I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x5D9B348A)
+I (C:\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x5D9B3488)
+I (../Core/Inc/main.h)(0x6AE845C4)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x67DD529C)
+I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6AE947ED)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_def.h)(0x67DD529C)
+I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g4xx.h)(0x67DD529C)
+I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g431xx.h)(0x67DD529C)
+I (../Drivers/CMSIS/Include/core_cm4.h)(0x67DD527E)
+I (../Drivers/CMSIS/Include/cmsis_version.h)(0x67DD527E)
+I (../Drivers/CMSIS/Include/cmsis_compiler.h)(0x67DD527E)
+I (../Drivers/CMSIS/Include/cmsis_armcc.h)(0x67DD527E)
+I (../Drivers/CMSIS/Include/mpu_armv7.h)(0x67DD527E)
+I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/system_stm32g4xx.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h)(0x67DD529C)
+I (C:\Keil_v5\ARM\ARMCC\include\stddef.h)(0x5D9B3488)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_gpio.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_gpio_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_dma.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_dma_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_cortex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_exti.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash_ramfunc.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_i2c.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_i2c_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_pwr.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_pwr_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x67DD529C)
+I (..\Middlewares\grbl\config.h)(0x6AEC7911)
+I (..\Middlewares\grbl\nuts_bolts.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\settings.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\system.h)(0x6AEB3B46)
+I (..\Middlewares\grbl\defaults.h)(0x6AEC7C72)
+I (..\Middlewares\grbl\cpu_map.h)(0x6AEC4B77)
+I (..\Middlewares\grbl\planner.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\coolant_control.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\eeprom.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\gcode.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\grbl_limits.h)(0x6AEB2B5D)
+I (..\Middlewares\grbl\motion_control.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\print.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\probe.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\protocol.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\report.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\grbl_serial.h)(0x6AEC739A)
+I (../Core/Inc/usart.h)(0x6AD8ACA2)
+I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5D9B348A)
+I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x5D9B348A)
+I (..\Middlewares\grbl\spindle_control.h)(0x6AEC4D02)
+I (..\Middlewares\grbl\stepper.h)(0x6AEC3E65)
+I (../Core/Inc/tim.h)(0x6AE947EB)
+I (../Core/Inc/gpio.h)(0x6AD8ACA0)
+I (..\Middlewares\grbl\jog.h)(0x6AD5C99D)
+F (..\Middlewares\grbl\probe.h)(0x6AD5C99D)()
+F (..\Middlewares\grbl\protocol.c)(0x6AEC7719)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209 -I ..\Middlewares\grbl -I ..\Components\AT24C64-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\protocol.o --omf_browse xy_machine\protocol.crf --depend xy_machine\protocol.d)
+I (..\Middlewares\grbl\grbl.h)(0x6AE9E91F)
+I (C:\Keil_v5\ARM\ARMCC\include\math.h)(0x5D9B3482)
+I (C:\Keil_v5\ARM\ARMCC\include\inttypes.h)(0x5D9B3488)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5D9B3488)
+I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x5D9B3488)
+I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x5D9B348A)
+I (C:\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x5D9B3488)
+I (../Core/Inc/main.h)(0x6AE845C4)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x67DD529C)
+I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6AE947ED)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_def.h)(0x67DD529C)
+I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g4xx.h)(0x67DD529C)
+I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g431xx.h)(0x67DD529C)
+I (../Drivers/CMSIS/Include/core_cm4.h)(0x67DD527E)
+I (../Drivers/CMSIS/Include/cmsis_version.h)(0x67DD527E)
+I (../Drivers/CMSIS/Include/cmsis_compiler.h)(0x67DD527E)
+I (../Drivers/CMSIS/Include/cmsis_armcc.h)(0x67DD527E)
+I (../Drivers/CMSIS/Include/mpu_armv7.h)(0x67DD527E)
+I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/system_stm32g4xx.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h)(0x67DD529C)
+I (C:\Keil_v5\ARM\ARMCC\include\stddef.h)(0x5D9B3488)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_gpio.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_gpio_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_dma.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_dma_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_cortex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_exti.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash_ramfunc.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_i2c.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_i2c_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_pwr.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_pwr_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x67DD529C)
+I (..\Middlewares\grbl\config.h)(0x6AEC7911)
+I (..\Middlewares\grbl\nuts_bolts.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\settings.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\system.h)(0x6AEB3B46)
+I (..\Middlewares\grbl\defaults.h)(0x6AEC7C72)
+I (..\Middlewares\grbl\cpu_map.h)(0x6AEC4B77)
+I (..\Middlewares\grbl\planner.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\coolant_control.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\eeprom.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\gcode.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\grbl_limits.h)(0x6AEB2B5D)
+I (..\Middlewares\grbl\motion_control.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\print.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\probe.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\protocol.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\report.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\grbl_serial.h)(0x6AEC739A)
+I (../Core/Inc/usart.h)(0x6AD8ACA2)
+I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5D9B348A)
+I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x5D9B348A)
+I (..\Middlewares\grbl\spindle_control.h)(0x6AEC4D02)
+I (..\Middlewares\grbl\stepper.h)(0x6AEC3E65)
+I (../Core/Inc/tim.h)(0x6AE947EB)
+I (../Core/Inc/gpio.h)(0x6AD8ACA0)
+I (..\Middlewares\grbl\jog.h)(0x6AD5C99D)
+I (../BSP/Inc/board_serial.h)(0x6AEC8224)
+F (..\Middlewares\grbl\protocol.h)(0x6AD5C99D)()
+F (..\Middlewares\grbl\report.c)(0x6AEC4875)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209 -I ..\Middlewares\grbl -I ..\Components\AT24C64-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\report.o --omf_browse xy_machine\report.crf --depend xy_machine\report.d)
+I (..\Middlewares\grbl\grbl.h)(0x6AE9E91F)
+I (C:\Keil_v5\ARM\ARMCC\include\math.h)(0x5D9B3482)
+I (C:\Keil_v5\ARM\ARMCC\include\inttypes.h)(0x5D9B3488)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5D9B3488)
+I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x5D9B3488)
+I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x5D9B348A)
+I (C:\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x5D9B3488)
+I (../Core/Inc/main.h)(0x6AE845C4)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x67DD529C)
+I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6AE947ED)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_def.h)(0x67DD529C)
+I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g4xx.h)(0x67DD529C)
+I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g431xx.h)(0x67DD529C)
+I (../Drivers/CMSIS/Include/core_cm4.h)(0x67DD527E)
+I (../Drivers/CMSIS/Include/cmsis_version.h)(0x67DD527E)
+I (../Drivers/CMSIS/Include/cmsis_compiler.h)(0x67DD527E)
+I (../Drivers/CMSIS/Include/cmsis_armcc.h)(0x67DD527E)
+I (../Drivers/CMSIS/Include/mpu_armv7.h)(0x67DD527E)
+I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/system_stm32g4xx.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h)(0x67DD529C)
+I (C:\Keil_v5\ARM\ARMCC\include\stddef.h)(0x5D9B3488)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_gpio.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_gpio_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_dma.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_dma_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_cortex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_exti.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash_ramfunc.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_i2c.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_i2c_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_pwr.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_pwr_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x67DD529C)
+I (..\Middlewares\grbl\config.h)(0x6AEC7911)
+I (..\Middlewares\grbl\nuts_bolts.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\settings.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\system.h)(0x6AEB3B46)
+I (..\Middlewares\grbl\defaults.h)(0x6AEC7C72)
+I (..\Middlewares\grbl\cpu_map.h)(0x6AEC4B77)
+I (..\Middlewares\grbl\planner.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\coolant_control.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\eeprom.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\gcode.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\grbl_limits.h)(0x6AEB2B5D)
+I (..\Middlewares\grbl\motion_control.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\print.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\probe.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\protocol.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\report.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\grbl_serial.h)(0x6AEC739A)
+I (../Core/Inc/usart.h)(0x6AD8ACA2)
+I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5D9B348A)
+I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x5D9B348A)
+I (..\Middlewares\grbl\spindle_control.h)(0x6AEC4D02)
+I (..\Middlewares\grbl\stepper.h)(0x6AEC3E65)
+I (../Core/Inc/tim.h)(0x6AE947EB)
+I (../Core/Inc/gpio.h)(0x6AD8ACA0)
+I (..\Middlewares\grbl\jog.h)(0x6AD5C99D)
+I (../BSP/Inc/MyDelay.h)(0x6AEB442E)
+F (..\Middlewares\grbl\report.h)(0x6AD5C99D)()
+F (..\Middlewares\grbl\settings.c)(0x6AD5C99D)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209 -I ..\Middlewares\grbl -I ..\Components\AT24C64-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\settings.o --omf_browse xy_machine\settings.crf --depend xy_machine\settings.d)
+I (..\Middlewares\grbl\grbl.h)(0x6AE9E91F)
+I (C:\Keil_v5\ARM\ARMCC\include\math.h)(0x5D9B3482)
+I (C:\Keil_v5\ARM\ARMCC\include\inttypes.h)(0x5D9B3488)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5D9B3488)
+I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x5D9B3488)
+I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x5D9B348A)
+I (C:\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x5D9B3488)
+I (../Core/Inc/main.h)(0x6AE845C4)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x67DD529C)
+I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6AE947ED)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_def.h)(0x67DD529C)
+I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g4xx.h)(0x67DD529C)
+I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g431xx.h)(0x67DD529C)
+I (../Drivers/CMSIS/Include/core_cm4.h)(0x67DD527E)
+I (../Drivers/CMSIS/Include/cmsis_version.h)(0x67DD527E)
+I (../Drivers/CMSIS/Include/cmsis_compiler.h)(0x67DD527E)
+I (../Drivers/CMSIS/Include/cmsis_armcc.h)(0x67DD527E)
+I (../Drivers/CMSIS/Include/mpu_armv7.h)(0x67DD527E)
+I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/system_stm32g4xx.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h)(0x67DD529C)
+I (C:\Keil_v5\ARM\ARMCC\include\stddef.h)(0x5D9B3488)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_gpio.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_gpio_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_dma.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_dma_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_cortex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_exti.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash_ramfunc.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_i2c.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_i2c_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_pwr.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_pwr_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x67DD529C)
+I (..\Middlewares\grbl\config.h)(0x6AEC7911)
+I (..\Middlewares\grbl\nuts_bolts.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\settings.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\system.h)(0x6AEB3B46)
+I (..\Middlewares\grbl\defaults.h)(0x6AEC7C72)
+I (..\Middlewares\grbl\cpu_map.h)(0x6AEC4B77)
+I (..\Middlewares\grbl\planner.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\coolant_control.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\eeprom.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\gcode.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\grbl_limits.h)(0x6AEB2B5D)
+I (..\Middlewares\grbl\motion_control.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\print.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\probe.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\protocol.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\report.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\grbl_serial.h)(0x6AEC739A)
+I (../Core/Inc/usart.h)(0x6AD8ACA2)
+I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5D9B348A)
+I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x5D9B348A)
+I (..\Middlewares\grbl\spindle_control.h)(0x6AEC4D02)
+I (..\Middlewares\grbl\stepper.h)(0x6AEC3E65)
+I (../Core/Inc/tim.h)(0x6AE947EB)
+I (../Core/Inc/gpio.h)(0x6AD8ACA0)
+I (..\Middlewares\grbl\jog.h)(0x6AD5C99D)
+F (..\Middlewares\grbl\settings.h)(0x6AD5C99D)()
+F (..\Middlewares\grbl\spindle_control.c)(0x6AEC4C63)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209 -I ..\Middlewares\grbl -I ..\Components\AT24C64-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\spindle_control.o --omf_browse xy_machine\spindle_control.crf --depend xy_machine\spindle_control.d)
+I (..\Middlewares\grbl\grbl.h)(0x6AE9E91F)
+I (C:\Keil_v5\ARM\ARMCC\include\math.h)(0x5D9B3482)
+I (C:\Keil_v5\ARM\ARMCC\include\inttypes.h)(0x5D9B3488)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5D9B3488)
+I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x5D9B3488)
+I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x5D9B348A)
+I (C:\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x5D9B3488)
+I (../Core/Inc/main.h)(0x6AE845C4)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x67DD529C)
+I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6AE947ED)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_def.h)(0x67DD529C)
+I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g4xx.h)(0x67DD529C)
+I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g431xx.h)(0x67DD529C)
+I (../Drivers/CMSIS/Include/core_cm4.h)(0x67DD527E)
+I (../Drivers/CMSIS/Include/cmsis_version.h)(0x67DD527E)
+I (../Drivers/CMSIS/Include/cmsis_compiler.h)(0x67DD527E)
+I (../Drivers/CMSIS/Include/cmsis_armcc.h)(0x67DD527E)
+I (../Drivers/CMSIS/Include/mpu_armv7.h)(0x67DD527E)
+I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/system_stm32g4xx.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h)(0x67DD529C)
+I (C:\Keil_v5\ARM\ARMCC\include\stddef.h)(0x5D9B3488)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_gpio.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_gpio_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_dma.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_dma_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_cortex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_exti.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash_ramfunc.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_i2c.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_i2c_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_pwr.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_pwr_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x67DD529C)
+I (..\Middlewares\grbl\config.h)(0x6AEC7911)
+I (..\Middlewares\grbl\nuts_bolts.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\settings.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\system.h)(0x6AEB3B46)
+I (..\Middlewares\grbl\defaults.h)(0x6AEC7C72)
+I (..\Middlewares\grbl\cpu_map.h)(0x6AEC4B77)
+I (..\Middlewares\grbl\planner.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\coolant_control.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\eeprom.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\gcode.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\grbl_limits.h)(0x6AEB2B5D)
+I (..\Middlewares\grbl\motion_control.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\print.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\probe.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\protocol.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\report.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\grbl_serial.h)(0x6AEC739A)
+I (../Core/Inc/usart.h)(0x6AD8ACA2)
+I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5D9B348A)
+I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x5D9B348A)
+I (..\Middlewares\grbl\spindle_control.h)(0x6AEC4D02)
+I (..\Middlewares\grbl\stepper.h)(0x6AEC3E65)
+I (../Core/Inc/tim.h)(0x6AE947EB)
+I (../Core/Inc/gpio.h)(0x6AD8ACA0)
+I (..\Middlewares\grbl\jog.h)(0x6AD5C99D)
+F (..\Middlewares\grbl\spindle_control.h)(0x6AEC4D02)()
+F (..\Middlewares\grbl\stepper.c)(0x6AEC4369)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209 -I ..\Middlewares\grbl -I ..\Components\AT24C64-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\stepper.o --omf_browse xy_machine\stepper.crf --depend xy_machine\stepper.d)
+I (..\Middlewares\grbl\grbl.h)(0x6AE9E91F)
+I (C:\Keil_v5\ARM\ARMCC\include\math.h)(0x5D9B3482)
+I (C:\Keil_v5\ARM\ARMCC\include\inttypes.h)(0x5D9B3488)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5D9B3488)
+I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x5D9B3488)
+I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x5D9B348A)
+I (C:\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x5D9B3488)
+I (../Core/Inc/main.h)(0x6AE845C4)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x67DD529C)
+I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6AE947ED)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_def.h)(0x67DD529C)
+I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g4xx.h)(0x67DD529C)
+I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g431xx.h)(0x67DD529C)
+I (../Drivers/CMSIS/Include/core_cm4.h)(0x67DD527E)
+I (../Drivers/CMSIS/Include/cmsis_version.h)(0x67DD527E)
+I (../Drivers/CMSIS/Include/cmsis_compiler.h)(0x67DD527E)
+I (../Drivers/CMSIS/Include/cmsis_armcc.h)(0x67DD527E)
+I (../Drivers/CMSIS/Include/mpu_armv7.h)(0x67DD527E)
+I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/system_stm32g4xx.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h)(0x67DD529C)
+I (C:\Keil_v5\ARM\ARMCC\include\stddef.h)(0x5D9B3488)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_gpio.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_gpio_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_dma.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_dma_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_cortex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_exti.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash_ramfunc.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_i2c.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_i2c_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_pwr.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_pwr_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x67DD529C)
+I (..\Middlewares\grbl\config.h)(0x6AEC7911)
+I (..\Middlewares\grbl\nuts_bolts.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\settings.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\system.h)(0x6AEB3B46)
+I (..\Middlewares\grbl\defaults.h)(0x6AEC7C72)
+I (..\Middlewares\grbl\cpu_map.h)(0x6AEC4B77)
+I (..\Middlewares\grbl\planner.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\coolant_control.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\eeprom.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\gcode.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\grbl_limits.h)(0x6AEB2B5D)
+I (..\Middlewares\grbl\motion_control.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\print.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\probe.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\protocol.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\report.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\grbl_serial.h)(0x6AEC739A)
+I (../Core/Inc/usart.h)(0x6AD8ACA2)
+I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5D9B348A)
+I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x5D9B348A)
+I (..\Middlewares\grbl\spindle_control.h)(0x6AEC4D02)
+I (..\Middlewares\grbl\stepper.h)(0x6AEC3E65)
+I (../Core/Inc/tim.h)(0x6AE947EB)
+I (../Core/Inc/gpio.h)(0x6AD8ACA0)
+I (..\Middlewares\grbl\jog.h)(0x6AD5C99D)
+I (../BSP/Inc/MyDelay.h)(0x6AEB442E)
+F (..\Middlewares\grbl\stepper.h)(0x6AEC3E65)()
+F (..\Middlewares\grbl\system.c)(0x6AEB3D7A)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209 -I ..\Middlewares\grbl -I ..\Components\AT24C64-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\system.o --omf_browse xy_machine\system.crf --depend xy_machine\system.d)
+I (..\Middlewares\grbl\grbl.h)(0x6AE9E91F)
+I (C:\Keil_v5\ARM\ARMCC\include\math.h)(0x5D9B3482)
+I (C:\Keil_v5\ARM\ARMCC\include\inttypes.h)(0x5D9B3488)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5D9B3488)
+I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x5D9B3488)
+I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x5D9B348A)
+I (C:\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x5D9B3488)
+I (../Core/Inc/main.h)(0x6AE845C4)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x67DD529C)
+I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6AE947ED)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_def.h)(0x67DD529C)
+I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g4xx.h)(0x67DD529C)
+I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g431xx.h)(0x67DD529C)
+I (../Drivers/CMSIS/Include/core_cm4.h)(0x67DD527E)
+I (../Drivers/CMSIS/Include/cmsis_version.h)(0x67DD527E)
+I (../Drivers/CMSIS/Include/cmsis_compiler.h)(0x67DD527E)
+I (../Drivers/CMSIS/Include/cmsis_armcc.h)(0x67DD527E)
+I (../Drivers/CMSIS/Include/mpu_armv7.h)(0x67DD527E)
+I (../Drivers/CMSIS/Device/ST/STM32G4xx/Include/system_stm32g4xx.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h)(0x67DD529C)
+I (C:\Keil_v5\ARM\ARMCC\include\stddef.h)(0x5D9B3488)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_gpio.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_gpio_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_dma.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_dma_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_cortex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_exti.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash_ramfunc.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_i2c.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_i2c_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_pwr.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_pwr_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x67DD529C)
+I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x67DD529C)
+I (..\Middlewares\grbl\config.h)(0x6AEC7911)
+I (..\Middlewares\grbl\nuts_bolts.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\settings.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\system.h)(0x6AEB3B46)
+I (..\Middlewares\grbl\defaults.h)(0x6AEC7C72)
+I (..\Middlewares\grbl\cpu_map.h)(0x6AEC4B77)
+I (..\Middlewares\grbl\planner.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\coolant_control.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\eeprom.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\gcode.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\grbl_limits.h)(0x6AEB2B5D)
+I (..\Middlewares\grbl\motion_control.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\print.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\probe.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\protocol.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\report.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\grbl_serial.h)(0x6AEC739A)
+I (../Core/Inc/usart.h)(0x6AD8ACA2)
+I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5D9B348A)
+I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x5D9B348A)
+I (..\Middlewares\grbl\spindle_control.h)(0x6AEC4D02)
+I (..\Middlewares\grbl\stepper.h)(0x6AEC3E65)
+I (../Core/Inc/tim.h)(0x6AE947EB)
+I (../Core/Inc/gpio.h)(0x6AD8ACA0)
+I (..\Middlewares\grbl\jog.h)(0x6AD5C99D)
+F (..\Middlewares\grbl\system.h)(0x6AEB3B46)()

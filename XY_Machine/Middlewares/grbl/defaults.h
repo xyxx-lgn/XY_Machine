@@ -26,38 +26,39 @@
    NOTE: Ensure one and only one of these DEFAULTS_XXX values is defined in config.h */
 
 #ifndef defaults_h
+#define defaults_h
 
-#ifdef DEFAULTS_GENERIC
+#ifdef DEFAULTS_GENERIC      //当前使用机型
   // Grbl generic default settings. Should work across different machines.
-  #define DEFAULT_X_STEPS_PER_MM 80.0	//步进电机每毫米步数
+  #define DEFAULT_X_STEPS_PER_MM 80.0	//步进电机每毫米步数，计算依据：每转脉冲数 = 200整步 × 16细分 = 3200  每转移动距离 = 20齿 × 2mm齿距 = 40mm   每毫米脉冲数 = 3200 ÷ 40 = 80
   #define DEFAULT_Y_STEPS_PER_MM 80.0
-  #define DEFAULT_Z_STEPS_PER_MM 80.0
-  #define DEFAULT_X_MAX_RATE 3000.0 // mm/min	//最大移动速度
-  #define DEFAULT_Y_MAX_RATE 3000.0 // mm/min
-  #define DEFAULT_Z_MAX_RATE 1000.0 // mm/min
-  #define DEFAULT_X_ACCELERATION (300.0*60*60) // 10*60*60 mm/min^2 = 10 mm/sec^2	//加速度
-  #define DEFAULT_Y_ACCELERATION (300.0*60*60) // 10*60*60 mm/min^2 = 10 mm/sec^2
-  #define DEFAULT_Z_ACCELERATION (100.0*60*60) // 10*60*60 mm/min^2 = 10 mm/sec^2
+  #define DEFAULT_Z_STEPS_PER_MM 80.0 // 临时占位，Z轴传动参数确认后重新计算，尚未标定，Z轴未使用同步带移动
+  #define DEFAULT_X_MAX_RATE 600.0 // mm/min	//最大移动速度
+  #define DEFAULT_Y_MAX_RATE 600.0 // mm/min
+  #define DEFAULT_Z_MAX_RATE 60.0 // mm/min
+  #define DEFAULT_X_ACCELERATION (30.0*60*60) // 例：10*60*60 mm/min^2 = 10 mm/sec^2	//加速度
+  #define DEFAULT_Y_ACCELERATION (30.0*60*60) // 例：10*60*60 mm/min^2 = 10 mm/sec^2
+  #define DEFAULT_Z_ACCELERATION (5.0*60*60)  // 例：10*60*60 mm/min^2 = 10 mm/sec^2
   #define DEFAULT_X_MAX_TRAVEL 200.0 // mm NOTE: Must be a positive value.	//最大行程
   #define DEFAULT_Y_MAX_TRAVEL 180.0 // mm NOTE: Must be a positive value.
   #define DEFAULT_Z_MAX_TRAVEL 200.0 // mm NOTE: Must be a positive value.
   #define DEFAULT_SPINDLE_RPM_MAX 1000.0 // rpm
   #define DEFAULT_SPINDLE_RPM_MIN 0.0 // rpm
   #define DEFAULT_STEP_PULSE_MICROSECONDS 10	//步进脉冲设置
-  #define DEFAULT_STEPPING_INVERT_MASK 0
-  #define DEFAULT_DIRECTION_INVERT_MASK 0
+  #define DEFAULT_STEPPING_INVERT_MASK 0      // STEP空闲低电平，输出高电平脉冲
+  #define DEFAULT_DIRECTION_INVERT_MASK (1<<X_AXIS) // 按X向右、Y向下、Z抬笔为正，仅反转X方向
   #define DEFAULT_STEPPER_IDLE_LOCK_TIME 250 // msec (0-254, 255 keeps steppers enabled) 步进电机空闲锁定时间
   #define DEFAULT_STATUS_REPORT_MASK 1 // MPos enabled
   #define DEFAULT_JUNCTION_DEVIATION 0.01 // mm
   #define DEFAULT_ARC_TOLERANCE 0.001 // mm
   #define DEFAULT_REPORT_INCHES 0 // false
-  #define DEFAULT_INVERT_ST_ENABLE 1 // false
-  #define DEFAULT_INVERT_LIMIT_PINS 1 // false // 启用软限位保护
-  #define DEFAULT_SOFT_LIMIT_ENABLE 0 // false // 禁用硬限位
-  #define DEFAULT_HARD_LIMIT_ENABLE 0  // false
+  #define DEFAULT_INVERT_ST_ENABLE 0 // ENN低电平使能，高电平关闭，不反转默认使能逻辑
+  #define DEFAULT_INVERT_LIMIT_PINS 1 // false // 控制限位输入的逻辑反转
+  #define DEFAULT_SOFT_LIMIT_ENABLE 0 // false // 初期关闭软限位，行程和机器坐标确认后再启用
+  #define DEFAULT_HARD_LIMIT_ENABLE 0  // false // 初期关闭硬限位，限位中断验证后再启用
   #define DEFAULT_INVERT_PROBE_PIN 0 // false
-  #define DEFAULT_LASER_MODE 0 // false
-  #define DEFAULT_HOMING_ENABLE 0  // false
+  #define DEFAULT_LASER_MODE 0 // false        // 当前不启用激光模式
+  #define DEFAULT_HOMING_ENABLE 0  // false   // 初期关闭回零，方向和限位状态确认后再启用
   #define DEFAULT_HOMING_DIR_MASK 0 // move positive dir
   #define DEFAULT_HOMING_FEED_RATE 25.0 // mm/min
   #define DEFAULT_HOMING_SEEK_RATE 500.0 // mm/min

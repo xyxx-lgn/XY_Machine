@@ -45,3 +45,6 @@ xy_machine\main.o: ../App/Inc/app.h
 xy_machine\main.o: ../BSP/Inc/board_step_test.h
 xy_machine\main.o: ../BSP/Inc/board_motor.h
 xy_machine\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
+xy_machine\main.o: ../BSP/Inc/MyDelay.h
+xy_machine\main.o: ..\Middlewares\grbl\stepper.h
+xy_machine\main.o: ../BSP/Inc/board_serial.h

@@ -29,6 +29,10 @@
 
 #include "app.h"
 #include "board_step_test.h"
+#include "MyDelay.h"   //自定义延时函数
+#include "stepper.h"   //grbl中步进脉冲相关函数
+#include "board_serial.h" // 获取当前自检或GRBL的编译选择
+ 
 
 /* USER CODE END Includes */
 
@@ -102,6 +106,8 @@ int main(void)
   MX_TIM4_Init();
   /* USER CODE BEGIN 2 */
 	
+	MyDelay_Init(); //自定义延时函数初始化
+	
 	app_init();
 
   /* USER CODE END 2 */
@@ -167,25 +173,28 @@ void SystemClock_Config(void)
 /* USER CODE BEGIN 4 */
 
 /*
- * HAL的定时器更新回调。
- *
- * CubeMX生成的TIMx_IRQHandler调用HAL_TIM_IRQHandler，
- * HAL再调用这里。
- *
- * 不要在此打印串口、操作TMC UART或调用HAL_Delay。
+ * TIM2负责步进调度，TIM4负责结束STEP高电平脉冲。
+ * 两个定时器必须交给同一个控制模块，不能根据当前是否忙碌临时切换。
  */
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
     if (htim->Instance == TIM2)
     {
-        board_step_test_tim2_irq();
+#if BOARD_SERIAL_GRBL_RX_ENABLE
+        stepper_timer_interrupt(); // GRBL：推进步进执行流程。
+#else
+        board_step_test_tim2_irq(); // 自检：按测试参数产生STEP脉冲。
+#endif
     }
     else if (htim->Instance == TIM4)
     {
-        board_step_test_tim4_irq();
+#if BOARD_SERIAL_GRBL_RX_ENABLE
+        pulse_width_timer_interrupt(); // GRBL：将STEP恢复为空闲电平。
+#else
+        board_step_test_tim4_irq(); // 自检：结束本次STEP高电平脉冲。
+#endif
     }
 }
-
 
 /* USER CODE END 4 */
 

@@ -129,6 +129,7 @@ void report_alarm_message(uint8_t alarm_code)
   printPgmString(PSTR("ALARM:"));
   print_uint8_base10(alarm_code);
   report_util_line_feed();
+	//等待报警信息进入发送队列
   MyDelay_ms(500); // Force delay to ensure message clears serial write buffer.
 }
 

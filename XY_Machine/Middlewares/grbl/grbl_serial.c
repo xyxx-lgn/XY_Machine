@@ -185,23 +185,158 @@ uint8_t serial_read()
 
 }
 
+//向 GRBL 普通接收环形缓冲区写入一个字节
+uint8_t serial_rx_push(uint8_t c)
+{
+  uint8_t next_head = (uint8_t)(serial_rx_buffer_head + 1u);
+
+  if (next_head == RX_RING_BUFFER) { next_head = 0u; }
+
+  if (next_head == serial_rx_buffer_tail)
+  {
+    return 0u;
+  }
+
+  serial_rx_buffer[serial_rx_buffer_head] = c;
+
+  __DMB();   //保证内存访问顺序，先写后更新head
+
+  serial_rx_buffer_head = next_head;
+
+  return 1u;
+}
+
+/*
+ * 处理从串口收到的一个字节。
+ * 实时命令立即提交执行请求，普通字符进入GRBL接收队列。
+ * 不在这里解析整行G-code，也不打印、延时或等待运动完成。
+ */
+void serial_receive_byte(uint8_t data)
+{
+    switch (data)    //在config.h文件里面可以看到下面实时指令宏对应的指令
+    {
+        case CMD_RESET:
+            mc_reset(); //停止当前运动并提交GRBL软件复位请求
+            break;
+
+        case CMD_STATUS_REPORT:
+            system_set_exec_state_flag(EXEC_STATUS_REPORT); //请求主流程发送状态报告
+            break;
+
+        case CMD_CYCLE_START:
+            system_set_exec_state_flag(EXEC_CYCLE_START); //请求启动或继续运动
+            break;
+
+        case CMD_FEED_HOLD:
+            system_set_exec_state_flag(EXEC_FEED_HOLD); //请求按减速流程暂停
+            break;
+
+        default:
+            if (data > 0x7Fu)
+            {
+                //扩展实时命令不进入普通G-code接收队列
+                switch (data)
+                {
+                    case CMD_SAFETY_DOOR:
+                        system_set_exec_state_flag(EXEC_SAFETY_DOOR);
+                        break;
+
+                    case CMD_JOG_CANCEL:
+                        if (sys.state & STATE_JOG)
+                        {
+                            system_set_exec_state_flag(EXEC_MOTION_CANCEL);
+                        }
+                        break;
+
+                    #ifdef DEBUG
+                    case CMD_DEBUG_REPORT:
+                        bit_true(sys_rt_exec_debug, EXEC_DEBUG_REPORT);
+                        break;
+                    #endif
+
+                    case CMD_FEED_OVR_RESET:
+                        system_set_exec_motion_override_flag(EXEC_FEED_OVR_RESET);
+                        break;
+
+                    case CMD_FEED_OVR_COARSE_PLUS:
+                        system_set_exec_motion_override_flag(EXEC_FEED_OVR_COARSE_PLUS);
+                        break;
+
+                    case CMD_FEED_OVR_COARSE_MINUS:
+                        system_set_exec_motion_override_flag(EXEC_FEED_OVR_COARSE_MINUS);
+                        break;
+
+                    case CMD_FEED_OVR_FINE_PLUS:
+                        system_set_exec_motion_override_flag(EXEC_FEED_OVR_FINE_PLUS);
+                        break;
+
+                    case CMD_FEED_OVR_FINE_MINUS:
+                        system_set_exec_motion_override_flag(EXEC_FEED_OVR_FINE_MINUS);
+                        break;
+
+                    case CMD_RAPID_OVR_RESET:
+                        system_set_exec_motion_override_flag(EXEC_RAPID_OVR_RESET);
+                        break;
+
+                    case CMD_RAPID_OVR_MEDIUM:
+                        system_set_exec_motion_override_flag(EXEC_RAPID_OVR_MEDIUM);
+                        break;
+
+                    case CMD_RAPID_OVR_LOW:
+                        system_set_exec_motion_override_flag(EXEC_RAPID_OVR_LOW);
+                        break;
+
+                    case CMD_SPINDLE_OVR_RESET:
+                        system_set_exec_accessory_override_flag(EXEC_SPINDLE_OVR_RESET);
+                        break;
+
+                    case CMD_SPINDLE_OVR_COARSE_PLUS:
+                        system_set_exec_accessory_override_flag(EXEC_SPINDLE_OVR_COARSE_PLUS);
+                        break;
+
+                    case CMD_SPINDLE_OVR_COARSE_MINUS:
+                        system_set_exec_accessory_override_flag(EXEC_SPINDLE_OVR_COARSE_MINUS);
+                        break;
+
+                    case CMD_SPINDLE_OVR_FINE_PLUS:
+                        system_set_exec_accessory_override_flag(EXEC_SPINDLE_OVR_FINE_PLUS);
+                        break;
+
+                    case CMD_SPINDLE_OVR_FINE_MINUS:
+                        system_set_exec_accessory_override_flag(EXEC_SPINDLE_OVR_FINE_MINUS);
+                        break;
+
+                    case CMD_SPINDLE_OVR_STOP:
+                        system_set_exec_accessory_override_flag(EXEC_SPINDLE_OVR_STOP);
+                        break;
+
+                    case CMD_COOLANT_FLOOD_OVR_TOGGLE:
+                        system_set_exec_accessory_override_flag(EXEC_COOLANT_FLOOD_OVR_TOGGLE);
+                        break;
+
+                    #ifdef ENABLE_M7
+                    case CMD_COOLANT_MIST_OVR_TOGGLE:
+                        system_set_exec_accessory_override_flag(EXEC_COOLANT_MIST_OVR_TOGGLE);
+                        break;
+                    #endif
+
+                    default:
+                        break; //忽略未定义的扩展字节
+                }
+            }
+            else
+            {
+                (void)serial_rx_push(data); //普通字符和换行符进入接收队列
+            }
+            break;
+    }
+}
+
 
 //手动往缓冲区写入一个字符
 uint8_t serial_Inject_char(uint8_t c)
 {
-	uint8_t next_head = (serial_rx_buffer_head + 1) & (RX_RING_BUFFER - 1);
-
-	if(next_head != serial_rx_buffer_tail)	//如果头指针等于尾指针，视为缓冲区未满
-	{
-		serial_rx_buffer[serial_rx_buffer_head] = c;	//将字符放入缓冲区
-		serial_rx_buffer_head = next_head; //更新头指针
-
-		return 1; //返回1，表示成功
-
-	}
-
-	return 0; //返回0， 表示缓冲区已满
-
+  return serial_rx_push(c);
 }
 
 

@@ -4,6 +4,10 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+
+// 0：USART2接收交给板端自检；1：USART2接收交给GRBL。
+#define BOARD_SERIAL_GRBL_RX_ENABLE 0
+
 /*
  * 初始化USART2软件接收缓冲区，并启动中断接收。
  *
@@ -53,6 +57,9 @@ bool board_serial_read_byte(uint8_t *byte);
  * 不关心的输出参数可以传NULL。
  */
 void board_serial_get_rx_stats(uint32_t *received, uint32_t *dropped, uint32_t *errors);
+
+// 在主流程中检查并恢复USART2接收，无恢复请求时立即返回。
+void board_serial_recover_rx(void);
 
 #endif
 

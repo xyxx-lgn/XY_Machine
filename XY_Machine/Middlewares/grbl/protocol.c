@@ -20,9 +20,12 @@
 */
 
 #include "grbl.h"
-#include "cmsis_os.h"
-#include "servo.h"
-#include "ui_jog.h"
+//#include "cmsis_os.h"   //当前未使用rtos，所以注释掉
+//#include "servo.h"      //当前未使用舵机，先注释
+//#include "ui_jog.h"     //当前未使用屏幕UI，注释
+#include "main.h"
+#include "board_serial.h" // 使用USART2接收错误恢复接口
+
 
 // Define line flags. Includes comment type tracking and line overflow detection.
 #define LINE_FLAG_OVERFLOW bit(0)
@@ -78,7 +81,9 @@ void protocol_main_loop()
   uint8_t c;
   for (;;) {
 
-	  osDelay(1);
+		//当前未使用rtos，而使用逻辑，因此注释该段，不需要调度时间
+//	  osDelay(1);
+
 
     // Process one line of incoming serial data, as the data becomes available. Performs an
     // initial filtering by removing spaces and comments and capitalizing all letters.
@@ -221,15 +226,18 @@ void protocol_auto_cycle_start()
 void protocol_execute_realtime()
 {
 
-  Servo_ProcessPending();	//更新PWM
+	//当前没有舵机代码实现，注释该段
+//  Servo_ProcessPending();	//更新PWM
 
 
   protocol_exec_rt_system();
   if (sys.suspend) { protocol_exec_rt_suspend(); }
-  ui_jog_process();
+	
+	//当前无触摸屏和UI操作逻辑，注释该段
+//  ui_jog_process();
 
 
-  protocol_background_slice(); //每隔5ms osDelay(1)
+  protocol_background_slice(); // 保留原后台检查入口，当前不执行调度延时
 }
 
 static void protocol_background_slice()
@@ -241,13 +249,15 @@ static void protocol_background_slice()
     return;
   }
 
-  now = osKernelGetTickCount();
+	//  now = osKernelGetTickCount();  //注释掉rtos实现，替换为逻辑实现
+	now = HAL_GetTick();   //获取当前系统tick计数
   if ((uint32_t)(now - last_slice_tick) < 5U) {
     return;
   }
 
   last_slice_tick = now;
-  osDelay(1);
+	//  osDelay(1);   //rtos中该延时是让出调度时间，所以不需要后面补充HAL库延时
+
 }
 
 
@@ -256,8 +266,9 @@ static void protocol_background_slice()
 // NOTE: Do not alter this unless you know exactly what you are doing!
 void protocol_exec_rt_system()
 {
-
+	// 保存本次检查的实时请求或报警值
   uint8_t rt_exec; // Temp variable to avoid calling volatile multiple times.
+	board_serial_recover_rx(); // 检查USART2接收是否需要恢复
   rt_exec = sys_rt_exec_alarm; // Copy volatile sys_rt_exec_alarm.  复制易变变量 sys_rt_exec_alarm
   if (rt_exec) { // Enter only if any bit flag is true 仅当任意位标志为真时进入
     // System alarm. Everything has shutdown by something that has gone severely wrong. Report
@@ -276,6 +287,9 @@ void protocol_exec_rt_system()
         // the user and a GUI time to do what is needed before resetting, like killing the
         // incoming stream. The same could be said about soft limits. While the position is not
         // lost, continued streaming could cause a serious crash if by chance it gets executed.
+				
+				  // 严重报警期间仍需恢复串口接收，保证后续复位字节有机会被接收。
+					board_serial_recover_rx();
       } while (bit_isfalse(sys_rt_exec_state,EXEC_RESET));
     }
     system_clear_exec_alarm(); // Clear alarm

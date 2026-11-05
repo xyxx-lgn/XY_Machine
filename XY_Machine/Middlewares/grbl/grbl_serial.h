@@ -80,10 +80,16 @@ uint8_t serial_get_rx_buffer_count();  //获取普通接收缓冲区当前已使用的空间
 uint8_t serial_get_tx_buffer_count();   //获取发送缓冲区当前排队的字节数量
 
 
-//增加的接口：从软件内部向普通接收缓冲区放入一个字符，不是硬件串口接收，也不能直接代替实时命令处理，
-//比如后续做界面或者屏幕触摸到某个点位给的指令，在此生成送入grbl普通输入队列。
+//向GRBL普通接收缓冲区写入一个字节
+uint8_t serial_rx_push(uint8_t c);
+
+// 识别串口接收字节，实时指令单独处理，普通字符进入GRBL接收队列。
+void serial_receive_byte(uint8_t data);
+
+//手动往缓冲区写入一个字符
 uint8_t serial_Inject_char(uint8_t c);
-//增加的接口：从软件内部提交一段命令文本，缓冲区满时的处理需要在.c文件中核对
+
+//手动写入完整的G指令
 void serial_manual_Write(const char* message);
 
 

@@ -21,6 +21,8 @@
 
 #include "grbl.h"
 
+#if GRBL_LASER_OUTPUT_ENABLE   //完成激光PWM的映射时启用激光功能，在cup_map.h修改
+
 
 //#ifdef VARIABLE_SPINDLE
 //  static float pwm_gradient; // Precalulated value to speed up rpm to PWM conversions.
@@ -258,3 +260,78 @@ void spindle_stop()
     _spindle_set_state(state);
   }
 #endif
+
+#else
+
+//当前未启用激光输出，初始化不执行硬件操作。
+void spindle_init(void)
+{
+}
+
+//当前未启用激光输出，返回关闭状态。
+uint8_t spindle_get_state(void)
+{
+    return SPINDLE_STATE_DISABLE;
+}
+
+//当前未启用激光输出，停止函数不执行硬件操作。
+void spindle_stop(void)
+{
+}
+
+#ifdef VARIABLE_SPINDLE
+
+//当前未启用激光输出，不改变PWM寄存器。
+void spindle_set_speed(uint8_t pwm_value)
+{
+    (void)pwm_value;
+}
+
+//当前未启用激光输出，返回关闭占空比。
+uint8_t spindle_compute_pwm_value(float rpm)
+{
+    (void)rpm;
+    return 0u;
+}
+
+//当前未启用激光输出，不改变任何GPIO或PWM。
+void spindle_set_state(uint8_t state, float rpm)
+{
+    (void)state;
+    (void)rpm;
+}
+
+//当前未启用激光输出，保留GRBL的同步接口。
+void spindle_sync(uint8_t state, float rpm)
+{
+    if (sys.state == STATE_CHECK_MODE) {
+        return;
+    }
+
+    protocol_buffer_synchronize();
+    spindle_set_state(state, rpm);
+}
+
+#else
+
+//当前未启用激光输出，保留非可变主轴的同步接口。
+void _spindle_sync(uint8_t state)
+{
+    if (sys.state == STATE_CHECK_MODE) {
+        return;
+    }
+
+    protocol_buffer_synchronize();
+    _spindle_set_state(state);
+}
+
+//当前未启用激光输出，不改变硬件状态。
+void _spindle_set_state(uint8_t state)
+{
+    (void)state;
+}
+
+#endif
+
+#endif
+

@@ -102,9 +102,13 @@
 // on separate pin, but homed in one cycle. Also, it should be noted that the function of hard limits
 // will not be affected by pin sharing.
 // NOTE: Defaults are set for a traditional 3-axis CNC machine. Z-axis first to clear, followed by X & Y.
-#define HOMING_CYCLE_0 (1<<Z_AXIS)                // REQUIRED: First move Z to clear workspace.
-#define HOMING_CYCLE_1 ((1<<X_AXIS)|(1<<Y_AXIS))  // OPTIONAL: Then move X,Y at the same time.
+//#define HOMING_CYCLE_0 (1<<Z_AXIS)                // REQUIRED: First move Z to clear workspace.    //先让Z回零再让XY回零
+//#define HOMING_CYCLE_1 ((1<<X_AXIS)|(1<<Y_AXIS))  // OPTIONAL: Then move X,Y at the same time.
 // #define HOMING_CYCLE_2                         // OPTIONAL: Uncomment and add axes mask to enable
+#define HOMING_CYCLE_0 (1<<X_AXIS) // 第一阶段只让X轴回零。  目前硬件无Z回零
+#define HOMING_CYCLE_1 (1<<Y_AXIS) // 第二阶段只让Y轴回零。
+// #define HOMING_CYCLE_2          // 当前没有第三阶段。
+
 
 // NOTE: The following are two examples to setup homing for 2-axis machines.
 // #define HOMING_CYCLE_0 ((1<<X_AXIS)|(1<<Y_AXIS))  // NOT COMPATIBLE WITH COREXY: Homes both X-Y in one cycle. 
@@ -190,7 +194,8 @@
 // have the same steps per mm internally.
 // 注意：此配置选项基于（http://corexy.com/theory.html）中定义的工作原理，改变了 X 轴和 Y 轴的运动方式。
 // 若电机未按文中描述的方案进行定位与接线，运动方向可能出现异常。Grbl 要求 CoreXY 的 A、B 电机内部具有相同的毫米步数（steps/mm）。
-#define COREXY // Default disabled. Uncomment to enable.  默认禁用。取消注释以启用。
+//#define COREXY // Default disabled. Uncomment to enable.  默认禁用。取消注释以启用。  当前使用独立XY轴，不启用CoreXY运动学
+
 
 // Inverts pin logic of the control command pins based on a mask. This essentially means you can use
 // normally-closed switches on the specified pins, rather than the default normally-open switches.

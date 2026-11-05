@@ -1,5 +1,6 @@
 #include "board_serial.h"
 #include "usart.h"
+#include "grbl_serial.h"
 
 #include <stddef.h>
 #include <string.h>
@@ -54,7 +55,7 @@ static volatile bool s_rx_need_recover;
  * 注意：
  * 恢复接收不能找回错误期间已经丢失的数据。
  */
-static void board_serial_recover_rx(void)
+void board_serial_recover_rx(void)
 {
     uint32_t saved_primask;
     HAL_StatusTypeDef status;
@@ -236,59 +237,53 @@ void board_serial_get_rx_stats(uint32_t *received, uint32_t *dropped, uint32_t *
  */
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
+	#if !BOARD_SERIAL_GRBL_RX_ENABLE
     uint16_t head;
     uint16_t next;
+	#endif
 
-    /*
-     * 只处理主机串口USART2。
-     *
-     * UART4用于TMC2209；
-     * 这里不读取、不重启UART4接收。
-     */
+    // 只处理USART2，UART4的TMC2209通信不在这里处理
     if (huart->Instance != USART2)
     {
         return;
     }
 
-    ++s_rx_received;
-
+    ++s_rx_received;   // 记录USART2接收完成的字节数，两种接收用途都统计
+		
+		
+	#if BOARD_SERIAL_GRBL_RX_ENABLE
+    // GRBL接收入口：识别实时指令，普通字符才进入GRBL缓冲区
+    serial_receive_byte(s_rx_byte);
+		
+	#else
+		// 自检接收入口：计算自检缓冲区下一个写入位置
     head = s_rx_head;
     next = (uint16_t)((head + 1u) % BOARD_SERIAL_RX_SIZE);
 
     if (next == s_rx_tail)
     {
-        /*
-         * 下一个位置碰到tail，表示缓冲区已满。
-         *
-         * 丢弃新字节，保留尚未处理的旧字节，
-         * 并记录此次丢弃。
-         */
+        // 自检缓冲区已满，丢弃本次字节并记录次数
         ++s_rx_dropped;
     }
     else
     {
+				//先保存收到的字节
         s_rx_buffer[head] = s_rx_byte;
 
-        /*
-         * 先把数据写入缓冲区，
-         * 再更新head，让主循环知道有新字节。
-         */
+        // 保证数据写入发生在发布新head之前
         __DMB();
 
         s_rx_head = next;
     }
+		
+	#endif
 
-    /*
-     * 单次Receive_IT只接收一个字节。
-     * 本次完成后必须重新挂接，才能继续接收下一字节。
-     *
-     * 如果已请求错误恢复，就交给主循环处理。
-     */
+    // 单字节接收完成后，两种用途都需要重新挂接下一次接收
     if (!s_rx_need_recover)
     {
         if (HAL_UART_Receive_IT(&huart2, &s_rx_byte, 1u) != HAL_OK)
         {
-            s_rx_need_recover = true;
+            s_rx_need_recover = true;   // 挂接失败时，由主流程中的恢复逻辑处理
         }
     }
 }

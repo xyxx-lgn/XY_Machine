@@ -22,7 +22,7 @@
 #ifndef limits_h
 #define limits_h
 
-#include "stm32f4xx_hal.h"
+#include "main.h"
 
 // Initialize the limits module
 void limits_init();
