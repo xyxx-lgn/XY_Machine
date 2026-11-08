@@ -330,6 +330,21 @@ uint8_t system_check_travel_limits(float *target)
 {
   uint8_t idx;
   for (idx=0; idx<N_AXIS; idx++) {
+		//Z轴为步进抬笔模式下的限位检测，不再是-量程~0，而是cup_map.h里面单独为Z轴步进模式设置的限幅值，并且不影响XY轴软限位使用
+			#if PEN_LIFT_MODE == PEN_LIFT_STEPPER
+			if (idx == Z_AXIS)
+			{
+					// 连杆Z轴按人工建立的机器坐标基准，检查专用的小范围。
+					if (target[idx] < PEN_Z_MIN_POSITION || target[idx] > PEN_Z_MAX_POSITION)
+					{
+							return(true);
+					}
+
+					continue; // Z轴已经检查完成，XY继续使用下面原有的检查。
+			}
+			#endif
+
+		
     #ifdef HOMING_FORCE_SET_ORIGIN
       // When homing forced set origin is enabled, soft limits checks need to account for directionality.
       // NOTE: max_travel is stored as negative

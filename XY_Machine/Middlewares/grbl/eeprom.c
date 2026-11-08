@@ -17,21 +17,25 @@ unsigned char eeprom_get_char(unsigned int addr)
 //向EEPROM写入一个字节
 void eeprom_put_char(unsigned int addr, unsigned char new_value)
 {
-  if (AT24C64_WriteOneByte((uint16_t)addr, new_value)  != 0) 
-		{
-    serial_write('A');
-    serial_write('T');
-    serial_write('2');
-    serial_write('4');
-    serial_write('C');
-    serial_write('0');
-    serial_write('2');
-    serial_write('E');
-    serial_write('E');
-    serial_write('R');
-    serial_write('O');
-    serial_write('M');
-  } 
+	//注释，避免每错误一次字节读取写入就打印一次
+//  if (AT24C64_WriteOneByte((uint16_t)addr, new_value)  != 0) 
+//		{
+//    serial_write('A');
+//    serial_write('T');
+//    serial_write('2');
+//    serial_write('4');
+//    serial_write('C');
+//    serial_write('6');
+//    serial_write('4');
+//		serial_write('D');
+//    serial_write('E');
+//    serial_write('E');
+//    serial_write('R');
+//    serial_write('O');
+//    serial_write('M');
+//  } 
+	
+	AT24C64_WriteOneByte((uint16_t)addr, new_value);
 
 }
 

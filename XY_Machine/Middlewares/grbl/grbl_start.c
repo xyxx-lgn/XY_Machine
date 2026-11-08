@@ -21,6 +21,11 @@
 
 #include "grbl.h"
 
+//加入所需头文件，启动grbl
+#include "board_motor.h"
+#include "board_serial.h"
+#include "tmc2209.h"
+
 
 // Declare system global variable structure
 system_t sys;
@@ -38,6 +43,24 @@ volatile uint8_t sys_rt_exec_accessory_override; // Global realtime executor bit
 
 int grbl_Start(void)
 {
+	//完成步进电机驱动芯片的配置，设置16细分，电流配置，tmc2209芯片配置
+	uint8_t failed_address;
+	tmc2209_result_t result;
+
+	board_motor_init();
+
+	result = board_motor_configure_drivers(&failed_address);  //tmc2209步进驱动芯片配置 
+
+	if (result != TMC2209_OK)
+	{
+			board_motor_enable(false);
+
+			for (;;)
+			{
+					// 配置失败时保持驱动关闭，不能进入GRBL运动循环。
+			}
+	}
+	
 	// Initialize system upon power-up.
 	serial_init();   // Setup serial baud rate and interrupts            //清空 GRBL 串口缓冲区和发送队列，已经把配置和中断启用用HAL库自动完成
 	settings_init(); // Load Grbl settings from EEPROM                   //从 EEPROM 读取 GRBL 参数，例如 steps/mm、速度、加速度

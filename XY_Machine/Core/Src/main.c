@@ -32,6 +32,8 @@
 #include "MyDelay.h"   //自定义延时函数
 #include "stepper.h"   //grbl中步进脉冲相关函数
 #include "board_serial.h" // 获取当前自检或GRBL的编译选择
+#include "grbl.h" // GRBL启动入口和平台接口
+#include "AT24C64.h"
  
 
 /* USER CODE END Includes */
@@ -108,7 +110,28 @@ int main(void)
 	
 	MyDelay_Init(); //自定义延时函数初始化
 	
-	app_init();
+#if BOARD_SERIAL_GRBL_RX_ENABLE      //当为1时启动grbl，为0启动板端自检模式
+
+		//GRBL模式下由主入口启动USART2接收，必须在grbl_Start()进入协议循环前调用一次，tmc2209启动在grbl主循环前启动，放在主循环中只执行一次 
+    if (!board_serial_init())   
+    {
+        board_serial_write("USART2 RX initialization failed.\r\n");
+
+
+        while (1)
+        {
+        }
+    }
+		
+    // USART2接收正常启动后，独立检查AT24C64D是否响应。
+//    AT24C64_DebugCheck();
+//		AT24C64_DebugWriteRead();
+
+#else     //启动板端自检模式，在board_motor.h中选择
+
+    app_init();   //初始化tmc2209的步进驱动芯片地址，DIR方向，串口中断开启
+
+#endif
 
   /* USER CODE END 2 */
 
@@ -120,7 +143,25 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 		
-		app_process();
+#if BOARD_SERIAL_GRBL_RX_ENABLE
+
+    grbl_Start();   //grbl_Start()内部包含永久协议循环，正常情况下不会返回
+
+    while (1)
+    {
+    }
+
+#else
+
+    while (1)
+    {
+        app_process();
+    }
+
+#endif
+		
+		
+		
   }
   /* USER CODE END 3 */
 }

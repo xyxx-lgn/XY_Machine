@@ -2,6 +2,7 @@ xy_machine\board_motor.o: ..\BSP\Src\board_motor.c
 xy_machine\board_motor.o: ../BSP/Inc/board_motor.h
 xy_machine\board_motor.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
 xy_machine\board_motor.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+xy_machine\board_motor.o: ../Components/TMC2209/tmc2209.h
 xy_machine\board_motor.o: ../Core/Inc/main.h
 xy_machine\board_motor.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h
 xy_machine\board_motor.o: ../Core/Inc/stm32g4xx_hal_conf.h

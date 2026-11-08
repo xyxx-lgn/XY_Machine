@@ -155,8 +155,8 @@ void app_init(void)
 {
     unsigned int i;
 
-    board_motor_init();
-    board_step_test_init();
+    board_motor_init();      //设置步进地址，以及DIR方向，同时禁止ENN启动
+    board_step_test_init();  //禁止步进三轴脉冲输出
 
     s_current_ready = false;
     s_step_test_active = false;
@@ -179,7 +179,7 @@ void app_init(void)
      * 必须在启动信息打印前调用，
      * 这样打印期间收到的数据也能暂存。
      */
-    if (!board_serial_init())
+    if (!board_serial_init())        //开启串口2中断
     {
         board_serial_write("USART2 RX initialization failed.\r\n");
     }
@@ -192,8 +192,8 @@ void app_init(void)
         "TMC UART communication has NOT been tested yet.\r\n"
     );
 
-    app_print_help();
-    app_print_home_levels();
+    app_print_help();         //打印板端自检指令信息
+    app_print_home_levels();  //打印限位开关当前状态
 }
 
 /*
@@ -452,65 +452,35 @@ finished:
  * 外部采样电阻每只0.1Ω；
  * 内部参考；
  * VSENSE=1。
+ * 自检命令c：调用公共驱动配置接口，再读取配置寄存器供观察。
+ * 只有三颗驱动配置及后续读取全部成功，才允许继续进行自检运动。
  */
 static void app_configure_test_currents(void)
 {
-	
-		 /*
-		 * 一旦重新配置，就先取消运动许可。
-		 * 中间任何一步失败，都不能沿用上一次的成功状态。
-		 */
-		s_current_ready = false;
-	
-    static const uint8_t irun_table[3] = {17u, 17u, 11u};
-    static const uint8_t ihold_table[3] = {8u, 8u, 5u};
-
     uint8_t address;
+    uint8_t failed_address = 0xFFu;
     uint32_t gconf;
     uint32_t chopconf;
     tmc2209_result_t result;
     char message[160];
 
-    /*
-     * 三轴共用ENN。
-     * 任何一颗配置失败，都不能开始运动。
-     */
-    board_motor_enable(false);
-    board_motor_clear_steps();
+    // 每次重新配置前，先撤销原来的自检运动许可。
+    s_current_ready = false;
 
-    board_serial_write("\r\nTMC2209 test-current configuration begin\r\n");
+    board_serial_write("\r\nTMC2209 driver configuration begin\r\n");
 
-    /*
-     * 复用上一课已经通过的总线初始化。
-     * 该函数会打印各节点SENDDELAY配置结果。
-     */
-    if (!app_configure_tmc_bus())
+    // 实际的三轴配置统一由板端公共接口完成。
+    result = board_motor_configure_drivers(&failed_address);
+
+    if (result != TMC2209_OK)
     {
-        board_serial_write("Bus configuration failed; drivers remain disabled.\r\n");
-        return;
+        address = failed_address;
+        goto failed;
     }
 
+    // 保留原来的寄存器输出，便于与之前的测试结果对照。
     for (address = 0u; address < 3u; ++address)
     {
-        /*
-         * 再次明确使用寄存器16细分，
-         * 不要求用户事先执行m命令。
-         */
-        result = tmc2209_set_microstep_16(address);
-
-        if (result != TMC2209_OK)
-        {
-            goto failed;
-        }
-
-        result = tmc2209_set_test_current(address, irun_table[address], ihold_table[address]);
-
-        if (result != TMC2209_OK)
-        {
-            goto failed;
-        }
-
-        /* 回读能够读取的配置寄存器。 */
         result = tmc2209_read_register(address, TMC2209_REG_GCONF, &gconf);
 
         if (result != TMC2209_OK)
@@ -525,30 +495,24 @@ static void app_configure_test_currents(void)
             goto failed;
         }
 
-        /*
-         * 打印的IRUN/IHOLD是已通过IFCNT验证的写入值，
-         * 不是从IHOLD_IRUN中回读出来的数值。
-         */
-        (void)snprintf(message, sizeof(message), "addr=%u OK GCONF=0x%08lX CHOPCONF=0x%08lX IRUN_written=%u IHOLD_written=%u\r\n",
-                       (unsigned int)address,
-                       (unsigned long)gconf,
-                       (unsigned long)chopconf,
-                       (unsigned int)irun_table[address],
-                       (unsigned int)ihold_table[address]);
+        (void)snprintf(message, sizeof(message), "addr=%u OK GCONF=0x%08lX CHOPCONF=0x%08lX\r\n",
+                       (unsigned int)address, (unsigned long)gconf, (unsigned long)chopconf);
 
         board_serial_write(message);
     }
 
-		/* 只有完整配置三颗驱动并全部成功，才开放运动测试。 */
-		s_current_ready = true;
-		
-    board_serial_write("All test currents configured; drivers remain disabled.\r\n");
+    // 仅用于原有自检命令的运动许可，不是新增的GRBL状态。
+    s_current_ready = true;
+
+    board_serial_write("All drivers configured: 16 microsteps; IRUN=17/17/11, IHOLD=8/8/5.\r\n");
+    board_serial_write("Drivers remain disabled.\r\n");
     return;
 
 failed:
     board_motor_enable(false);
+    board_motor_clear_steps();
 
-    (void)snprintf(message, sizeof(message), "Current configuration FAIL: addr=%u result=%s\r\n",
+    (void)snprintf(message, sizeof(message), "Driver configuration FAIL: addr=%u result=%s\r\n",
                    (unsigned int)address, tmc2209_result_string(result));
 
     board_serial_write(message);

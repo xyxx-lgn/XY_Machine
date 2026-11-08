@@ -234,14 +234,18 @@
      * 数值暂定，需在确认Z传动参数和建立工作零点后调整。
      */
     #define PEN_UP_Z_MM                     2.0f
-    #define PEN_DOWN_Z_MM                   0.0f
+    #define PEN_DOWN_Z_MM                   (-0.4f)
+		
+		// Z机器坐标的允许范围，取当前已经实测过的范围。
+	#define PEN_Z_MIN_POSITION      (-1.5f)
+	#define PEN_Z_MAX_POSITION       4.0f
 		
     /*
      * 抬落笔进给速度，单位mm/min。
      * 后续由运动请求使用，不直接决定定时器频率。
      * 当前数值暂定。
      */
-    #define PEN_Z_FEED_MM_MIN               60.0f
+    #define PEN_Z_FEED_MM_MIN               6.0f
 		
 		
   #elif PEN_LIFT_MODE == PEN_LIFT_SERVO

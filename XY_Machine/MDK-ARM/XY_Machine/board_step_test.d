@@ -3,6 +3,7 @@ xy_machine\board_step_test.o: ../BSP/Inc/board_step_test.h
 xy_machine\board_step_test.o: ../BSP/Inc/board_motor.h
 xy_machine\board_step_test.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
 xy_machine\board_step_test.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+xy_machine\board_step_test.o: ../Components/TMC2209/tmc2209.h
 xy_machine\board_step_test.o: ../Core/Inc/tim.h
 xy_machine\board_step_test.o: ../Core/Inc/main.h
 xy_machine\board_step_test.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h

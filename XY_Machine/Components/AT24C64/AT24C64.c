@@ -1,13 +1,92 @@
 #include "AT24C64.h"
 #include "i2c.h"
 
-/*
- * HAL函数的超时时间。
- *
- * AT24C64D单字节写入完成通常只需要几毫秒，
- * 这里给100ms是为了覆盖异常情况下的等待。
- */
-#define AT24C64_TIMEOUT_MS    100u
+#include <stdio.h>
+#include "usart.h"
+#include "board_serial.h"
+
+
+#define AT24C64_TIMEOUT_MS    100u   //HAL函数的超时时间
+
+
+//检测AT24C64读写是否正常
+//void AT24C64_DebugCheck(void)
+//{
+//    HAL_StatusTypeDef status;
+//    uint32_t error_code;
+
+//    status = HAL_I2C_IsDeviceReady(&hi2c2, AT24C64_HAL_ADDRESS, 10u, 100u);
+//    error_code = HAL_I2C_GetError(&hi2c2);
+
+//    if (status == HAL_OK)
+//    {
+//        board_serial_write("AT24C64 IsDeviceReady: OK\r\n");
+//    }
+//    else
+//    {
+//        char message[80];
+
+//        (void)snprintf(message, sizeof(message),
+//                       "AT24C64 IsDeviceReady: FAIL status=%d error=0x%08lX\r\n",
+//                       (int)status,
+//                       (unsigned long)error_code);
+
+//        board_serial_write(message);
+//    }
+//}
+
+//void AT24C64_DebugWriteRead(void)
+//{
+//    HAL_StatusTypeDef status;
+//    uint32_t error_code;
+//    uint8_t write_value = 0x5Au;
+//    uint8_t read_value = 0u;
+//    char message[100];
+
+//    status = HAL_I2C_Mem_Write(&hi2c2,
+//                               AT24C64_HAL_ADDRESS,
+//                               0x1000u,
+//                               I2C_MEMADD_SIZE_16BIT,
+//                               &write_value,
+//                               1u,
+//                               AT24C64_TIMEOUT_MS);
+
+//    error_code = HAL_I2C_GetError(&hi2c2);
+
+//    (void)snprintf(message, sizeof(message),
+//                   "EEPROM raw write: status=%d error=0x%08lX\r\n",
+//                   (int)status,
+//                   (unsigned long)error_code);
+
+//    board_serial_write(message);
+
+//    if (status != HAL_OK)
+//    {
+//        return;
+//    }
+
+//    HAL_Delay(10u);
+
+//    status = HAL_I2C_Mem_Read(&hi2c2,
+//                              AT24C64_HAL_ADDRESS,
+//                              0x1000u,
+//                              I2C_MEMADD_SIZE_16BIT,
+//                              &read_value,
+//                              1u,
+//                              AT24C64_TIMEOUT_MS);
+
+//    error_code = HAL_I2C_GetError(&hi2c2);
+
+//    (void)snprintf(message, sizeof(message),
+//                   "EEPROM raw read: status=%d error=0x%08lX value=0x%02X\r\n",
+//                   (int)status,
+//                   (unsigned long)error_code,
+//                   (unsigned int)read_value);
+
+//    board_serial_write(message);
+//}
+
+
 
 
 /*
@@ -27,20 +106,23 @@ static uint8_t AT24C64_AddressValid(uint16_t address)
 
 /*
  * 等待AT24C64D完成内部写周期。
- *
- * EEPROM收到写数据后，需要一段时间将数据写入内部存储单元。
- * 在这段时间内，器件通常不会应答新的访问请求。
- *
- * HAL_I2C_IsDeviceReady()会不断检测器件是否重新应答。
+ * 每次检测之间间隔1ms，避免在EEPROM仍忙时连续耗尽HAL重试次数
  */
 static uint8_t AT24C64_WaitReady(void)
 {
-    if (HAL_I2C_IsDeviceReady(&hi2c2,AT24C64_HAL_ADDRESS,10u,AT24C64_TIMEOUT_MS) != HAL_OK) 
-		{
-        return 1u;
+    uint32_t retry;
+
+    for (retry = 0u; retry < 100u; ++retry)
+    {
+        if (HAL_I2C_IsDeviceReady(&hi2c2,AT24C64_HAL_ADDRESS,1u,2u) == HAL_OK)
+        {
+            return 0u;
+        }
+
+        HAL_Delay(1u);
     }
 
-    return 0u;
+    return 1u;
 }
 
 

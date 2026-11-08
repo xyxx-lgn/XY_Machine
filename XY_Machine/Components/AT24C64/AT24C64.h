@@ -24,4 +24,8 @@ uint8_t AT24C64_ReadBytes(uint16_t read_addr, uint8_t *data, uint16_t length);
 //检查AT24C64D是否能够响应I2C地址，返回0表示器件在线
 uint8_t AT24C64_Check(void);
 
+//检测AT24C64读写是否正常
+//void AT24C64_DebugCheck(void);
+//void AT24C64_DebugWriteRead(void);
+
 #endif

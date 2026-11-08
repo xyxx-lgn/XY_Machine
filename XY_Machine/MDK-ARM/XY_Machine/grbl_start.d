@@ -68,3 +68,6 @@ xy_machine\grbl_start.o: ..\Middlewares\grbl\stepper.h
 xy_machine\grbl_start.o: ../Core/Inc/tim.h
 xy_machine\grbl_start.o: ../Core/Inc/gpio.h
 xy_machine\grbl_start.o: ..\Middlewares\grbl\jog.h
+xy_machine\grbl_start.o: ../BSP/Inc/board_motor.h
+xy_machine\grbl_start.o: ../Components/TMC2209/tmc2209.h
+xy_machine\grbl_start.o: ../BSP/Inc/board_serial.h

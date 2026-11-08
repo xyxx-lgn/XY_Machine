@@ -6,7 +6,7 @@
 
 
 // 0：USART2接收交给板端自检；1：USART2接收交给GRBL。
-#define BOARD_SERIAL_GRBL_RX_ENABLE 0
+#define BOARD_SERIAL_GRBL_RX_ENABLE 1
 
 /*
  * 初始化USART2软件接收缓冲区，并启动中断接收。

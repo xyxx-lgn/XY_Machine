@@ -33,14 +33,14 @@
   #define DEFAULT_X_STEPS_PER_MM 80.0	//步进电机每毫米步数，计算依据：每转脉冲数 = 200整步 × 16细分 = 3200  每转移动距离 = 20齿 × 2mm齿距 = 40mm   每毫米脉冲数 = 3200 ÷ 40 = 80
   #define DEFAULT_Y_STEPS_PER_MM 80.0
   #define DEFAULT_Z_STEPS_PER_MM 80.0 // 临时占位，Z轴传动参数确认后重新计算，尚未标定，Z轴未使用同步带移动
-  #define DEFAULT_X_MAX_RATE 600.0 // mm/min	//最大移动速度
-  #define DEFAULT_Y_MAX_RATE 600.0 // mm/min
-  #define DEFAULT_Z_MAX_RATE 60.0 // mm/min
+  #define DEFAULT_X_MAX_RATE 1000.0 // mm/min	//最大移动速度
+  #define DEFAULT_Y_MAX_RATE 1000.0 // mm/min
+  #define DEFAULT_Z_MAX_RATE 240.0 // mm/min
   #define DEFAULT_X_ACCELERATION (30.0*60*60) // 例：10*60*60 mm/min^2 = 10 mm/sec^2	//加速度
   #define DEFAULT_Y_ACCELERATION (30.0*60*60) // 例：10*60*60 mm/min^2 = 10 mm/sec^2
-  #define DEFAULT_Z_ACCELERATION (5.0*60*60)  // 例：10*60*60 mm/min^2 = 10 mm/sec^2
-  #define DEFAULT_X_MAX_TRAVEL 200.0 // mm NOTE: Must be a positive value.	//最大行程
-  #define DEFAULT_Y_MAX_TRAVEL 180.0 // mm NOTE: Must be a positive value.
+  #define DEFAULT_Z_ACCELERATION (20.0*60*60)  // 例：10*60*60 mm/min^2 = 10 mm/sec^2
+  #define DEFAULT_X_MAX_TRAVEL 210.0 // mm NOTE: Must be a positive value.	//最大行程
+  #define DEFAULT_Y_MAX_TRAVEL 315.0 // mm NOTE: Must be a positive value.
   #define DEFAULT_Z_MAX_TRAVEL 200.0 // mm NOTE: Must be a positive value.
   #define DEFAULT_SPINDLE_RPM_MAX 1000.0 // rpm
   #define DEFAULT_SPINDLE_RPM_MIN 0.0 // rpm

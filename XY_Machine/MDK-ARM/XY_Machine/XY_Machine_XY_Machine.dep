@@ -1,7 +1,7 @@
 Dependencies for Project 'XY_Machine', Target 'XY_Machine': (DO NOT MODIFY !)
 CompilerVersion: 5060750::V5.06 update 6 (build 750)::.\ARMCC
 F (startup_stm32g431xx.s)(0x6AE947F0)(--cpu Cortex-M4.fp.sp -g --apcs=interwork -I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include--pd "__UVISION_VERSION SETA 538" --pd "_RTE_ SETA 1" --pd "STM32G431xx SETA 1" --pd "_RTE_ SETA 1"--list startup_stm32g431xx.lst --xref -o xy_machine\startup_stm32g431xx.o --depend xy_machine\startup_stm32g431xx.d)
-F (../Core/Src/main.c)(0x6AEC81FA)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209 -I ..\Middlewares\grbl -I ..\Components\AT24C64-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\main.o --omf_browse xy_machine\main.crf --depend xy_machine\main.d)
+F (../Core/Src/main.c)(0x6AED8B5C)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209 -I ..\Middlewares\grbl -I ..\Components\AT24C64-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\main.o --omf_browse xy_machine\main.crf --depend xy_machine\main.d)
 I (../Core/Inc/main.h)(0x6AE845C4)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x67DD529C)
 I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6AE947ED)
@@ -45,11 +45,39 @@ I (../Core/Inc/usart.h)(0x6AD8ACA2)
 I (../Core/Inc/gpio.h)(0x6AD8ACA0)
 I (../App/Inc/app.h)(0x6AE84F67)
 I (../BSP/Inc/board_step_test.h)(0x6AE98AED)
-I (../BSP/Inc/board_motor.h)(0x6AE84F67)
+I (../BSP/Inc/board_motor.h)(0x6AEC8C67)
 I (C:\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x5D9B3488)
+I (../Components/TMC2209/tmc2209.h)(0x6AE89EFA)
 I (../BSP/Inc/MyDelay.h)(0x6AEB442E)
-I (..\Middlewares\grbl\stepper.h)(0x6AEC3E65)
-I (../BSP/Inc/board_serial.h)(0x6AEC8224)
+I (..\Middlewares\grbl\stepper.h)(0x6AEC8525)
+I (../BSP/Inc/board_serial.h)(0x6AED4AC5)
+I (..\Middlewares\grbl\grbl.h)(0x6AE9E91F)
+I (C:\Keil_v5\ARM\ARMCC\include\math.h)(0x5D9B3482)
+I (C:\Keil_v5\ARM\ARMCC\include\inttypes.h)(0x5D9B3488)
+I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x5D9B3488)
+I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x5D9B348A)
+I (..\Middlewares\grbl\config.h)(0x6AF02087)
+I (..\Middlewares\grbl\nuts_bolts.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\settings.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\system.h)(0x6AEB3B46)
+I (..\Middlewares\grbl\defaults.h)(0x6AF02256)
+I (..\Middlewares\grbl\cpu_map.h)(0x6AF01E8F)
+I (..\Middlewares\grbl\planner.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\coolant_control.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\eeprom.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\gcode.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\grbl_limits.h)(0x6AEB2B5D)
+I (..\Middlewares\grbl\motion_control.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\print.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\probe.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\protocol.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\report.h)(0x6AD5C99D)
+I (..\Middlewares\grbl\grbl_serial.h)(0x6AEC739A)
+I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5D9B348A)
+I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x5D9B348A)
+I (..\Middlewares\grbl\spindle_control.h)(0x6AEC4D02)
+I (..\Middlewares\grbl\jog.h)(0x6AD5C99D)
+I (..\Components\AT24C64\AT24C64.h)(0x6AED8B5C)
 F (../Core/Src/gpio.c)(0x6AE845C1)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209 -I ..\Middlewares\grbl -I ..\Components\AT24C64-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\gpio.o --omf_browse xy_machine\gpio.crf --depend xy_machine\gpio.d)
 I (../Core/Inc/gpio.h)(0x6AD8ACA0)
 I (../Core/Inc/main.h)(0x6AE845C4)
@@ -1107,10 +1135,11 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x67DD529C)
-F (..\BSP\Src\board_motor.c)(0x6AE84F67)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209 -I ..\Middlewares\grbl -I ..\Components\AT24C64-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\board_motor.o --omf_browse xy_machine\board_motor.crf --depend xy_machine\board_motor.d)
-I (../BSP/Inc/board_motor.h)(0x6AE84F67)
+F (..\BSP\Src\board_motor.c)(0x6AEC8DBA)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209 -I ..\Middlewares\grbl -I ..\Components\AT24C64-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\board_motor.o --omf_browse xy_machine\board_motor.crf --depend xy_machine\board_motor.d)
+I (../BSP/Inc/board_motor.h)(0x6AEC8C67)
 I (C:\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x5D9B3488)
 I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5D9B3488)
+I (../Components/TMC2209/tmc2209.h)(0x6AE89EFA)
 I (../Core/Inc/main.h)(0x6AE845C4)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x67DD529C)
 I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6AE947ED)
@@ -1146,9 +1175,9 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x67DD529C)
-F (..\BSP\Inc\board_motor.h)(0x6AE84F67)()
+F (..\BSP\Inc\board_motor.h)(0x6AEC8C67)()
 F (..\BSP\Src\board_serial.c)(0x6AEC75D2)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209 -I ..\Middlewares\grbl -I ..\Components\AT24C64-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\board_serial.o --omf_browse xy_machine\board_serial.crf --depend xy_machine\board_serial.d)
-I (../BSP/Inc/board_serial.h)(0x6AEC8224)
+I (../BSP/Inc/board_serial.h)(0x6AED4AC5)
 I (C:\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x5D9B3488)
 I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5D9B3488)
 I (../Core/Inc/usart.h)(0x6AD8ACA2)
@@ -1191,12 +1220,13 @@ I (..\Middlewares\grbl\grbl_serial.h)(0x6AEC739A)
 I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5D9B348A)
 I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x5D9B348A)
 I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x5D9B3488)
-F (..\BSP\Inc\board_serial.h)(0x6AEC8224)()
+F (..\BSP\Inc\board_serial.h)(0x6AED4AC5)()
 F (..\BSP\Src\board_step_test.c)(0x6AE98AED)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209 -I ..\Middlewares\grbl -I ..\Components\AT24C64-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\board_step_test.o --omf_browse xy_machine\board_step_test.crf --depend xy_machine\board_step_test.d)
 I (../BSP/Inc/board_step_test.h)(0x6AE98AED)
-I (../BSP/Inc/board_motor.h)(0x6AE84F67)
+I (../BSP/Inc/board_motor.h)(0x6AEC8C67)
 I (C:\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x5D9B3488)
 I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5D9B3488)
+I (../Components/TMC2209/tmc2209.h)(0x6AE89EFA)
 I (../Core/Inc/tim.h)(0x6AE947EB)
 I (../Core/Inc/main.h)(0x6AE845C4)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x67DD529C)
@@ -1273,12 +1303,13 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x67DD529C)
 F (..\BSP\Inc\MyDelay.h)(0x6AEB442E)()
-F (..\App\Src\app.c)(0x6AE9D029)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209 -I ..\Middlewares\grbl -I ..\Components\AT24C64-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\app.o --omf_browse xy_machine\app.crf --depend xy_machine\app.d)
+F (..\App\Src\app.c)(0x6AED4BF2)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209 -I ..\Middlewares\grbl -I ..\Components\AT24C64-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\app.o --omf_browse xy_machine\app.crf --depend xy_machine\app.d)
 I (../App/Inc/app.h)(0x6AE84F67)
-I (../BSP/Inc/board_motor.h)(0x6AE84F67)
+I (../BSP/Inc/board_motor.h)(0x6AEC8C67)
 I (C:\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x5D9B3488)
 I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5D9B3488)
-I (../BSP/Inc/board_serial.h)(0x6AEC8224)
+I (../Components/TMC2209/tmc2209.h)(0x6AE89EFA)
+I (../BSP/Inc/board_serial.h)(0x6AED4AC5)
 I (../Core/Inc/main.h)(0x6AE845C4)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x67DD529C)
 I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6AE947ED)
@@ -1314,7 +1345,6 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x67DD529C)
-I (../Components/TMC2209/tmc2209.h)(0x6AE89EFA)
 I (../BSP/Inc/board_step_test.h)(0x6AE98AED)
 I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5D9B348A)
 F (..\App\Inc\app.h)(0x6AE84F67)()
@@ -1360,8 +1390,8 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x67DD529C)
 I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x5D9B3488)
 F (..\Components\TMC2209\tmc2209.h)(0x6AE89EFA)()
-F (..\Components\AT24C64\AT24C64.c)(0x6AEBFBD9)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209 -I ..\Middlewares\grbl -I ..\Components\AT24C64-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\at24c64.o --omf_browse xy_machine\at24c64.crf --depend xy_machine\at24c64.d)
-I (..\Components\AT24C64\AT24C64.h)(0x6AEBF9F4)
+F (..\Components\AT24C64\AT24C64.c)(0x6AED8AD5)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209 -I ..\Middlewares\grbl -I ..\Components\AT24C64-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\at24c64.o --omf_browse xy_machine\at24c64.crf --depend xy_machine\at24c64.d)
+I (..\Components\AT24C64\AT24C64.h)(0x6AED8B5C)
 I (../Core/Inc/main.h)(0x6AE845C4)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x67DD529C)
 I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6AE947ED)
@@ -1399,8 +1429,12 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x67DD529C)
 I (../Core/Inc/i2c.h)(0x6AD8ACA1)
-F (..\Components\AT24C64\AT24C64.h)(0x6AEBF9F4)()
-F (..\Middlewares\grbl\config.h)(0x6AEC7911)()
+I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5D9B348A)
+I (../Core/Inc/usart.h)(0x6AD8ACA2)
+I (../BSP/Inc/board_serial.h)(0x6AED4AC5)
+I (C:\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x5D9B3488)
+F (..\Components\AT24C64\AT24C64.h)(0x6AED8B5C)()
+F (..\Middlewares\grbl\config.h)(0x6AF02087)()
 F (..\Middlewares\grbl\coolant_control.c)(0x6AEC6A7B)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209 -I ..\Middlewares\grbl -I ..\Components\AT24C64-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\coolant_control.o --omf_browse xy_machine\coolant_control.crf --depend xy_machine\coolant_control.d)
 I (..\Middlewares\grbl\grbl.h)(0x6AE9E91F)
 I (C:\Keil_v5\ARM\ARMCC\include\math.h)(0x5D9B3482)
@@ -1444,12 +1478,12 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x67DD529C)
-I (..\Middlewares\grbl\config.h)(0x6AEC7911)
+I (..\Middlewares\grbl\config.h)(0x6AF02087)
 I (..\Middlewares\grbl\nuts_bolts.h)(0x6AD5C99D)
 I (..\Middlewares\grbl\settings.h)(0x6AD5C99D)
 I (..\Middlewares\grbl\system.h)(0x6AEB3B46)
-I (..\Middlewares\grbl\defaults.h)(0x6AEC7C72)
-I (..\Middlewares\grbl\cpu_map.h)(0x6AEC4B77)
+I (..\Middlewares\grbl\defaults.h)(0x6AF02256)
+I (..\Middlewares\grbl\cpu_map.h)(0x6AF01E8F)
 I (..\Middlewares\grbl\planner.h)(0x6AD5C99D)
 I (..\Middlewares\grbl\coolant_control.h)(0x6AD5C99D)
 I (..\Middlewares\grbl\eeprom.h)(0x6AD5C99D)
@@ -1465,15 +1499,15 @@ I (../Core/Inc/usart.h)(0x6AD8ACA2)
 I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5D9B348A)
 I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x5D9B348A)
 I (..\Middlewares\grbl\spindle_control.h)(0x6AEC4D02)
-I (..\Middlewares\grbl\stepper.h)(0x6AEC3E65)
+I (..\Middlewares\grbl\stepper.h)(0x6AEC8525)
 I (../Core/Inc/tim.h)(0x6AE947EB)
 I (../Core/Inc/gpio.h)(0x6AD8ACA0)
 I (..\Middlewares\grbl\jog.h)(0x6AD5C99D)
 F (..\Middlewares\grbl\coolant_control.h)(0x6AD5C99D)()
-F (..\Middlewares\grbl\cpu_map.h)(0x6AEC4B77)()
-F (..\Middlewares\grbl\defaults.h)(0x6AEC7C72)()
-F (..\Middlewares\grbl\eeprom.c)(0x6AEC1186)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209 -I ..\Middlewares\grbl -I ..\Components\AT24C64-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\eeprom.o --omf_browse xy_machine\eeprom.crf --depend xy_machine\eeprom.d)
-I (..\Components\AT24C64\AT24C64.h)(0x6AEBF9F4)
+F (..\Middlewares\grbl\cpu_map.h)(0x6AF01E8F)()
+F (..\Middlewares\grbl\defaults.h)(0x6AF02256)()
+F (..\Middlewares\grbl\eeprom.c)(0x6AED8B51)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209 -I ..\Middlewares\grbl -I ..\Components\AT24C64-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\eeprom.o --omf_browse xy_machine\eeprom.crf --depend xy_machine\eeprom.d)
+I (..\Components\AT24C64\AT24C64.h)(0x6AED8B5C)
 I (../Core/Inc/main.h)(0x6AE845C4)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h)(0x67DD529C)
 I (../Core/Inc/stm32g4xx_hal_conf.h)(0x6AE947ED)
@@ -1517,11 +1551,11 @@ I (C:\Keil_v5\ARM\ARMCC\include\inttypes.h)(0x5D9B3488)
 I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x5D9B3488)
 I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x5D9B348A)
 I (C:\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x5D9B3488)
-I (..\Middlewares\grbl\config.h)(0x6AEC7911)
+I (..\Middlewares\grbl\config.h)(0x6AF02087)
 I (..\Middlewares\grbl\nuts_bolts.h)(0x6AD5C99D)
 I (..\Middlewares\grbl\system.h)(0x6AEB3B46)
-I (..\Middlewares\grbl\defaults.h)(0x6AEC7C72)
-I (..\Middlewares\grbl\cpu_map.h)(0x6AEC4B77)
+I (..\Middlewares\grbl\defaults.h)(0x6AF02256)
+I (..\Middlewares\grbl\cpu_map.h)(0x6AF01E8F)
 I (..\Middlewares\grbl\planner.h)(0x6AD5C99D)
 I (..\Middlewares\grbl\coolant_control.h)(0x6AD5C99D)
 I (..\Middlewares\grbl\eeprom.h)(0x6AD5C99D)
@@ -1537,7 +1571,7 @@ I (../Core/Inc/usart.h)(0x6AD8ACA2)
 I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5D9B348A)
 I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x5D9B348A)
 I (..\Middlewares\grbl\spindle_control.h)(0x6AEC4D02)
-I (..\Middlewares\grbl\stepper.h)(0x6AEC3E65)
+I (..\Middlewares\grbl\stepper.h)(0x6AEC8525)
 I (../Core/Inc/tim.h)(0x6AE947EB)
 I (../Core/Inc/gpio.h)(0x6AD8ACA0)
 I (..\Middlewares\grbl\jog.h)(0x6AD5C99D)
@@ -1585,12 +1619,12 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x67DD529C)
-I (..\Middlewares\grbl\config.h)(0x6AEC7911)
+I (..\Middlewares\grbl\config.h)(0x6AF02087)
 I (..\Middlewares\grbl\nuts_bolts.h)(0x6AD5C99D)
 I (..\Middlewares\grbl\settings.h)(0x6AD5C99D)
 I (..\Middlewares\grbl\system.h)(0x6AEB3B46)
-I (..\Middlewares\grbl\defaults.h)(0x6AEC7C72)
-I (..\Middlewares\grbl\cpu_map.h)(0x6AEC4B77)
+I (..\Middlewares\grbl\defaults.h)(0x6AF02256)
+I (..\Middlewares\grbl\cpu_map.h)(0x6AF01E8F)
 I (..\Middlewares\grbl\planner.h)(0x6AD5C99D)
 I (..\Middlewares\grbl\coolant_control.h)(0x6AD5C99D)
 I (..\Middlewares\grbl\eeprom.h)(0x6AD5C99D)
@@ -1606,7 +1640,7 @@ I (../Core/Inc/usart.h)(0x6AD8ACA2)
 I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5D9B348A)
 I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x5D9B348A)
 I (..\Middlewares\grbl\spindle_control.h)(0x6AEC4D02)
-I (..\Middlewares\grbl\stepper.h)(0x6AEC3E65)
+I (..\Middlewares\grbl\stepper.h)(0x6AEC8525)
 I (../Core/Inc/tim.h)(0x6AE947EB)
 I (../Core/Inc/gpio.h)(0x6AD8ACA0)
 I (..\Middlewares\grbl\jog.h)(0x6AD5C99D)
@@ -1655,12 +1689,12 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x67DD529C)
-I (..\Middlewares\grbl\config.h)(0x6AEC7911)
+I (..\Middlewares\grbl\config.h)(0x6AF02087)
 I (..\Middlewares\grbl\nuts_bolts.h)(0x6AD5C99D)
 I (..\Middlewares\grbl\settings.h)(0x6AD5C99D)
 I (..\Middlewares\grbl\system.h)(0x6AEB3B46)
-I (..\Middlewares\grbl\defaults.h)(0x6AEC7C72)
-I (..\Middlewares\grbl\cpu_map.h)(0x6AEC4B77)
+I (..\Middlewares\grbl\defaults.h)(0x6AF02256)
+I (..\Middlewares\grbl\cpu_map.h)(0x6AF01E8F)
 I (..\Middlewares\grbl\planner.h)(0x6AD5C99D)
 I (..\Middlewares\grbl\coolant_control.h)(0x6AD5C99D)
 I (..\Middlewares\grbl\eeprom.h)(0x6AD5C99D)
@@ -1676,7 +1710,7 @@ I (../Core/Inc/usart.h)(0x6AD8ACA2)
 I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5D9B348A)
 I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x5D9B348A)
 I (..\Middlewares\grbl\spindle_control.h)(0x6AEC4D02)
-I (..\Middlewares\grbl\stepper.h)(0x6AEC3E65)
+I (..\Middlewares\grbl\stepper.h)(0x6AEC8525)
 I (../Core/Inc/tim.h)(0x6AE947EB)
 I (../Core/Inc/gpio.h)(0x6AD8ACA0)
 I (..\Middlewares\grbl\jog.h)(0x6AD5C99D)
@@ -1724,12 +1758,12 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x67DD529C)
-I (..\Middlewares\grbl\config.h)(0x6AEC7911)
+I (..\Middlewares\grbl\config.h)(0x6AF02087)
 I (..\Middlewares\grbl\nuts_bolts.h)(0x6AD5C99D)
 I (..\Middlewares\grbl\settings.h)(0x6AD5C99D)
 I (..\Middlewares\grbl\system.h)(0x6AEB3B46)
-I (..\Middlewares\grbl\defaults.h)(0x6AEC7C72)
-I (..\Middlewares\grbl\cpu_map.h)(0x6AEC4B77)
+I (..\Middlewares\grbl\defaults.h)(0x6AF02256)
+I (..\Middlewares\grbl\cpu_map.h)(0x6AF01E8F)
 I (..\Middlewares\grbl\planner.h)(0x6AD5C99D)
 I (..\Middlewares\grbl\coolant_control.h)(0x6AD5C99D)
 I (..\Middlewares\grbl\eeprom.h)(0x6AD5C99D)
@@ -1745,12 +1779,12 @@ I (../Core/Inc/usart.h)(0x6AD8ACA2)
 I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5D9B348A)
 I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x5D9B348A)
 I (..\Middlewares\grbl\spindle_control.h)(0x6AEC4D02)
-I (..\Middlewares\grbl\stepper.h)(0x6AEC3E65)
+I (..\Middlewares\grbl\stepper.h)(0x6AEC8525)
 I (../Core/Inc/tim.h)(0x6AE947EB)
 I (../Core/Inc/gpio.h)(0x6AD8ACA0)
 I (..\Middlewares\grbl\jog.h)(0x6AD5C99D)
 F (..\Middlewares\grbl\grbl_serial.h)(0x6AEC739A)()
-F (..\Middlewares\grbl\grbl_start.c)(0x6AEBE89B)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209 -I ..\Middlewares\grbl -I ..\Components\AT24C64-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\grbl_start.o --omf_browse xy_machine\grbl_start.crf --depend xy_machine\grbl_start.d)
+F (..\Middlewares\grbl\grbl_start.c)(0x6AED4B00)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209 -I ..\Middlewares\grbl -I ..\Components\AT24C64-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\grbl_start.o --omf_browse xy_machine\grbl_start.crf --depend xy_machine\grbl_start.d)
 I (..\Middlewares\grbl\grbl.h)(0x6AE9E91F)
 I (C:\Keil_v5\ARM\ARMCC\include\math.h)(0x5D9B3482)
 I (C:\Keil_v5\ARM\ARMCC\include\inttypes.h)(0x5D9B3488)
@@ -1793,12 +1827,12 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x67DD529C)
-I (..\Middlewares\grbl\config.h)(0x6AEC7911)
+I (..\Middlewares\grbl\config.h)(0x6AF02087)
 I (..\Middlewares\grbl\nuts_bolts.h)(0x6AD5C99D)
 I (..\Middlewares\grbl\settings.h)(0x6AD5C99D)
 I (..\Middlewares\grbl\system.h)(0x6AEB3B46)
-I (..\Middlewares\grbl\defaults.h)(0x6AEC7C72)
-I (..\Middlewares\grbl\cpu_map.h)(0x6AEC4B77)
+I (..\Middlewares\grbl\defaults.h)(0x6AF02256)
+I (..\Middlewares\grbl\cpu_map.h)(0x6AF01E8F)
 I (..\Middlewares\grbl\planner.h)(0x6AD5C99D)
 I (..\Middlewares\grbl\coolant_control.h)(0x6AD5C99D)
 I (..\Middlewares\grbl\eeprom.h)(0x6AD5C99D)
@@ -1814,10 +1848,13 @@ I (../Core/Inc/usart.h)(0x6AD8ACA2)
 I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5D9B348A)
 I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x5D9B348A)
 I (..\Middlewares\grbl\spindle_control.h)(0x6AEC4D02)
-I (..\Middlewares\grbl\stepper.h)(0x6AEC3E65)
+I (..\Middlewares\grbl\stepper.h)(0x6AEC8525)
 I (../Core/Inc/tim.h)(0x6AE947EB)
 I (../Core/Inc/gpio.h)(0x6AD8ACA0)
 I (..\Middlewares\grbl\jog.h)(0x6AD5C99D)
+I (../BSP/Inc/board_motor.h)(0x6AEC8C67)
+I (../Components/TMC2209/tmc2209.h)(0x6AE89EFA)
+I (../BSP/Inc/board_serial.h)(0x6AED4AC5)
 F (..\Middlewares\grbl\jog.c)(0x6AD5C99D)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209 -I ..\Middlewares\grbl -I ..\Components\AT24C64-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\jog.o --omf_browse xy_machine\jog.crf --depend xy_machine\jog.d)
 I (..\Middlewares\grbl\grbl.h)(0x6AE9E91F)
 I (C:\Keil_v5\ARM\ARMCC\include\math.h)(0x5D9B3482)
@@ -1861,12 +1898,12 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x67DD529C)
-I (..\Middlewares\grbl\config.h)(0x6AEC7911)
+I (..\Middlewares\grbl\config.h)(0x6AF02087)
 I (..\Middlewares\grbl\nuts_bolts.h)(0x6AD5C99D)
 I (..\Middlewares\grbl\settings.h)(0x6AD5C99D)
 I (..\Middlewares\grbl\system.h)(0x6AEB3B46)
-I (..\Middlewares\grbl\defaults.h)(0x6AEC7C72)
-I (..\Middlewares\grbl\cpu_map.h)(0x6AEC4B77)
+I (..\Middlewares\grbl\defaults.h)(0x6AF02256)
+I (..\Middlewares\grbl\cpu_map.h)(0x6AF01E8F)
 I (..\Middlewares\grbl\planner.h)(0x6AD5C99D)
 I (..\Middlewares\grbl\coolant_control.h)(0x6AD5C99D)
 I (..\Middlewares\grbl\eeprom.h)(0x6AD5C99D)
@@ -1882,7 +1919,7 @@ I (../Core/Inc/usart.h)(0x6AD8ACA2)
 I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5D9B348A)
 I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x5D9B348A)
 I (..\Middlewares\grbl\spindle_control.h)(0x6AEC4D02)
-I (..\Middlewares\grbl\stepper.h)(0x6AEC3E65)
+I (..\Middlewares\grbl\stepper.h)(0x6AEC8525)
 I (../Core/Inc/tim.h)(0x6AE947EB)
 I (../Core/Inc/gpio.h)(0x6AD8ACA0)
 I (..\Middlewares\grbl\jog.h)(0x6AD5C99D)
@@ -1930,12 +1967,12 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x67DD529C)
-I (..\Middlewares\grbl\config.h)(0x6AEC7911)
+I (..\Middlewares\grbl\config.h)(0x6AF02087)
 I (..\Middlewares\grbl\nuts_bolts.h)(0x6AD5C99D)
 I (..\Middlewares\grbl\settings.h)(0x6AD5C99D)
 I (..\Middlewares\grbl\system.h)(0x6AEB3B46)
-I (..\Middlewares\grbl\defaults.h)(0x6AEC7C72)
-I (..\Middlewares\grbl\cpu_map.h)(0x6AEC4B77)
+I (..\Middlewares\grbl\defaults.h)(0x6AF02256)
+I (..\Middlewares\grbl\cpu_map.h)(0x6AF01E8F)
 I (..\Middlewares\grbl\planner.h)(0x6AD5C99D)
 I (..\Middlewares\grbl\coolant_control.h)(0x6AD5C99D)
 I (..\Middlewares\grbl\eeprom.h)(0x6AD5C99D)
@@ -1951,7 +1988,7 @@ I (../Core/Inc/usart.h)(0x6AD8ACA2)
 I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5D9B348A)
 I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x5D9B348A)
 I (..\Middlewares\grbl\spindle_control.h)(0x6AEC4D02)
-I (..\Middlewares\grbl\stepper.h)(0x6AEC3E65)
+I (..\Middlewares\grbl\stepper.h)(0x6AEC8525)
 I (../Core/Inc/tim.h)(0x6AE947EB)
 I (../Core/Inc/gpio.h)(0x6AD8ACA0)
 I (..\Middlewares\grbl\jog.h)(0x6AD5C99D)
@@ -1998,12 +2035,12 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x67DD529C)
-I (..\Middlewares\grbl\config.h)(0x6AEC7911)
+I (..\Middlewares\grbl\config.h)(0x6AF02087)
 I (..\Middlewares\grbl\nuts_bolts.h)(0x6AD5C99D)
 I (..\Middlewares\grbl\settings.h)(0x6AD5C99D)
 I (..\Middlewares\grbl\system.h)(0x6AEB3B46)
-I (..\Middlewares\grbl\defaults.h)(0x6AEC7C72)
-I (..\Middlewares\grbl\cpu_map.h)(0x6AEC4B77)
+I (..\Middlewares\grbl\defaults.h)(0x6AF02256)
+I (..\Middlewares\grbl\cpu_map.h)(0x6AF01E8F)
 I (..\Middlewares\grbl\planner.h)(0x6AD5C99D)
 I (..\Middlewares\grbl\coolant_control.h)(0x6AD5C99D)
 I (..\Middlewares\grbl\eeprom.h)(0x6AD5C99D)
@@ -2019,7 +2056,7 @@ I (../Core/Inc/usart.h)(0x6AD8ACA2)
 I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5D9B348A)
 I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x5D9B348A)
 I (..\Middlewares\grbl\spindle_control.h)(0x6AEC4D02)
-I (..\Middlewares\grbl\stepper.h)(0x6AEC3E65)
+I (..\Middlewares\grbl\stepper.h)(0x6AEC8525)
 I (../Core/Inc/tim.h)(0x6AE947EB)
 I (../Core/Inc/gpio.h)(0x6AD8ACA0)
 I (..\Middlewares\grbl\jog.h)(0x6AD5C99D)
@@ -2067,12 +2104,12 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x67DD529C)
-I (..\Middlewares\grbl\config.h)(0x6AEC7911)
+I (..\Middlewares\grbl\config.h)(0x6AF02087)
 I (..\Middlewares\grbl\nuts_bolts.h)(0x6AD5C99D)
 I (..\Middlewares\grbl\settings.h)(0x6AD5C99D)
 I (..\Middlewares\grbl\system.h)(0x6AEB3B46)
-I (..\Middlewares\grbl\defaults.h)(0x6AEC7C72)
-I (..\Middlewares\grbl\cpu_map.h)(0x6AEC4B77)
+I (..\Middlewares\grbl\defaults.h)(0x6AF02256)
+I (..\Middlewares\grbl\cpu_map.h)(0x6AF01E8F)
 I (..\Middlewares\grbl\planner.h)(0x6AD5C99D)
 I (..\Middlewares\grbl\coolant_control.h)(0x6AD5C99D)
 I (..\Middlewares\grbl\eeprom.h)(0x6AD5C99D)
@@ -2088,7 +2125,7 @@ I (../Core/Inc/usart.h)(0x6AD8ACA2)
 I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5D9B348A)
 I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x5D9B348A)
 I (..\Middlewares\grbl\spindle_control.h)(0x6AEC4D02)
-I (..\Middlewares\grbl\stepper.h)(0x6AEC3E65)
+I (..\Middlewares\grbl\stepper.h)(0x6AEC8525)
 I (../Core/Inc/tim.h)(0x6AE947EB)
 I (../Core/Inc/gpio.h)(0x6AD8ACA0)
 I (..\Middlewares\grbl\jog.h)(0x6AD5C99D)
@@ -2137,12 +2174,12 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x67DD529C)
-I (..\Middlewares\grbl\config.h)(0x6AEC7911)
+I (..\Middlewares\grbl\config.h)(0x6AF02087)
 I (..\Middlewares\grbl\nuts_bolts.h)(0x6AD5C99D)
 I (..\Middlewares\grbl\settings.h)(0x6AD5C99D)
 I (..\Middlewares\grbl\system.h)(0x6AEB3B46)
-I (..\Middlewares\grbl\defaults.h)(0x6AEC7C72)
-I (..\Middlewares\grbl\cpu_map.h)(0x6AEC4B77)
+I (..\Middlewares\grbl\defaults.h)(0x6AF02256)
+I (..\Middlewares\grbl\cpu_map.h)(0x6AF01E8F)
 I (..\Middlewares\grbl\planner.h)(0x6AD5C99D)
 I (..\Middlewares\grbl\coolant_control.h)(0x6AD5C99D)
 I (..\Middlewares\grbl\eeprom.h)(0x6AD5C99D)
@@ -2158,7 +2195,7 @@ I (../Core/Inc/usart.h)(0x6AD8ACA2)
 I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5D9B348A)
 I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x5D9B348A)
 I (..\Middlewares\grbl\spindle_control.h)(0x6AEC4D02)
-I (..\Middlewares\grbl\stepper.h)(0x6AEC3E65)
+I (..\Middlewares\grbl\stepper.h)(0x6AEC8525)
 I (../Core/Inc/tim.h)(0x6AE947EB)
 I (../Core/Inc/gpio.h)(0x6AD8ACA0)
 I (..\Middlewares\grbl\jog.h)(0x6AD5C99D)
@@ -2206,12 +2243,12 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x67DD529C)
-I (..\Middlewares\grbl\config.h)(0x6AEC7911)
+I (..\Middlewares\grbl\config.h)(0x6AF02087)
 I (..\Middlewares\grbl\nuts_bolts.h)(0x6AD5C99D)
 I (..\Middlewares\grbl\settings.h)(0x6AD5C99D)
 I (..\Middlewares\grbl\system.h)(0x6AEB3B46)
-I (..\Middlewares\grbl\defaults.h)(0x6AEC7C72)
-I (..\Middlewares\grbl\cpu_map.h)(0x6AEC4B77)
+I (..\Middlewares\grbl\defaults.h)(0x6AF02256)
+I (..\Middlewares\grbl\cpu_map.h)(0x6AF01E8F)
 I (..\Middlewares\grbl\planner.h)(0x6AD5C99D)
 I (..\Middlewares\grbl\coolant_control.h)(0x6AD5C99D)
 I (..\Middlewares\grbl\eeprom.h)(0x6AD5C99D)
@@ -2227,7 +2264,7 @@ I (../Core/Inc/usart.h)(0x6AD8ACA2)
 I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5D9B348A)
 I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x5D9B348A)
 I (..\Middlewares\grbl\spindle_control.h)(0x6AEC4D02)
-I (..\Middlewares\grbl\stepper.h)(0x6AEC3E65)
+I (..\Middlewares\grbl\stepper.h)(0x6AEC8525)
 I (../Core/Inc/tim.h)(0x6AE947EB)
 I (../Core/Inc/gpio.h)(0x6AD8ACA0)
 I (..\Middlewares\grbl\jog.h)(0x6AD5C99D)
@@ -2275,12 +2312,12 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x67DD529C)
-I (..\Middlewares\grbl\config.h)(0x6AEC7911)
+I (..\Middlewares\grbl\config.h)(0x6AF02087)
 I (..\Middlewares\grbl\nuts_bolts.h)(0x6AD5C99D)
 I (..\Middlewares\grbl\settings.h)(0x6AD5C99D)
 I (..\Middlewares\grbl\system.h)(0x6AEB3B46)
-I (..\Middlewares\grbl\defaults.h)(0x6AEC7C72)
-I (..\Middlewares\grbl\cpu_map.h)(0x6AEC4B77)
+I (..\Middlewares\grbl\defaults.h)(0x6AF02256)
+I (..\Middlewares\grbl\cpu_map.h)(0x6AF01E8F)
 I (..\Middlewares\grbl\planner.h)(0x6AD5C99D)
 I (..\Middlewares\grbl\coolant_control.h)(0x6AD5C99D)
 I (..\Middlewares\grbl\eeprom.h)(0x6AD5C99D)
@@ -2296,7 +2333,7 @@ I (../Core/Inc/usart.h)(0x6AD8ACA2)
 I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5D9B348A)
 I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x5D9B348A)
 I (..\Middlewares\grbl\spindle_control.h)(0x6AEC4D02)
-I (..\Middlewares\grbl\stepper.h)(0x6AEC3E65)
+I (..\Middlewares\grbl\stepper.h)(0x6AEC8525)
 I (../Core/Inc/tim.h)(0x6AE947EB)
 I (../Core/Inc/gpio.h)(0x6AD8ACA0)
 I (..\Middlewares\grbl\jog.h)(0x6AD5C99D)
@@ -2344,12 +2381,12 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x67DD529C)
-I (..\Middlewares\grbl\config.h)(0x6AEC7911)
+I (..\Middlewares\grbl\config.h)(0x6AF02087)
 I (..\Middlewares\grbl\nuts_bolts.h)(0x6AD5C99D)
 I (..\Middlewares\grbl\settings.h)(0x6AD5C99D)
 I (..\Middlewares\grbl\system.h)(0x6AEB3B46)
-I (..\Middlewares\grbl\defaults.h)(0x6AEC7C72)
-I (..\Middlewares\grbl\cpu_map.h)(0x6AEC4B77)
+I (..\Middlewares\grbl\defaults.h)(0x6AF02256)
+I (..\Middlewares\grbl\cpu_map.h)(0x6AF01E8F)
 I (..\Middlewares\grbl\planner.h)(0x6AD5C99D)
 I (..\Middlewares\grbl\coolant_control.h)(0x6AD5C99D)
 I (..\Middlewares\grbl\eeprom.h)(0x6AD5C99D)
@@ -2365,11 +2402,11 @@ I (../Core/Inc/usart.h)(0x6AD8ACA2)
 I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5D9B348A)
 I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x5D9B348A)
 I (..\Middlewares\grbl\spindle_control.h)(0x6AEC4D02)
-I (..\Middlewares\grbl\stepper.h)(0x6AEC3E65)
+I (..\Middlewares\grbl\stepper.h)(0x6AEC8525)
 I (../Core/Inc/tim.h)(0x6AE947EB)
 I (../Core/Inc/gpio.h)(0x6AD8ACA0)
 I (..\Middlewares\grbl\jog.h)(0x6AD5C99D)
-I (../BSP/Inc/board_serial.h)(0x6AEC8224)
+I (../BSP/Inc/board_serial.h)(0x6AED4AC5)
 F (..\Middlewares\grbl\protocol.h)(0x6AD5C99D)()
 F (..\Middlewares\grbl\report.c)(0x6AEC4875)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209 -I ..\Middlewares\grbl -I ..\Components\AT24C64-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\report.o --omf_browse xy_machine\report.crf --depend xy_machine\report.d)
 I (..\Middlewares\grbl\grbl.h)(0x6AE9E91F)
@@ -2414,12 +2451,12 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x67DD529C)
-I (..\Middlewares\grbl\config.h)(0x6AEC7911)
+I (..\Middlewares\grbl\config.h)(0x6AF02087)
 I (..\Middlewares\grbl\nuts_bolts.h)(0x6AD5C99D)
 I (..\Middlewares\grbl\settings.h)(0x6AD5C99D)
 I (..\Middlewares\grbl\system.h)(0x6AEB3B46)
-I (..\Middlewares\grbl\defaults.h)(0x6AEC7C72)
-I (..\Middlewares\grbl\cpu_map.h)(0x6AEC4B77)
+I (..\Middlewares\grbl\defaults.h)(0x6AF02256)
+I (..\Middlewares\grbl\cpu_map.h)(0x6AF01E8F)
 I (..\Middlewares\grbl\planner.h)(0x6AD5C99D)
 I (..\Middlewares\grbl\coolant_control.h)(0x6AD5C99D)
 I (..\Middlewares\grbl\eeprom.h)(0x6AD5C99D)
@@ -2435,7 +2472,7 @@ I (../Core/Inc/usart.h)(0x6AD8ACA2)
 I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5D9B348A)
 I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x5D9B348A)
 I (..\Middlewares\grbl\spindle_control.h)(0x6AEC4D02)
-I (..\Middlewares\grbl\stepper.h)(0x6AEC3E65)
+I (..\Middlewares\grbl\stepper.h)(0x6AEC8525)
 I (../Core/Inc/tim.h)(0x6AE947EB)
 I (../Core/Inc/gpio.h)(0x6AD8ACA0)
 I (..\Middlewares\grbl\jog.h)(0x6AD5C99D)
@@ -2484,12 +2521,12 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x67DD529C)
-I (..\Middlewares\grbl\config.h)(0x6AEC7911)
+I (..\Middlewares\grbl\config.h)(0x6AF02087)
 I (..\Middlewares\grbl\nuts_bolts.h)(0x6AD5C99D)
 I (..\Middlewares\grbl\settings.h)(0x6AD5C99D)
 I (..\Middlewares\grbl\system.h)(0x6AEB3B46)
-I (..\Middlewares\grbl\defaults.h)(0x6AEC7C72)
-I (..\Middlewares\grbl\cpu_map.h)(0x6AEC4B77)
+I (..\Middlewares\grbl\defaults.h)(0x6AF02256)
+I (..\Middlewares\grbl\cpu_map.h)(0x6AF01E8F)
 I (..\Middlewares\grbl\planner.h)(0x6AD5C99D)
 I (..\Middlewares\grbl\coolant_control.h)(0x6AD5C99D)
 I (..\Middlewares\grbl\eeprom.h)(0x6AD5C99D)
@@ -2505,7 +2542,7 @@ I (../Core/Inc/usart.h)(0x6AD8ACA2)
 I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5D9B348A)
 I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x5D9B348A)
 I (..\Middlewares\grbl\spindle_control.h)(0x6AEC4D02)
-I (..\Middlewares\grbl\stepper.h)(0x6AEC3E65)
+I (..\Middlewares\grbl\stepper.h)(0x6AEC8525)
 I (../Core/Inc/tim.h)(0x6AE947EB)
 I (../Core/Inc/gpio.h)(0x6AD8ACA0)
 I (..\Middlewares\grbl\jog.h)(0x6AD5C99D)
@@ -2553,12 +2590,12 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x67DD529C)
-I (..\Middlewares\grbl\config.h)(0x6AEC7911)
+I (..\Middlewares\grbl\config.h)(0x6AF02087)
 I (..\Middlewares\grbl\nuts_bolts.h)(0x6AD5C99D)
 I (..\Middlewares\grbl\settings.h)(0x6AD5C99D)
 I (..\Middlewares\grbl\system.h)(0x6AEB3B46)
-I (..\Middlewares\grbl\defaults.h)(0x6AEC7C72)
-I (..\Middlewares\grbl\cpu_map.h)(0x6AEC4B77)
+I (..\Middlewares\grbl\defaults.h)(0x6AF02256)
+I (..\Middlewares\grbl\cpu_map.h)(0x6AF01E8F)
 I (..\Middlewares\grbl\planner.h)(0x6AD5C99D)
 I (..\Middlewares\grbl\coolant_control.h)(0x6AD5C99D)
 I (..\Middlewares\grbl\eeprom.h)(0x6AD5C99D)
@@ -2574,12 +2611,12 @@ I (../Core/Inc/usart.h)(0x6AD8ACA2)
 I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5D9B348A)
 I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x5D9B348A)
 I (..\Middlewares\grbl\spindle_control.h)(0x6AEC4D02)
-I (..\Middlewares\grbl\stepper.h)(0x6AEC3E65)
+I (..\Middlewares\grbl\stepper.h)(0x6AEC8525)
 I (../Core/Inc/tim.h)(0x6AE947EB)
 I (../Core/Inc/gpio.h)(0x6AD8ACA0)
 I (..\Middlewares\grbl\jog.h)(0x6AD5C99D)
 F (..\Middlewares\grbl\spindle_control.h)(0x6AEC4D02)()
-F (..\Middlewares\grbl\stepper.c)(0x6AEC4369)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209 -I ..\Middlewares\grbl -I ..\Components\AT24C64-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\stepper.o --omf_browse xy_machine\stepper.crf --depend xy_machine\stepper.d)
+F (..\Middlewares\grbl\stepper.c)(0x6AEC857C)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209 -I ..\Middlewares\grbl -I ..\Components\AT24C64-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\stepper.o --omf_browse xy_machine\stepper.crf --depend xy_machine\stepper.d)
 I (..\Middlewares\grbl\grbl.h)(0x6AE9E91F)
 I (C:\Keil_v5\ARM\ARMCC\include\math.h)(0x5D9B3482)
 I (C:\Keil_v5\ARM\ARMCC\include\inttypes.h)(0x5D9B3488)
@@ -2622,12 +2659,12 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x67DD529C)
-I (..\Middlewares\grbl\config.h)(0x6AEC7911)
+I (..\Middlewares\grbl\config.h)(0x6AF02087)
 I (..\Middlewares\grbl\nuts_bolts.h)(0x6AD5C99D)
 I (..\Middlewares\grbl\settings.h)(0x6AD5C99D)
 I (..\Middlewares\grbl\system.h)(0x6AEB3B46)
-I (..\Middlewares\grbl\defaults.h)(0x6AEC7C72)
-I (..\Middlewares\grbl\cpu_map.h)(0x6AEC4B77)
+I (..\Middlewares\grbl\defaults.h)(0x6AF02256)
+I (..\Middlewares\grbl\cpu_map.h)(0x6AF01E8F)
 I (..\Middlewares\grbl\planner.h)(0x6AD5C99D)
 I (..\Middlewares\grbl\coolant_control.h)(0x6AD5C99D)
 I (..\Middlewares\grbl\eeprom.h)(0x6AD5C99D)
@@ -2643,13 +2680,13 @@ I (../Core/Inc/usart.h)(0x6AD8ACA2)
 I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5D9B348A)
 I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x5D9B348A)
 I (..\Middlewares\grbl\spindle_control.h)(0x6AEC4D02)
-I (..\Middlewares\grbl\stepper.h)(0x6AEC3E65)
+I (..\Middlewares\grbl\stepper.h)(0x6AEC8525)
 I (../Core/Inc/tim.h)(0x6AE947EB)
 I (../Core/Inc/gpio.h)(0x6AD8ACA0)
 I (..\Middlewares\grbl\jog.h)(0x6AD5C99D)
 I (../BSP/Inc/MyDelay.h)(0x6AEB442E)
-F (..\Middlewares\grbl\stepper.h)(0x6AEC3E65)()
-F (..\Middlewares\grbl\system.c)(0x6AEB3D7A)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209 -I ..\Middlewares\grbl -I ..\Components\AT24C64-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\system.o --omf_browse xy_machine\system.crf --depend xy_machine\system.d)
+F (..\Middlewares\grbl\stepper.h)(0x6AEC8525)()
+F (..\Middlewares\grbl\system.c)(0x6AEF36E5)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../BSP/Inc -I ../BSP/Src -I ../App/Inc -I ../App/Src -I ../Components/TMC2209 -I ..\Middlewares\grbl -I ..\Components\AT24C64-I.\RTE\_XY_Machine-IC:\Users\xiaoy\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\xiaoy\AppData\Local\Arm\Packs\Keil\STM32G4xx_DFP\1.2.1\Drivers\CMSIS\Device\ST\STM32G4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o xy_machine\system.o --omf_browse xy_machine\system.crf --depend xy_machine\system.d)
 I (..\Middlewares\grbl\grbl.h)(0x6AE9E91F)
 I (C:\Keil_v5\ARM\ARMCC\include\math.h)(0x5D9B3482)
 I (C:\Keil_v5\ARM\ARMCC\include\inttypes.h)(0x5D9B3488)
@@ -2692,12 +2729,12 @@ I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h)(0x67DD529C)
 I (../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h)(0x67DD529C)
-I (..\Middlewares\grbl\config.h)(0x6AEC7911)
+I (..\Middlewares\grbl\config.h)(0x6AF02087)
 I (..\Middlewares\grbl\nuts_bolts.h)(0x6AD5C99D)
 I (..\Middlewares\grbl\settings.h)(0x6AD5C99D)
 I (..\Middlewares\grbl\system.h)(0x6AEB3B46)
-I (..\Middlewares\grbl\defaults.h)(0x6AEC7C72)
-I (..\Middlewares\grbl\cpu_map.h)(0x6AEC4B77)
+I (..\Middlewares\grbl\defaults.h)(0x6AF02256)
+I (..\Middlewares\grbl\cpu_map.h)(0x6AF01E8F)
 I (..\Middlewares\grbl\planner.h)(0x6AD5C99D)
 I (..\Middlewares\grbl\coolant_control.h)(0x6AD5C99D)
 I (..\Middlewares\grbl\eeprom.h)(0x6AD5C99D)
@@ -2713,7 +2750,7 @@ I (../Core/Inc/usart.h)(0x6AD8ACA2)
 I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5D9B348A)
 I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x5D9B348A)
 I (..\Middlewares\grbl\spindle_control.h)(0x6AEC4D02)
-I (..\Middlewares\grbl\stepper.h)(0x6AEC3E65)
+I (..\Middlewares\grbl\stepper.h)(0x6AEC8525)
 I (../Core/Inc/tim.h)(0x6AE947EB)
 I (../Core/Inc/gpio.h)(0x6AD8ACA0)
 I (..\Middlewares\grbl\jog.h)(0x6AD5C99D)

@@ -4,7 +4,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-
+#include "tmc2209.h" // 使用TMC2209通信结果类型
 
 
 
@@ -126,6 +126,13 @@ typedef enum
  * 必须在MX_GPIO_Init()之后调用。
  */
 void board_motor_init(void);
+
+/*
+ * 配置本板三颗TMC2209：通信回复延时、16细分和初期运行电流。
+ * 调用前必须完成外设初始化及board_motor_init()，整个配置过程保持ENN关闭。
+ * failed_address可传NULL；非NULL时，失败返回对应驱动地址。
+ */
+tmc2209_result_t board_motor_configure_drivers(uint8_t *failed_address);
 
 /*
  * 三轴共用ENN：

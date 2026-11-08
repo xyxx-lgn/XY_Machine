@@ -1,5 +1,6 @@
 #include "board_motor.h"
 #include "main.h"
+#include <stddef.h> // 使用NULL。
 
 /*
  * 使用CubeMX在main.h中生成的引脚宏，也可参考board_motor.h文件中的解释。
@@ -102,3 +103,76 @@ void board_motor_init(void)
     HAL_GPIO_WritePin(Z_MS1_GPIO_Port, Z_MS1_Pin, GPIO_PIN_RESET);
     HAL_GPIO_WritePin(Z_MS2_GPIO_Port, Z_MS2_Pin, GPIO_PIN_SET);
 }
+
+
+
+/*
+ * 复用已经通过自检的TMC2209配置流程。
+ * 只负责配置驱动，不启动步进定时器，也不使能电机输出。
+ */
+tmc2209_result_t board_motor_configure_drivers(uint8_t *failed_address)
+{
+    static const uint8_t irun_table[3] = {17u, 17u, 11u};
+    static const uint8_t ihold_table[3] = {8u, 8u, 5u};
+
+    uint8_t address;
+    tmc2209_result_t result;
+
+    // 三轴共用ENN，配置期间始终禁止驱动输出。
+    board_motor_enable(false);
+    board_motor_clear_steps();
+
+    // 0xFF表示当前没有记录失败的驱动地址。
+    if (failed_address != NULL)
+    {
+        *failed_address = 0xFFu;
+    }
+
+    // 先为三颗驱动设置回复延时，保持与原来验证成功的顺序一致。
+    for (address = 0u; address < 3u; ++address)
+    {
+        result = tmc2209_set_send_delay(address);
+
+        if (result != TMC2209_OK)
+        {
+            goto failed;
+        }
+    }
+
+    // 地址0、1、2分别对应X、Y、Z。
+    for (address = 0u; address < 3u; ++address)
+    {
+        // 通过寄存器选择16细分，底层函数会进行配置验证。
+        result = tmc2209_set_microstep_16(address);
+
+        if (result != TMC2209_OK)
+        {
+            goto failed;
+        }
+
+        // 使用内部参考、外部0.1欧姆采样电阻以及已验证的初期电流设置。
+        result = tmc2209_set_test_current(address, irun_table[address], ihold_table[address]);
+
+        if (result != TMC2209_OK)
+        {
+            goto failed;
+        }
+    }
+
+    // 配置成功也不在这里使能，后续由运动控制模块决定何时使能。
+    return TMC2209_OK;
+
+failed:
+    // 任意一颗配置失败，三轴继续保持关闭。
+    board_motor_enable(false);
+    board_motor_clear_steps();
+
+    if (failed_address != NULL)
+    {
+        *failed_address = address;
+    }
+
+    return result;
+}
+
+

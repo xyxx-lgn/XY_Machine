@@ -3,6 +3,7 @@ xy_machine\app.o: ../App/Inc/app.h
 xy_machine\app.o: ../BSP/Inc/board_motor.h
 xy_machine\app.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
 xy_machine\app.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+xy_machine\app.o: ../Components/TMC2209/tmc2209.h
 xy_machine\app.o: ../BSP/Inc/board_serial.h
 xy_machine\app.o: ../Core/Inc/main.h
 xy_machine\app.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h
@@ -40,6 +41,5 @@ xy_machine\app.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h
 xy_machine\app.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h
 xy_machine\app.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h
 xy_machine\app.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h
-xy_machine\app.o: ../Components/TMC2209/tmc2209.h
 xy_machine\app.o: ../BSP/Inc/board_step_test.h
 xy_machine\app.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
