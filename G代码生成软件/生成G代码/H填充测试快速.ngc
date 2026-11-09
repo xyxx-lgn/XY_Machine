@@ -1,0 +1,677 @@
+G21 G90 G94 G17 G54
+G92.1
+G49
+G10 L2 P1 Z0
+G21 (All units in mm)
+
+(Start cutting path id: path79)
+(Change tool to Default tool)
+
+G00 Z2.000000
+G00 X32.580262 Y239.347557
+
+G01 Z-0.400000 F400.0(Penetrate)
+G01 X32.580262 Y239.347557 Z-0.400000 F1000.000000
+G00 Z2.000000
+
+(End cutting path id: path79)
+
+
+(Start cutting path id: path79)
+(Change tool to Default tool)
+
+G00 Z2.000000
+G00 X32.580262 Y239.347557
+
+G01 Z-0.400000 F400.0(Penetrate)
+G01 X32.580262 Y239.347557 Z-0.400000 F1000.000000
+G00 Z2.000000
+
+(End cutting path id: path79)
+
+
+(Start cutting path id: path79)
+(Change tool to Default tool)
+
+G00 Z2.000000
+G00 X32.580262 Y239.347557
+
+G01 Z-0.400000 F400.0(Penetrate)
+G01 X32.580262 Y229.699261 Z-0.400000 F1000.000000
+G00 Z2.000000
+
+(End cutting path id: path79)
+
+
+(Start cutting path id: path79)
+(Change tool to Default tool)
+
+G00 Z2.000000
+G00 X32.580262 Y229.699261
+
+G01 Z-0.400000 F400.0(Penetrate)
+G01 X32.580262 Y229.699261 Z-0.400000 F1000.000000
+G00 Z2.000000
+
+(End cutting path id: path79)
+
+
+(Start cutting path id: path79)
+(Change tool to Default tool)
+
+G00 Z2.000000
+G00 X32.580262 Y229.699261
+
+G01 Z-0.400000 F400.0(Penetrate)
+G01 X32.580262 Y229.699261 Z-0.400000 F1000.000000
+G01 X32.580262 Y229.699261 Z-0.400000
+G00 Z2.000000
+
+(End cutting path id: path79)
+
+
+(Start cutting path id: path79)
+(Change tool to Default tool)
+
+G00 Z2.000000
+G00 X32.580262 Y229.699261
+
+G01 Z-0.400000 F400.0(Penetrate)
+G01 X32.580262 Y229.699261 Z-0.400000 F1000.000000
+G00 Z2.000000
+
+(End cutting path id: path79)
+
+
+(Start cutting path id: path79)
+(Change tool to Default tool)
+
+G00 Z2.000000
+G00 X32.580262 Y229.699261
+
+G01 Z-0.400000 F400.0(Penetrate)
+G01 X32.830293 Y229.699261 Z-0.400000 F1000.000000
+G01 X32.830293 Y229.699261 Z-0.400000
+G00 Z2.000000
+
+(End cutting path id: path79)
+
+
+(Start cutting path id: path79)
+(Change tool to Default tool)
+
+G00 Z2.000000
+G00 X32.830293 Y229.699261
+
+G01 Z-0.400000 F400.0(Penetrate)
+G01 X32.830293 Y239.347557 Z-0.400000 F1000.000000
+G00 Z2.000000
+
+(End cutting path id: path79)
+
+
+(Start cutting path id: path79)
+(Change tool to Default tool)
+
+G00 Z2.000000
+G00 X32.830293 Y239.347557
+
+G01 Z-0.400000 F400.0(Penetrate)
+G01 X32.830293 Y239.347557 Z-0.400000 F1000.000000
+G01 X33.080325 Y239.347557 Z-0.400000
+G01 X33.080325 Y239.347557 Z-0.400000
+G00 Z2.000000
+
+(End cutting path id: path79)
+
+
+(Start cutting path id: path79)
+(Change tool to Default tool)
+
+G00 Z2.000000
+G00 X33.080325 Y239.347557
+
+G01 Z-0.400000 F400.0(Penetrate)
+G01 X33.080325 Y229.699261 Z-0.400000 F1000.000000
+G00 Z2.000000
+
+(End cutting path id: path79)
+
+
+(Start cutting path id: path79)
+(Change tool to Default tool)
+
+G00 Z2.000000
+G00 X33.080325 Y229.699261
+
+G01 Z-0.400000 F400.0(Penetrate)
+G01 X33.080325 Y229.699261 Z-0.400000 F1000.000000
+G01 X33.330356 Y229.699261 Z-0.400000
+G01 X33.330356 Y229.699261 Z-0.400000
+G00 Z2.000000
+
+(End cutting path id: path79)
+
+
+(Start cutting path id: path79)
+(Change tool to Default tool)
+
+G00 Z2.000000
+G00 X33.330356 Y229.699261
+
+G01 Z-0.400000 F400.0(Penetrate)
+G01 X33.330356 Y239.347557 Z-0.400000 F1000.000000
+G00 Z2.000000
+
+(End cutting path id: path79)
+
+
+(Start cutting path id: path79)
+(Change tool to Default tool)
+
+G00 Z2.000000
+G00 X33.330356 Y239.347557
+
+G01 Z-0.400000 F400.0(Penetrate)
+G01 X33.330356 Y239.347557 Z-0.400000 F1000.000000
+G01 X33.580387 Y239.347557 Z-0.400000
+G01 X33.580387 Y239.347557 Z-0.400000
+G00 Z2.000000
+
+(End cutting path id: path79)
+
+
+(Start cutting path id: path79)
+(Change tool to Default tool)
+
+G00 Z2.000000
+G00 X33.580387 Y239.347557
+
+G01 Z-0.400000 F400.0(Penetrate)
+G01 X33.580387 Y229.699261 Z-0.400000 F1000.000000
+G00 Z2.000000
+
+(End cutting path id: path79)
+
+
+(Start cutting path id: path79)
+(Change tool to Default tool)
+
+G00 Z2.000000
+G00 X33.580387 Y229.699261
+
+G01 Z-0.400000 F400.0(Penetrate)
+G01 X33.580387 Y229.699261 Z-0.400000 F1000.000000
+G01 X33.830154 Y229.699261 Z-0.400000
+G01 X33.830154 Y229.699261 Z-0.400000
+G00 Z2.000000
+
+(End cutting path id: path79)
+
+
+(Start cutting path id: path79)
+(Change tool to Default tool)
+
+G00 Z2.000000
+G00 X33.830154 Y229.699261
+
+G01 Z-0.400000 F400.0(Penetrate)
+G01 X33.830154 Y239.347557 Z-0.400000 F1000.000000
+G00 Z2.000000
+
+(End cutting path id: path79)
+
+
+(Start cutting path id: path79)
+(Change tool to Default tool)
+
+G00 Z2.000000
+G00 X33.830154 Y239.347557
+
+G01 Z-0.400000 F400.0(Penetrate)
+G01 X33.830154 Y239.347557 Z-0.400000 F1000.000000
+G01 X33.863227 Y239.347557 Z-0.400000
+G00 Z2.000000
+
+(End cutting path id: path79)
+
+
+(Start cutting path id: path79)
+(Change tool to Default tool)
+
+G00 Z2.000000
+G00 X33.863227 Y239.347557
+
+G01 Z-0.400000 F400.0(Penetrate)
+G01 X33.863227 Y239.347557 Z-0.400000 F1000.000000
+G00 Z2.000000
+
+(End cutting path id: path79)
+
+
+(Start cutting path id: path79)
+(Change tool to Default tool)
+
+G00 Z2.000000
+G00 X34.080185 Y234.623951
+
+G01 Z-0.400000 F400.0(Penetrate)
+G01 X34.080185 Y233.483332 Z-0.400000 F1000.000000
+G00 Z2.000000
+
+(End cutting path id: path79)
+
+
+(Start cutting path id: path79)
+(Change tool to Default tool)
+
+G00 Z2.000000
+G00 X34.330216 Y233.483332
+
+G01 Z-0.400000 F400.0(Penetrate)
+G01 X34.330216 Y234.623951 Z-0.400000 F1000.000000
+G00 Z2.000000
+
+(End cutting path id: path79)
+
+
+(Start cutting path id: path79)
+(Change tool to Default tool)
+
+G00 Z2.000000
+G00 X34.580247 Y234.623951
+
+G01 Z-0.400000 F400.0(Penetrate)
+G01 X34.580247 Y233.483332 Z-0.400000 F1000.000000
+G00 Z2.000000
+
+(End cutting path id: path79)
+
+
+(Start cutting path id: path79)
+(Change tool to Default tool)
+
+G00 Z2.000000
+G00 X34.830279 Y233.483332
+
+G01 Z-0.400000 F400.0(Penetrate)
+G01 X34.830279 Y234.623951 Z-0.400000 F1000.000000
+G00 Z2.000000
+
+(End cutting path id: path79)
+
+
+(Start cutting path id: path79)
+(Change tool to Default tool)
+
+G00 Z2.000000
+G00 X35.080310 Y234.623951
+
+G01 Z-0.400000 F400.0(Penetrate)
+G01 X35.080310 Y233.483332 Z-0.400000 F1000.000000
+G00 Z2.000000
+
+(End cutting path id: path79)
+
+
+(Start cutting path id: path79)
+(Change tool to Default tool)
+
+G00 Z2.000000
+G00 X35.330341 Y233.483332
+
+G01 Z-0.400000 F400.0(Penetrate)
+G01 X35.330341 Y234.623951 Z-0.400000 F1000.000000
+G00 Z2.000000
+
+(End cutting path id: path79)
+
+
+(Start cutting path id: path79)
+(Change tool to Default tool)
+
+G00 Z2.000000
+G00 X35.580372 Y234.623951
+
+G01 Z-0.400000 F400.0(Penetrate)
+G01 X35.580372 Y233.483332 Z-0.400000 F1000.000000
+G00 Z2.000000
+
+(End cutting path id: path79)
+
+
+(Start cutting path id: path79)
+(Change tool to Default tool)
+
+G00 Z2.000000
+G00 X35.830139 Y233.483332
+
+G01 Z-0.400000 F400.0(Penetrate)
+G01 X35.830139 Y234.623951 Z-0.400000 F1000.000000
+G00 Z2.000000
+
+(End cutting path id: path79)
+
+
+(Start cutting path id: path79)
+(Change tool to Default tool)
+
+G00 Z2.000000
+G00 X36.080170 Y234.623951
+
+G01 Z-0.400000 F400.0(Penetrate)
+G01 X36.080170 Y233.483332 Z-0.400000 F1000.000000
+G00 Z2.000000
+
+(End cutting path id: path79)
+
+
+(Start cutting path id: path79)
+(Change tool to Default tool)
+
+G00 Z2.000000
+G00 X36.330202 Y233.483332
+
+G01 Z-0.400000 F400.0(Penetrate)
+G01 X36.330202 Y234.623951 Z-0.400000 F1000.000000
+G00 Z2.000000
+
+(End cutting path id: path79)
+
+
+(Start cutting path id: path79)
+(Change tool to Default tool)
+
+G00 Z2.000000
+G00 X36.580233 Y234.623951
+
+G01 Z-0.400000 F400.0(Penetrate)
+G01 X36.580233 Y233.483332 Z-0.400000 F1000.000000
+G00 Z2.000000
+
+(End cutting path id: path79)
+
+
+(Start cutting path id: path79)
+(Change tool to Default tool)
+
+G00 Z2.000000
+G00 X36.830264 Y233.483332
+
+G01 Z-0.400000 F400.0(Penetrate)
+G01 X36.830264 Y234.623951 Z-0.400000 F1000.000000
+G00 Z2.000000
+
+(End cutting path id: path79)
+
+
+(Start cutting path id: path79)
+(Change tool to Default tool)
+
+G00 Z2.000000
+G00 X37.080295 Y234.623951
+
+G01 Z-0.400000 F400.0(Penetrate)
+G01 X37.080295 Y233.483332 Z-0.400000 F1000.000000
+G00 Z2.000000
+
+(End cutting path id: path79)
+
+
+(Start cutting path id: path79)
+(Change tool to Default tool)
+
+G00 Z2.000000
+G00 X37.330327 Y233.483332
+
+G01 Z-0.400000 F400.0(Penetrate)
+G01 X37.330327 Y234.623951 Z-0.400000 F1000.000000
+G00 Z2.000000
+
+(End cutting path id: path79)
+
+
+(Start cutting path id: path79)
+(Change tool to Default tool)
+
+G00 Z2.000000
+G00 X37.580358 Y234.623951
+
+G01 Z-0.400000 F400.0(Penetrate)
+G01 X37.580358 Y233.483332 Z-0.400000 F1000.000000
+G00 Z2.000000
+
+(End cutting path id: path79)
+
+
+(Start cutting path id: path79)
+(Change tool to Default tool)
+
+G00 Z2.000000
+G00 X37.830389 Y233.483332
+
+G01 Z-0.400000 F400.0(Penetrate)
+G01 X37.830389 Y234.623951 Z-0.400000 F1000.000000
+G00 Z2.000000
+
+(End cutting path id: path79)
+
+
+(Start cutting path id: path79)
+(Change tool to Default tool)
+
+G00 Z2.000000
+G00 X38.080156 Y234.623951
+
+G01 Z-0.400000 F400.0(Penetrate)
+G01 X38.080156 Y233.483332 Z-0.400000 F1000.000000
+G00 Z2.000000
+
+(End cutting path id: path79)
+
+
+(Start cutting path id: path79)
+(Change tool to Default tool)
+
+G00 Z2.000000
+G00 X38.330187 Y233.483332
+
+G01 Z-0.400000 F400.0(Penetrate)
+G01 X38.330187 Y234.623951 Z-0.400000 F1000.000000
+G00 Z2.000000
+
+(End cutting path id: path79)
+
+
+(Start cutting path id: path79)
+(Change tool to Default tool)
+
+G00 Z2.000000
+G00 X38.580218 Y234.623951
+
+G01 Z-0.400000 F400.0(Penetrate)
+G01 X38.580218 Y233.483332 Z-0.400000 F1000.000000
+G00 Z2.000000
+
+(End cutting path id: path79)
+
+
+(Start cutting path id: path79)
+(Change tool to Default tool)
+
+G00 Z2.000000
+G00 X38.677585 Y229.699261
+
+G01 Z-0.400000 F400.0(Penetrate)
+G01 X38.677585 Y229.699261 Z-0.400000 F1000.000000
+G00 Z2.000000
+
+(End cutting path id: path79)
+
+
+(Start cutting path id: path79)
+(Change tool to Default tool)
+
+G00 Z2.000000
+G00 X38.677585 Y229.699261
+
+G01 Z-0.400000 F400.0(Penetrate)
+G01 X38.830250 Y229.699261 Z-0.400000 F1000.000000
+G01 X38.830250 Y229.699261 Z-0.400000
+G00 Z2.000000
+
+(End cutting path id: path79)
+
+
+(Start cutting path id: path79)
+(Change tool to Default tool)
+
+G00 Z2.000000
+G00 X38.830250 Y229.699261
+
+G01 Z-0.400000 F400.0(Penetrate)
+G01 X38.830250 Y239.347557 Z-0.400000 F1000.000000
+G00 Z2.000000
+
+(End cutting path id: path79)
+
+
+(Start cutting path id: path79)
+(Change tool to Default tool)
+
+G00 Z2.000000
+G00 X38.830250 Y239.347557
+
+G01 Z-0.400000 F400.0(Penetrate)
+G01 X38.830250 Y239.347557 Z-0.400000 F1000.000000
+G01 X39.080281 Y239.347557 Z-0.400000
+G01 X39.080281 Y239.347557 Z-0.400000
+G00 Z2.000000
+
+(End cutting path id: path79)
+
+
+(Start cutting path id: path79)
+(Change tool to Default tool)
+
+G00 Z2.000000
+G00 X39.080281 Y239.347557
+
+G01 Z-0.400000 F400.0(Penetrate)
+G01 X39.080281 Y229.699261 Z-0.400000 F1000.000000
+G00 Z2.000000
+
+(End cutting path id: path79)
+
+
+(Start cutting path id: path79)
+(Change tool to Default tool)
+
+G00 Z2.000000
+G00 X39.080281 Y229.699261
+
+G01 Z-0.400000 F400.0(Penetrate)
+G01 X39.080281 Y229.699261 Z-0.400000 F1000.000000
+G01 X39.330312 Y229.699261 Z-0.400000
+G01 X39.330312 Y229.699261 Z-0.400000
+G00 Z2.000000
+
+(End cutting path id: path79)
+
+
+(Start cutting path id: path79)
+(Change tool to Default tool)
+
+G00 Z2.000000
+G00 X39.330312 Y229.699261
+
+G01 Z-0.400000 F400.0(Penetrate)
+G01 X39.330312 Y239.347557 Z-0.400000 F1000.000000
+G00 Z2.000000
+
+(End cutting path id: path79)
+
+
+(Start cutting path id: path79)
+(Change tool to Default tool)
+
+G00 Z2.000000
+G00 X39.330312 Y239.347557
+
+G01 Z-0.400000 F400.0(Penetrate)
+G01 X39.330312 Y239.347557 Z-0.400000 F1000.000000
+G01 X39.580343 Y239.347557 Z-0.400000
+G01 X39.580343 Y239.347557 Z-0.400000
+G00 Z2.000000
+
+(End cutting path id: path79)
+
+
+(Start cutting path id: path79)
+(Change tool to Default tool)
+
+G00 Z2.000000
+G00 X39.580343 Y239.347557
+
+G01 Z-0.400000 F400.0(Penetrate)
+G01 X39.580343 Y229.699261 Z-0.400000 F1000.000000
+G00 Z2.000000
+
+(End cutting path id: path79)
+
+
+(Start cutting path id: path79)
+(Change tool to Default tool)
+
+G00 Z2.000000
+G00 X39.580343 Y229.699261
+
+G01 Z-0.400000 F400.0(Penetrate)
+G01 X39.580343 Y229.699261 Z-0.400000 F1000.000000
+G01 X39.830374 Y229.699261 Z-0.400000
+G01 X39.830374 Y229.699261 Z-0.400000
+G00 Z2.000000
+
+(End cutting path id: path79)
+
+
+(Start cutting path id: path79)
+(Change tool to Default tool)
+
+G00 Z2.000000
+G00 X39.830374 Y229.699261
+
+G01 Z-0.400000 F400.0(Penetrate)
+G01 X39.830374 Y239.347557 Z-0.400000 F1000.000000
+G00 Z2.000000
+
+(End cutting path id: path79)
+
+
+(Start cutting path id: path79)
+(Change tool to Default tool)
+
+G00 Z2.000000
+G00 X39.830374 Y239.347557
+
+G01 Z-0.400000 F400.0(Penetrate)
+G01 X39.830374 Y239.347557 Z-0.400000 F1000.000000
+G01 X39.960814 Y239.347557 Z-0.400000
+G00 Z2.000000
+
+(End cutting path id: path79)
+
+
+(Start cutting path id: path79)
+(Change tool to Default tool)
+
+G00 Z2.000000
+G00 X39.960814 Y239.347557
+
+G01 Z-0.400000 F400.0(Penetrate)
+G01 X39.960814 Y239.347557 Z-0.400000 F1000.000000
+G00 Z2.000000
+
+(End cutting path id: path79)
+
+G1 Z2.0 F120

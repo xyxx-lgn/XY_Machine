@@ -1,0 +1,6 @@
+.venv/
+.runtime/
+__pycache__/
+*.pyc
+logs/*.log*
+config/machine.json

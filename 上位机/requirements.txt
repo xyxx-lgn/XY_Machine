@@ -1,0 +1,3 @@
+# 只安装界面、串口需要的Qt模块，不安装WebEngine和PDF组件。
+PySide6-Essentials==6.12.0
+PySide6-Addons==6.12.0
