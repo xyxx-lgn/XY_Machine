@@ -28,7 +28,7 @@ class MachineProfile:
     servo_down_command: str = ""
     servo_firmware_confirmed: bool = False
 
-    # Z限位仅保留能力标记，第一阶段不增加Z回零命令。
+    # Z限位仅保留能力标记，当前不增加Z回零命令。
     z_limit_available: bool = False
 
     def validate(self):

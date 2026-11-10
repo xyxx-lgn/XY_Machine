@@ -4,7 +4,7 @@ from dataclasses import dataclass
 
 from PySide6.QtCore import QObject, QTimer, Signal
 
-from app.grbl import normalize_command, parse_status
+from app.grbl import normalize_command, parse_status, vector
 from app.transport import SIMULATOR, SerialTransport, SimulatorTransport
 
 
@@ -19,6 +19,11 @@ class GrblController(QObject):
     changed = Signal()
     log = Signal(str, str)
     notice = Signal(str)
+    acknowledged = Signal(str, str, str)
+    status_received = Signal()
+    interrupted = Signal(str)
+    pause_requested = Signal()
+    resume_requested = Signal()
 
     def __init__(self, profile, parent=None):
         super().__init__(parent)
@@ -30,6 +35,7 @@ class GrblController(QObject):
         self.machine = None
         self.work = None
         self.offset = None
+        self.g54_offset = None
         self.pins = ""
         self.feed = None
         self.modal = "未知"
@@ -42,6 +48,7 @@ class GrblController(QObject):
         self.servo_raised = False
         self.fault = False
         self.awaiting_reset = False
+        self.job_active = False
         self.poll = QTimer(self)
         self.poll.setInterval(500)
         self.poll.timeout.connect(self.poll_status)
@@ -59,7 +66,7 @@ class GrblController(QObject):
 
     @property
     def available(self):
-        return self.idle and self.pending is None and not self.queue
+        return self.idle and self.pending is None and not self.queue and not self.job_active
 
     def connect_device(self, name, baud_rate):
         if self.connected:
@@ -85,6 +92,7 @@ class GrblController(QObject):
         self.settings.clear()
         self.last_status = 0.0
         self.machine = self.work = self.offset = None
+        self.g54_offset = None
         self.modal = "未知"
         self.log.emit("SYS", "模拟设备已连接，不会驱动硬件。" if self.simulated else "串口已打开，仅自动查询，不自动运动、解锁或复位。")
         self.poll.start()
@@ -98,12 +106,14 @@ class GrblController(QObject):
             self.transport = None
 
     def on_closed(self):
+        self.interrupted.emit("串口已断开，文件任务已结束，不会自动续传。")
         self.connected = False
         self.state = "Disconnected"
         self.poll.stop()
         self.clear_pending()
         self.buffer.clear()
         self.machine = self.work = self.offset = None
+        self.g54_offset = None
         self.settings.clear()
         self.modal = "未知"
         self.feed = None
@@ -115,6 +125,7 @@ class GrblController(QObject):
         self.changed.emit()
 
     def on_failure(self, message):
+        self.interrupted.emit(message)
         self.fault = True
         self.clear_pending()
         self.log.emit("ERROR", message)
@@ -128,6 +139,7 @@ class GrblController(QObject):
 
     def command_timeout(self):
         text = self.pending.text if self.pending else "未知命令"
+        self.interrupted.emit(f"等待应答超时：{text}")
         self.clear_pending()
         self.fault = True
         self.log.emit("ERROR", f"等待应答超时：{text}。不自动重发，以免重复运动。")
@@ -149,21 +161,25 @@ class GrblController(QObject):
         self.changed.emit()
 
     def pause(self):
+        self.pause_requested.emit()
         self.write_realtime(b"!", "! 暂停")
 
     def resume(self):
-        if not self.fault and self.state.startswith("Hold"):
+        if self.fresh and not self.fault and self.state == "Hold:0":
+            self.resume_requested.emit()
             self.write_realtime(b"~", "~ 继续")
 
     def cancel_jog(self):
         self.write_realtime(b"\x85", "0x85 取消点动")
 
     def reset(self):
+        self.interrupted.emit("软复位中止任务；重新确认坐标和Z基准后从文件开头重新开始。")
         self.clear_pending()
         self.fault = False
         self.awaiting_reset = True
         self.state = "Resetting"
         self.machine = self.work = self.offset = None
+        self.g54_offset = None
         self.baseline_confirmed = False
         self.servo_raised = False
         self.last_status = 0.0
@@ -171,6 +187,9 @@ class GrblController(QObject):
         self.changed.emit()
 
     def send(self, command, action="console", timeout_ms=8000):
+        if self.job_active and action != "job":
+            self.notice.emit("文件任务正在占用普通命令通道，请先完成或中止任务。")
+            return False
         if not self.connected or self.fault or self.awaiting_reset:
             self.notice.emit("设备未连接、等待复位或应答失步，暂不能发送普通命令。")
             return False
@@ -223,11 +242,14 @@ class GrblController(QObject):
                 self.machine, self.work, self.offset = report.machine, report.work, report.offset
                 self.pins, self.feed = report.pins, report.feed
                 self.last_status = time.monotonic()
+                self.status_received.emit()
         elif line.startswith("Grbl "):
+            self.interrupted.emit("检测到GRBL重启，任务已中止，不会续传。")
             self.clear_pending()
             self.fault = False
             self.awaiting_reset = False
             self.machine = self.work = self.offset = None
+            self.g54_offset = None
             self.baseline_confirmed = False
             self.servo_raised = False
             self.last_status = 0.0
@@ -235,6 +257,7 @@ class GrblController(QObject):
             self.state = "Connecting"
             self.log.emit("SYS", "检测到GRBL启动，旧命令已丢弃。请重新确认坐标和Z基准。")
         elif line.startswith("ALARM:"):
+            self.interrupted.emit(f"设备{line}，任务已中止。")
             self.clear_pending()
             self.state = "Alarm"
             self.baseline_confirmed = False
@@ -257,14 +280,25 @@ class GrblController(QObject):
                         self.servo_raised = False
                     if command.action in ("origin", "home", "console"):
                         self.offset = None
+                        self.g54_offset = None
                         self.modal = "未知"
+                        QTimer.singleShot(0, self.refresh_parameters)
                 QTimer.singleShot(0, self.pump)
-                self.last_status = 0.0
-                QTimer.singleShot(0, self.query_status)
+                if command.action != "job":
+                    self.last_status = 0.0
+                # 文件流只使用500ms周期查询，避免每个ok额外产生一整份状态报告。
+                if command.action != "job":
+                    QTimer.singleShot(0, self.query_status)
+                self.acknowledged.emit(command.text, command.action, line)
             else:
                 self.log.emit("SYS", "收到未配对的应答，未将其用于其他命令。")
         elif line.startswith("[GC:"):
             self.modal = line[4:-1]
+        elif line.startswith("[G54:"):
+            try:
+                self.g54_offset = vector(line[5:-1])
+            except ValueError:
+                self.g54_offset = None
         elif re.match(r"^\$\d+=", line):
             key, value = line[1:].split("=", 1)
             try:
@@ -272,6 +306,11 @@ class GrblController(QObject):
             except ValueError:
                 pass
         self.changed.emit()
+
+    def refresh_parameters(self):
+        if self.connected and not self.fault and not self.awaiting_reset and not self.job_active:
+            self.send("$G", "read")
+            self.send("$#", "read")
 
     def require_idle(self):
         if not self.available:

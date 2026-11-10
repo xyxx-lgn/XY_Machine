@@ -80,6 +80,14 @@ class SimulatorTransport(QObject):
         self.state = "Idle"
         self.position = [-180.0, -270.0, 0.0]
         self.offset = [-190.0, -280.0, 0.0]
+        self.absolute = True
+        self.unit = 1.0
+        self.motion = 0
+        self.deferred = []
+        self.motion_remaining = False
+        self.motion_timer = QTimer(self)
+        self.motion_timer.setSingleShot(True)
+        self.motion_timer.timeout.connect(self.finish_motion)
         self.settings = {110: 1500.0, 111: 1500.0, 112: 240.0, 120: 30.0, 121: 30.0, 122: 20.0, 130: 210.0, 131: 315.0, 132: 200.0}
 
     def open(self, name, baud_rate):
@@ -102,16 +110,25 @@ class SimulatorTransport(QObject):
         if data == b"?":
             self.status()
         elif data == b"!":
+            self.motion_timer.stop()
             self.state = "Hold:0"
             self.status()
         elif data == b"~":
-            self.state = "Idle"
+            self.state = "Run" if self.motion_remaining else "Idle"
+            if self.motion_remaining:
+                self.motion_timer.start(100)
             self.status()
+            deferred, self.deferred = self.deferred, []
+            for command, epoch in deferred:
+                self.execute(command, epoch)
         elif data == b"\x85":
             self.state = "Idle"
             self.status()
         elif data == b"\x18":
             self.epoch += 1
+            self.motion_timer.stop()
+            self.motion_remaining = False
+            self.deferred.clear()
             self.state = "Alarm"
             self.reply("Grbl 1.1h ['$' for help]")
         else:
@@ -123,8 +140,11 @@ class SimulatorTransport(QObject):
     def execute(self, command, epoch):
         if not self.active or epoch != self.epoch:
             return
+        if self.state.startswith("Hold") and not command.startswith("$"):
+            self.deferred.append((command, epoch))
+            return
         if command == "$G":
-            self.reply("[GC:G0 G54 G17 G21 G90 G94 M5 M9 T0 F0 S0]")
+            self.reply(f"[GC:G{self.motion} G54 G17 G{21 if self.unit == 1 else 20} G{90 if self.absolute else 91} G94 M5 M9 T0 F0 S0]")
         elif command == "$#":
             self.reply("[G54:" + ",".join(f"{value:.3f}" for value in self.offset) + "]")
         elif command == "$I":
@@ -141,8 +161,6 @@ class SimulatorTransport(QObject):
         elif self.state == "Alarm" and not command.startswith("$"):
             self.reply("error:9")
             return
-        elif "G10" in command:
-            self.offset[0:2] = self.position[0:2]
         elif command.startswith("$") and "=" in command and not command.startswith("$J="):
             key, value = command[1:].split("=", 1)
             try:
@@ -150,18 +168,41 @@ class SimulatorTransport(QObject):
             except ValueError:
                 self.reply("error:3")
                 return
-        elif any(axis in command for axis in "XYZ"):
-            values = {axis: float(value) for axis, value in re.findall(r"([XYZ])(-?\d+(?:\.\d+)?)", command)}
-            relative = "G91" in command
-            machine = "G53" in command
+        else:
+            words = re.findall(r"([A-Z])([+-]?(?:\d+(?:\.\d*)?|\.\d+))", command)
+            codes = [float(value) for key, value in words if key == "G"]
+            values = {key: float(value) for key, value in words if key != "G"}
+            jogging = command.startswith("$J=")
+            unit = 25.4 if 20 in codes else 1.0 if 21 in codes else self.unit
+            absolute = True if 90 in codes else False if 91 in codes else self.absolute
+            if not jogging:
+                self.unit, self.absolute = unit, absolute
+                for code in codes:
+                    if code in (0, 1, 2, 3):
+                        self.motion = int(code)
             for index, axis in enumerate("XYZ"):
                 if axis in values:
-                    self.position[index] = self.position[index] + values[axis] if relative else values[axis] + (0 if machine else self.offset[index])
+                    value = values[axis] * unit
+                    if 10 in codes:
+                        self.offset[index] = value if values.get("L") == 2 else self.position[index] - value
+                    else:
+                        self.position[index] = self.position[index] + value if not absolute else value + (0 if 53 in codes else self.offset[index])
+            if 10 not in codes and any(axis in values for axis in "XYZ"):
+                self.motion_remaining = True
+                self.state = "Jog" if jogging else "Run"
+                self.motion_timer.start(100)
         self.reply("ok")
         self.status()
 
+    def finish_motion(self):
+        if self.active and not self.state.startswith("Hold"):
+            self.motion_remaining = False
+            self.state = "Idle"
+            self.status()
+
     def close(self):
         if self.active:
+            self.motion_timer.stop()
             self.active = False
             self.epoch += 1
             self.closed.emit()
