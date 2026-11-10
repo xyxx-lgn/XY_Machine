@@ -9,6 +9,7 @@ from PySide6.QtGui import QFont, QFontMetricsF, QImage, QImageReader, QPainter, 
 
 from app.gcode import parse_program
 from app.profile import ROOT
+from app.image_processing import ImageProcessingError, ProcessingCancelled, image_rgb, process_image
 
 
 class GenerationError(ValueError):
@@ -31,6 +32,12 @@ class PlotOptions:
     threshold: int = 128
     invert: bool = False
     crop: bool = True
+    processing: str = "threshold"
+    edge_sensitivity: int = 55
+    detail_level: int = 50
+    smoothing: int = 2
+    despeckle: int = 12
+    repair_gaps: bool = False
     spacing: float = 0.18
     vertical: bool = False
     tolerance: float = 0.03
@@ -53,6 +60,12 @@ class PlotOptions:
             raise GenerationError("不支持的路径模式。")
         if not 0 <= self.threshold <= 255:
             raise GenerationError("阈值应为0～255。")
+        if self.processing not in ("threshold", "adaptive", "edges", "cartoon"):
+            raise GenerationError("不支持的图片处理方式。")
+        if any(type(value) is not int for value in (self.edge_sensitivity, self.detail_level, self.despeckle, self.smoothing)):
+            raise GenerationError("灵敏度、内部细节、碎点过滤和去噪强度需要整数。")
+        if any(not 0 <= value <= 100 for value in (self.edge_sensitivity, self.detail_level, self.despeckle)) or not 0 <= self.smoothing <= 5:
+            raise GenerationError("灵敏度、内部细节和碎点过滤应为0～100，去噪强度应为0～5。")
         if not 0.05 <= self.width <= 1000 or not 0.05 <= self.height <= 1000:
             raise GenerationError("图案尺寸应为0.05～1000mm。")
         if not 0 < self.paper_width <= 1000 or not 0 < self.paper_height <= 1000:
@@ -85,13 +98,7 @@ def checkpoint(cancel):
 
 
 def image_gray(image):
-    # 透明背景先铺白，避免透明PNG被识别成整块黑色。
-    rgba = image.convertToFormat(QImage.Format.Format_RGBA8888)
-    pixels = np.frombuffer(rgba.constBits(), np.uint8).reshape(rgba.height(), rgba.bytesPerLine())
-    pixels = pixels[:, :rgba.width() * 4].reshape(rgba.height(), rgba.width(), 4)
-    alpha = pixels[:, :, 3:4].astype(np.float32) / 255
-    rgb = np.rint(pixels[:, :, :3] * alpha + 255 * (1 - alpha)).astype(np.uint8)
-    return cv2.cvtColor(rgb, cv2.COLOR_RGB2GRAY)
+    return cv2.cvtColor(image_rgb(image), cv2.COLOR_RGB2GRAY)
 
 
 def read_image(path):
@@ -139,16 +146,10 @@ def render_text(text, family, bold=False):
 
 
 def threshold_image(image, options):
-    gray = image_gray(image)
-    mask = (gray <= options.threshold).astype(np.uint8) * 255
-    if options.invert:
-        mask = 255 - mask
-    if not np.any(mask):
-        raise GenerationError("阈值处理后没有黑色图案，请调整阈值或反相。")
-    if options.crop:
-        x, y, width, height = cv2.boundingRect(mask)
-        mask = mask[y:y + height, x:x + width]
-    return mask
+    try:
+        return process_image(image, options).mask
+    except ImageProcessingError as error:
+        raise GenerationError(str(error)) from None
 
 
 def source_ratio(image, threshold=128, invert=False, crop=True):
@@ -156,12 +157,16 @@ def source_ratio(image, threshold=128, invert=False, crop=True):
     return mask.shape[1] / max(1, mask.shape[0])
 
 
-def prepare_mask(image, options):
-    mask = threshold_image(image, options)
+def prepare_mask(image, options, processed=None):
+    mask = processed.mask if processed else threshold_image(image, options)
     # 目标约25像素/mm，长边最多2400像素，所有后续误差均换算成物理尺寸。
     density = min(25.0, 2399 / max(options.width, options.height))
     width, height = max(2, round(options.width * density) + 1), max(2, round(options.height * density) + 1)
-    mask = cv2.resize(mask, (width, height), interpolation=cv2.INTER_NEAREST)
+    if options.mode == "centerline" and (width < mask.shape[1] or height < mask.shape[0]):
+        # 中线缩小时保留细线覆盖，避免一像素边缘被最近邻抽样漏掉。
+        mask = (cv2.resize(mask, (width, height), interpolation=cv2.INTER_AREA) > 12).astype(np.uint8) * 255
+    else:
+        mask = cv2.resize(mask, (width, height), interpolation=cv2.INTER_NEAREST)
     return mask, options.width / (width - 1), options.height / (height - 1)
 
 
@@ -391,12 +396,18 @@ def emit_program(paths, options, name, cancel):
     return program, travel
 
 
-def generate_task(image, options, name="生成任务", cancel=None, progress=None):
+def generate_task(image, options, name="生成任务", cancel=None, progress=None, processed=None):
     options.validate()
     notify = progress or (lambda value, message: None)
     checkpoint(cancel)
     notify(5, "处理黑白图像")
-    mask, sx, sy = prepare_mask(image, options)
+    try:
+        processed = processed or process_image(image, options, cancel)
+    except ImageProcessingError as error:
+        raise GenerationError(str(error)) from None
+    except ProcessingCancelled:
+        raise GenerationCancelled() from None
+    mask, sx, sy = prepare_mask(image, options, processed)
     checkpoint(cancel)
     paths = []
     if options.mode in ("outline", "outline_fill"):
@@ -426,6 +437,7 @@ def generate_task(image, options, name="生成任务", cancel=None, progress=Non
     z_distance = options.pen_up - options.pen_down
     seconds = 60 * (program.drawing_length / options.draw_feed + travel / options.travel_feed + len(paths) * z_distance * (1 / options.up_feed + 1 / options.down_feed))
     notes = ["耗时仅为匀速理论下限，未计加减速、串口等待和初始进场。", "Z使用G53机器坐标；XY使用G54，未修改EEPROM。"]
+    notes.extend(processed.notes)
     if options.mode == "centerline":
         notes.append("中线是图形骨架，不是手写笔顺；粗体和交叉笔画可能有短分叉。")
     if options.mode in ("fill", "outline_fill") and options.spacing < 2 * max(sx, sy):
@@ -435,10 +447,8 @@ def generate_task(image, options, name="生成任务", cancel=None, progress=Non
 
 
 def save_gcode(program, path):
-    # 用户授权仅写上位机目录，导出也统一执行这一约束。
+    # 导出到用户选择的位置；配置、日志和运行文件仍保存在上位机目录。
     path = Path(path).resolve()
-    if not path.is_relative_to(ROOT.resolve()):
-        raise GenerationError("请保存到当前“上位机”文件夹内，例如exports子目录。")
     if path.suffix.lower() not in (".ngc", ".nc", ".gcode", ".tap"):
         raise GenerationError("请使用.ngc、.nc、.gcode或.tap扩展名保存G代码。")
     path.parent.mkdir(parents=True, exist_ok=True)

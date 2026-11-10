@@ -33,6 +33,10 @@ def wait_until(application, condition, timeout=10):
     raise AssertionError("等待生成/界面状态超时")
 
 
+def generation_idle(dialog):
+    return dialog.worker is None and dialog.image_worker is None and not dialog.pending_generate
+
+
 application = QApplication([])
 configure_appearance(application)
 folder = ROOT / ".runtime" / "screenshots"
@@ -78,6 +82,8 @@ dialog.export(path=ROOT / ".runtime" / "text_fill_test.ngc")
 parsed = load_program(ROOT / ".runtime" / "text_fill_test.ngc", pen_threshold=1.3)
 assert len(parsed.commands) == len(dialog.task.program.commands)
 dialog.x.setValue(11)
+dialog.up_feed.setValue(1000)
+dialog.down_feed.setValue(900)
 assert dialog.task is None and not dialog.load_button.isEnabled()
 assert not dialog.save_button.isEnabled()
 dialog.generate()
@@ -95,23 +101,31 @@ window.grab().save(str(folder / "stage3-main-loaded.png"))
 dialog = GenerationDialog(MachineProfile(pen_up=4, pen_up_feed=360), "text", window)
 assert dialog.text.toPlainText() == "HOB 123\n写字机"
 assert dialog.x.value() == 11
-assert dialog.pen_up.value() == 4 and dialog.up_feed.value() == 360
+assert dialog.pen_up.value() == 4 and dialog.up_feed.value() == 1000 and dialog.down_feed.value() == 900
 dialog.reject()
 
 dialog = GenerationDialog(window.profile, "image", window)
 dialog.show()
 dialog.choose_image(path=ROOT / "examples" / "阶段三线稿示例.png")
 assert dialog.source is not None
+assert dialog.up_feed.value() == 300 and dialog.down_feed.value() == 120
+dialog.up_feed.setValue(1500)
+dialog.down_feed.setValue(1100)
 for mode in ("outline", "outline_fill", "fill", "centerline"):
     dialog.mode.setCurrentIndex(dialog.mode.findData(mode))
     dialog.generate()
-    wait_until(application, lambda: dialog.worker is None, 30)
+    wait_until(application, lambda: generation_idle(dialog), 30)
     assert dialog.task is not None, (mode, dialog.status.text())
     assert dialog.task.program.drawing_length > 0
     application.processEvents()
     dialog.grab().save(str(folder / f"stage3-image-{mode}.png"))
+dialog.save_preferences()
 dialog.invert.setChecked(True)
 assert dialog.task is None
+dialog.reject()
+
+dialog = GenerationDialog(window.profile, "image", window)
+assert dialog.up_feed.value() == 1500 and dialog.down_feed.value() == 1100
 dialog.reject()
 
 # 背景线程可以中止；关闭窗口时先结束工作线程，不留下运行中的QThread。
@@ -121,11 +135,11 @@ dialog.mode.setCurrentIndex(dialog.mode.findData("centerline"))
 dialog.width.setValue(190)
 dialog.generate()
 dialog.cancel_generation()
-wait_until(application, lambda: dialog.worker is None, 30)
+wait_until(application, lambda: generation_idle(dialog), 30)
 assert dialog.task is None
 dialog.generate()
 dialog.reject()
-wait_until(application, lambda: dialog.worker is None, 30)
+wait_until(application, lambda: generation_idle(dialog), 30)
 assert not dialog.isVisible()
 
 # 顶部入口确实能打开窗口；不需要连接设备即可进入生成流程。

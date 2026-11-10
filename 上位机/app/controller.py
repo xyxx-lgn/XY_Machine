@@ -284,7 +284,8 @@ class GrblController(QObject):
                         self.modal = "未知"
                         QTimer.singleShot(0, self.refresh_parameters)
                 QTimer.singleShot(0, self.pump)
-                if command.action != "job":
+                # 发送前的$$只读查询不会改变坐标，保留有效状态供检查流程继续使用。
+                if command.action not in ("job", "preflight"):
                     self.last_status = 0.0
                 # 文件流只使用500ms周期查询，避免每个ok额外产生一整份状态报告。
                 if command.action != "job":

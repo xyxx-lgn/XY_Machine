@@ -13,8 +13,10 @@ from app.generation import (
     GenerationCancelled, GenerationError, PlotOptions, generate_task, read_image,
     render_text, save_gcode, source_ratio
 )
+from app.image_processing import ProcessingCancelled, binary_thumbnail, process_image
 from app.profile import ROOT
 from app.ui.preview_widget import PreviewWidget
+from app.ui.image_inspection import ImageInspectionDialog
 
 
 PREFERENCES = ROOT / "config" / "generation.json"
@@ -25,18 +27,38 @@ class GenerationWorker(QThread):
     failed = Signal(str)
     progress = Signal(int, str)
 
-    def __init__(self, image, options, name, parent=None):
+    def __init__(self, image, options, name, parent=None, processed=None):
         super().__init__(parent)
         self.image, self.options, self.name = image.copy(), options, name
+        self.processed = processed
 
     def run(self):
         try:
-            task = generate_task(self.image, self.options, self.name, self.isInterruptionRequested, self.progress.emit)
+            task = generate_task(self.image, self.options, self.name, self.isInterruptionRequested, self.progress.emit, self.processed)
             self.ready.emit(task)
         except GenerationCancelled:
             self.failed.emit("已取消生成，可以修改参数后重试。")
         except Exception as error:
             self.failed.emit(str(error) or type(error).__name__)
+
+
+class ImagePreviewWorker(QThread):
+    ready = Signal(object, int)
+    failed = Signal(str, int)
+
+    def __init__(self, image, options, revision, parent=None):
+        super().__init__(parent)
+        self.image, self.options, self.revision = image.copy(), options, revision
+
+    def run(self):
+        try:
+            processed = process_image(self.image, self.options, self.isInterruptionRequested)
+            if not self.isInterruptionRequested():
+                self.ready.emit(processed, self.revision)
+        except ProcessingCancelled:
+            pass
+        except Exception as error:
+            self.failed.emit(str(error) or type(error).__name__, self.revision)
 
 
 class GenerationDialog(QDialog):
@@ -52,11 +74,22 @@ class GenerationDialog(QDialog):
         self.image_path = None
         self.close_pending = False
         self.cancel_requested = False
+        self.image_worker = None
+        self.image_revision = 0
+        self.processed_revision = -1
+        self.processed = None
+        self.processed_image = None
+        self.pending_generate = False
+        self.preview_needed = False
+        self.preview_timer = QTimer(self)
+        self.preview_timer.setSingleShot(True)
+        self.preview_timer.setInterval(250)
+        self.preview_timer.timeout.connect(self.begin_image_preview)
         self.text_timer = QTimer(self)
         self.text_timer.setSingleShot(True)
         self.text_timer.setInterval(300)
         self.text_timer.timeout.connect(self.update_text_preview)
-        self.setWindowTitle("文字生成 · 路径与G代码" if kind == "text" else "图片生成 · 路径与G代码")
+        self.setWindowTitle("文字生成 · 路径与G代码" if kind == "text" else "图片生成 · 彩色转线稿与G代码")
         self.resize(1240, 880)
         self.setMinimumSize(1050, 720)
         self.build_ui()
@@ -88,7 +121,7 @@ class GenerationDialog(QDialog):
 
     def build_ui(self):
         layout = QVBoxLayout(self)
-        introduction = QLabel("文字/黑色图案 → 轮廓、连续填线或中线 → G代码。X向右、Y向下；生成和载入均不会自动发送。")
+        introduction = QLabel("文字/图片 → 黑白结果 → 路径 → G代码。X向右、Y向下；生成和载入均不会自动发送。")
         introduction.setWordWrap(True)
         layout.addWidget(introduction)
         split = QSplitter(Qt.Orientation.Horizontal)
@@ -115,6 +148,37 @@ class GenerationDialog(QDialog):
             source_form.addWidget(self.button("选择图片…", self.choose_image))
             source_form.addWidget(self.source_label)
             left.addWidget(self.group("图片来源", source_form))
+        if self.kind == "image":
+            processing_form = QFormLayout()
+            self.processing = QComboBox()
+            for title, value in (("黑白阈值（已有线稿）", "threshold"), ("自适应黑白（扫描/拍照）", "adaptive"), ("彩色边缘（插画/照片）", "edges"), ("白底卡通线稿（彩色角色）", "cartoon")):
+                self.processing.addItem(title, value)
+            self.sensitivity = QSpinBox()
+            self.sensitivity.setRange(0, 100)
+            self.sensitivity.setValue(55)
+            self.detail = QSpinBox()
+            self.detail.setRange(0, 100)
+            self.detail.setValue(50)
+            self.smoothing = QSpinBox()
+            self.smoothing.setRange(0, 5)
+            self.smoothing.setValue(2)
+            self.despeckle = QSpinBox()
+            self.despeckle.setRange(0, 100)
+            self.despeckle.setValue(12)
+            for field in (self.sensitivity, self.detail, self.smoothing, self.despeckle):
+                field.setKeyboardTracking(False)
+            self.repair = QCheckBox("修补微小断口（相近细节可能粘连）")
+            processing_form.addRow("预处理方式", self.processing)
+            processing_form.addRow("边缘灵敏度 0～100", self.sensitivity)
+            processing_form.addRow("内部细节 0～100", self.detail)
+            processing_form.addRow("去噪强度 0～5", self.smoothing)
+            processing_form.addRow("碎点过滤 0～100", self.despeckle)
+            processing_form.addRow(self.repair)
+            processing_form.addRow(self.button("应用此方式的推荐参数", self.recommended_processing))
+            self.processing_hint = QLabel()
+            self.processing_hint.setWordWrap(True)
+            processing_form.addRow(self.processing_hint)
+            left.addWidget(self.group("图片转黑白线稿", processing_form))
         form = QFormLayout()
         self.mode = QComboBox()
         for title, value in (("轮廓（空心字/线稿边界）", "outline"), ("轮廓＋填充（实心）", "outline_fill"), ("仅填充（实心，减少重复描边）", "fill"), ("中线（骨架，适合细线稿）", "centerline")):
@@ -177,7 +241,7 @@ class GenerationDialog(QDialog):
         form.addRow("机器Z落笔位置", self.pen_down)
         form.addRow("抬笔进给F", self.up_feed)
         form.addRow("落笔进给F", self.down_feed)
-        z_hint = QLabel("Z参数每次打开取设备配置，可仅对本任务调整。连杆Z单位不是笔尖垂直mm；实际速度受固件$110～$122限制。")
+        z_hint = QLabel("Z高度每次打开取设备配置；抬落笔进给会记住生成窗口上次保存的值。连杆Z单位不是笔尖垂直mm；实际速度受固件$110～$122限制。")
         z_hint.setWordWrap(True)
         form.addRow(z_hint)
         left.addWidget(self.group("速度与步进Z", form))
@@ -196,13 +260,28 @@ class GenerationDialog(QDialog):
         right = QWidget()
         column = QVBoxLayout(right)
         column.setContentsMargins(4, 0, 0, 0)
-        self.source_preview = QLabel("在左侧选择内容并点击“生成预览”")
-        self.source_preview.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.source_preview.setMinimumHeight(115)
-        self.source_preview.setMaximumHeight(160)
-        self.source_preview.setStyleSheet("background: white; border: 1px solid #d8e2f0;")
-        self.source_preview.setToolTip("源图 / 生成后的黑白处理结果")
-        column.addWidget(self.source_preview)
+        image_row = QHBoxLayout()
+        for name, title in (("source_preview", "原图"), ("binary_preview", "黑白处理结果 · 自动更新")):
+            box = QVBoxLayout()
+            box.addWidget(QLabel(title))
+            label = QLabel("选择内容后显示")
+            label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+            label.setMinimumHeight(145)
+            label.setMaximumHeight(170)
+            label.setMinimumWidth(160)
+            label.setStyleSheet("background: white; border: 1px solid #d8e2f0;")
+            setattr(self, name, label)
+            box.addWidget(label)
+            image_row.addLayout(box, 1)
+        column.addLayout(image_row)
+        image_actions = QHBoxLayout()
+        self.binary_status = QLabel("先检查黑白图，再生成下方实际轨迹。")
+        self.binary_status.setWordWrap(True)
+        image_actions.addWidget(self.binary_status, 1)
+        self.enlarge_button = self.button("放大黑白图", self.enlarge_processed)
+        self.enlarge_button.setEnabled(False)
+        image_actions.addWidget(self.enlarge_button)
+        column.addLayout(image_actions)
         toolbar = QHBoxLayout()
         toolbar.addWidget(QLabel("实际轨迹 · G54纸张坐标"))
         self.travel = QCheckBox("显示空行程")
@@ -258,6 +337,12 @@ class GenerationDialog(QDialog):
             self.text.textChanged.connect(self.text_changed)
             self.font.currentFontChanged.connect(self.text_changed)
             self.bold.toggled.connect(self.text_changed)
+        else:
+            self.processing.currentIndexChanged.connect(self.processing_changed)
+            for field in (self.sensitivity, self.detail, self.smoothing, self.despeckle):
+                field.valueChanged.connect(self.source_changed)
+            self.repair.toggled.connect(self.source_changed)
+            self.processing_changed(select_path=False)
 
     def invalidate(self, *args):
         self.task = None
@@ -276,6 +361,8 @@ class GenerationDialog(QDialog):
             "centerline": "提取黑色图案骨架；不是自动识别手写笔顺，交叉处可能产生分叉。"
         }
         self.mode_hint.setText(hints[self.mode.currentData()])
+        if self.kind == "image" and self.processing.currentData() in ("edges", "cartoon") and self.mode.currentData() != "centerline":
+            self.mode_hint.setText(self.mode_hint.text() + " 当前结果已是细线，推荐中线；轮廓会描细线两侧，填充只填细线区域。")
         self.invalidate()
 
     def change_size(self, from_width):
@@ -305,17 +392,140 @@ class GenerationDialog(QDialog):
         self.source_changed()
 
     def source_changed(self, *args):
+        self.invalidate()
+        if self.kind == "image":
+            self.image_revision += 1
+            self.processed = None
+            self.processed_image = None
+            self.enlarge_button.setEnabled(False)
+            self.binary_preview.clear()
+            self.binary_preview.setText("黑白图待更新…")
+            self.preview_needed = self.source is not None
+            if self.image_worker is not None:
+                self.image_worker.requestInterruption()
+            if self.source is not None:
+                self.show_source(self.source)
+                self.preview_timer.start()
+            else:
+                self.source_preview.clear()
+                self.source_preview.setText("请选择图片")
+                self.binary_status.setText("选择图片后自动更新黑白预览。")
+            return
         if self.source is not None:
             try:
                 self.ratio = source_ratio(self.source, self.threshold.value(), self.invert.isChecked(), self.crop.isChecked())
                 self.change_size(self.size_from_width)
                 self.show_source(self.source)
-            except GenerationError as error:
+                self.show_processed(process_image(self.source, self.options()).image())
+                self.binary_status.setText("文字黑白图已更新，路径需点击“生成预览”。")
+            except ValueError as error:
                 self.status.setText(str(error))
-        self.invalidate()
 
     def show_source(self, image):
-        self.source_preview.setPixmap(QPixmap.fromImage(image).scaled(620, 145, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation))
+        self.source_preview.setPixmap(QPixmap.fromImage(image).scaled(340, 165, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation))
+
+    def show_processed(self, image):
+        self.processed_image = image
+        self.binary_preview.setPixmap(QPixmap.fromImage(binary_thumbnail(image, 340, 165)))
+        self.enlarge_button.setEnabled(True)
+
+    def enlarge_processed(self):
+        if self.processed_image is not None:
+            dialog = ImageInspectionDialog(self.processed_image, self)
+            dialog.exec()
+            dialog.deleteLater()
+
+    def processing_changed(self, *args, select_path=True):
+        value = self.processing.currentData()
+        edges = value in ("edges", "cartoon")
+        self.threshold.setEnabled(value == "threshold")
+        self.invert.setEnabled(not edges)
+        self.invert.setText("原图反相（白线黑底）" if value == "adaptive" else "反相：白色部分作为图案")
+        if edges:
+            self.invert.blockSignals(True)
+            self.invert.setChecked(False)
+            self.invert.blockSignals(False)
+            if select_path:
+                self.mode.setCurrentIndex(self.mode.findData("centerline"))
+        self.sensitivity.setEnabled(edges)
+        self.detail.setEnabled(value != "threshold")
+        for field in (self.smoothing, self.despeckle, self.repair):
+            field.setEnabled(value != "threshold")
+        hints = {
+            "threshold": "适合黑线白底。此方式使用下方黑白阈值，保留原版效果。",
+            "adaptive": "适合纸面亮度不均的线稿。内部细节越高，保留的浅色线越多。",
+            "edges": "按颜色和明暗变化提取细线；灵敏度越高，弱边缘越多。推荐中线路径。",
+            "cartoon": "适合白底角色图。内部细节为0时仅留主体外轮廓；提高可补眼睛、嘴巴等，阴影也可能增加。推荐中线路径。"
+        }
+        self.processing_hint.setText(hints[value])
+        self.source_changed()
+
+    def recommended_processing(self):
+        sensitivity = 80 if self.processing.currentData() == "cartoon" else 55
+        for field, value in ((self.sensitivity, sensitivity), (self.detail, 50), (self.smoothing, 2), (self.despeckle, 12), (self.threshold, 128)):
+            field.blockSignals(True)
+            field.setValue(value)
+            field.blockSignals(False)
+        self.repair.blockSignals(True)
+        self.repair.setChecked(False)
+        self.repair.blockSignals(False)
+        self.processing_changed()
+
+    def begin_image_preview(self):
+        self.preview_timer.stop()
+        if self.source is None or self.close_pending or self.worker is not None:
+            return
+        if self.image_worker is not None:
+            self.preview_needed = self.preview_needed or self.image_worker.revision != self.image_revision
+            return
+        self.preview_needed = False
+        self.cancel_requested = False
+        self.image_worker = ImagePreviewWorker(self.source, self.options(), self.image_revision, self)
+        self.image_worker.ready.connect(self.image_preview_ready)
+        self.image_worker.failed.connect(self.image_preview_failed)
+        self.image_worker.finished.connect(self.image_preview_finished)
+        self.binary_status.setText("正在后台更新黑白图…")
+        self.set_busy(self.pending_generate)
+        self.image_worker.start()
+
+    def image_preview_ready(self, processed, revision):
+        if revision != self.image_revision or self.close_pending or self.cancel_requested:
+            return
+        self.processed = processed
+        self.processed_revision = revision
+        self.ratio = processed.ratio
+        self.change_size(self.size_from_width)
+        self.show_processed(processed.image())
+        self.binary_status.setText("黑白图已更新；" + (" ".join(processed.notes) if processed.notes else "可放大检查细节。"))
+        self.status.setText("黑白图已更新，点击“生成预览”计算下方轨迹。")
+
+    def image_preview_failed(self, message, revision):
+        if revision == self.image_revision:
+            self.processed = None
+            self.binary_preview.setText("处理未完成")
+            self.binary_status.setText(message)
+            self.status.setText(message)
+
+    def image_preview_finished(self):
+        self.image_worker.deleteLater()
+        self.image_worker = None
+        if self.cancel_requested:
+            self.status.setText("已取消图片处理，可以修改参数后重试。")
+        if self.close_pending:
+            if self.worker is None:
+                super().reject()
+            return
+        if self.pending_generate:
+            if self.preview_needed:
+                self.begin_image_preview()
+                return
+            self.pending_generate = False
+            if self.processed is not None and self.processed_revision == self.image_revision:
+                self.generate()
+                return
+        elif self.preview_needed:
+            self.preview_timer.start()
+        self.set_busy(self.worker is not None)
 
     def choose_image(self, checked=False, path=None):
         if path is None:
@@ -324,6 +534,7 @@ class GenerationDialog(QDialog):
             return
         self.invalidate()
         self.source = None
+        self.source_changed()
         try:
             self.source = read_image(path)
             self.image_path = Path(path)
@@ -349,7 +560,7 @@ class GenerationDialog(QDialog):
             self.status.setText(str(error))
 
     def options(self):
-        return PlotOptions(
+        options = PlotOptions(
             paper_width=self.profile.paper_width, paper_height=self.profile.paper_height,
             x=self.x.value(), y=self.y.value(), width=self.width.value(), height=self.height.value(),
             mode=self.mode.currentData(), threshold=self.threshold.value(), invert=self.invert.isChecked(), crop=self.crop.isChecked(),
@@ -358,6 +569,14 @@ class GenerationDialog(QDialog):
             travel_feed=self.travel_feed.value(), pen_up=self.pen_up.value(), pen_down=self.pen_down.value(),
             up_feed=self.up_feed.value(), down_feed=self.down_feed.value(), z_min=self.profile.z_min, z_max=self.profile.z_max
         )
+        if self.kind == "image":
+            options.processing = self.processing.currentData()
+            options.edge_sensitivity = self.sensitivity.value()
+            options.detail_level = self.detail.value()
+            options.smoothing = self.smoothing.value()
+            options.despeckle = self.despeckle.value()
+            options.repair_gaps = self.repair.isChecked()
+        return options
 
     def generate(self):
         if self.worker is not None:
@@ -371,6 +590,14 @@ class GenerationDialog(QDialog):
                 self.refresh_text_source()
             if self.source is None:
                 raise GenerationError("请先选择图片。")
+            if self.kind == "image" and (self.processed is None or self.processed_revision != self.image_revision or self.image_worker is not None):
+                self.pending_generate = True
+                self.preview_timer.stop()
+                self.preview_needed = self.image_worker is None or self.image_worker.revision != self.image_revision
+                self.status.setText("先更新黑白图，完成后自动生成轨迹…")
+                self.set_busy(True)
+                self.begin_image_preview()
+                return
             options = self.options()
             options.validate()
         except (ValueError, OSError) as error:
@@ -378,7 +605,8 @@ class GenerationDialog(QDialog):
             return
         self.progress.setValue(0)
         self.cancel_requested = False
-        self.worker = GenerationWorker(self.source, options, "文字任务" if self.kind == "text" else "图片任务", self)
+        self.preview_timer.stop()
+        self.worker = GenerationWorker(self.source, options, "文字任务" if self.kind == "text" else "图片任务", self, self.processed if self.kind == "image" else None)
         self.worker.ready.connect(self.generated)
         self.worker.failed.connect(self.failed)
         self.worker.progress.connect(self.on_progress)
@@ -389,7 +617,7 @@ class GenerationDialog(QDialog):
     def set_busy(self, busy):
         self.inputs.setEnabled(not busy)
         self.generate_button.setEnabled(not busy and self.profile.z_mode == "stepper")
-        self.cancel_button.setEnabled(busy)
+        self.cancel_button.setEnabled(busy or self.image_worker is not None)
         self.load_button.setEnabled(not busy and self.task is not None)
         self.save_button.setEnabled(not busy and self.task is not None)
         if self.profile.z_mode != "stepper":
@@ -403,7 +631,7 @@ class GenerationDialog(QDialog):
         if self.cancel_requested:
             return
         self.task = task
-        self.show_source(task.image)
+        self.show_processed(task.image)
         self.preview.set_program(task.program)
         self.preview.fit_job()
         self.summary.setText(
@@ -424,10 +652,17 @@ class GenerationDialog(QDialog):
             self.task = None
             self.status.setText("已取消生成，可以修改参数后重试。")
         self.set_busy(False)
-        if self.close_pending:
+        if self.close_pending and self.image_worker is None:
             super().reject()
 
     def cancel_generation(self):
+        self.preview_timer.stop()
+        self.pending_generate = self.preview_needed = False
+        self.cancel_requested = True
+        if self.image_worker is not None:
+            self.image_worker.requestInterruption()
+            self.cancel_button.setEnabled(False)
+            self.status.setText("正在取消图片处理…")
         if self.worker is not None:
             self.cancel_requested = True
             self.worker.requestInterruption()
@@ -435,19 +670,19 @@ class GenerationDialog(QDialog):
             self.status.setText("正在取消，请等待当前处理步骤结束…")
 
     def load_task(self):
-        if self.worker is not None or self.task is None:
+        if self.worker is not None or self.image_worker is not None or self.pending_generate or self.task is None:
             return
         self.save_preferences()
         self.loaded_task = self.task
         self.accept()
 
     def export(self, checked=False, path=None):
-        if self.worker is not None or self.task is None:
+        if self.worker is not None or self.image_worker is not None or self.pending_generate or self.task is None:
             return
         if path is None:
             folder = ROOT / "exports"
             folder.mkdir(exist_ok=True)
-            path, _ = QFileDialog.getSaveFileName(self, "保存G代码（上位机目录内）", str(folder / self.task.program.path.name), "G代码 (*.ngc *.nc)")
+            path, _ = QFileDialog.getSaveFileName(self, "保存G代码", str(folder / self.task.program.path.name), "G代码 (*.ngc *.nc *.gcode *.tap)")
         if not path:
             return
         try:
@@ -460,9 +695,11 @@ class GenerationDialog(QDialog):
     def save_preferences(self):
         if not self.remember.isChecked():
             return
-        data = {name: getattr(self, name).value() for name in ("width", "height", "x", "y", "spacing", "tolerance", "minimum", "draw_feed", "travel_feed", "threshold")}
+        data = {name: getattr(self, name).value() for name in ("width", "height", "x", "y", "spacing", "tolerance", "minimum", "draw_feed", "travel_feed", "up_feed", "down_feed", "threshold")}
         data.update({name: getattr(self, name).isChecked() for name in ("invert", "crop", "aspect", "optimize")})
         data.update(mode=self.mode.currentData(), direction=self.direction.currentIndex())
+        if self.kind == "image":
+            data.update(processing=self.processing.currentData(), sensitivity=self.sensitivity.value(), detail=self.detail.value(), smoothing=self.smoothing.value(), despeckle=self.despeckle.value(), repair=self.repair.isChecked())
         if self.kind == "text":
             data.update(text=self.text.toPlainText(), font=self.font.currentFont().family(), bold=self.bold.isChecked())
         try:
@@ -479,7 +716,7 @@ class GenerationDialog(QDialog):
     def restore_preferences(self):
         try:
             stored = json.loads(PREFERENCES.read_text(encoding="utf-8")).get(self.kind, {})
-            for name in ("width", "height", "x", "y", "spacing", "tolerance", "minimum", "draw_feed", "travel_feed", "threshold"):
+            for name in ("width", "height", "x", "y", "spacing", "tolerance", "minimum", "draw_feed", "travel_feed", "up_feed", "down_feed", "threshold"):
                 if name in stored and type(stored[name]) in (int, float):
                     getattr(self, name).setValue(stored[name])
             for name in ("invert", "crop", "aspect", "optimize"):
@@ -489,6 +726,14 @@ class GenerationDialog(QDialog):
             if index >= 0:
                 self.mode.setCurrentIndex(index)
             self.direction.setCurrentIndex(1 if stored.get("direction") == 1 else 0)
+            if self.kind == "image":
+                index = self.processing.findData(stored.get("processing"))
+                if index >= 0:
+                    self.processing.setCurrentIndex(index)
+                for name in ("sensitivity", "detail", "smoothing", "despeckle"):
+                    if type(stored.get(name)) is int:
+                        getattr(self, name).setValue(stored[name])
+                self.repair.setChecked(stored.get("repair") is True)
             if self.kind == "text":
                 if isinstance(stored.get("text"), str):
                     self.text.setPlainText(stored["text"][:2000])
@@ -504,14 +749,17 @@ class GenerationDialog(QDialog):
 
     def reject(self):
         self.text_timer.stop()
-        if self.worker is not None:
+        self.preview_timer.stop()
+        if self.worker is not None or self.image_worker is not None:
             self.close_pending = True
             self.cancel_generation()
             return
         super().reject()
 
     def closeEvent(self, event):
-        if self.worker is not None:
+        self.preview_timer.stop()
+        self.text_timer.stop()
+        if self.worker is not None or self.image_worker is not None:
             self.close_pending = True
             self.cancel_generation()
             event.ignore()

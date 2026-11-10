@@ -112,7 +112,7 @@ def arc_points(start, end, words, clockwise):
     return tuple(points), abs(sweep) * radius
 
 
-def load_program(path, initial_work=None, g54_offset=(0.0, 0.0, 0.0), pen_threshold=0.0):
+def load_program(path, initial_work=None, g54_offset=(0.0, 0.0, 0.0), pen_threshold=0.0, xy_travel=None):
     path = Path(path)
     if path.stat().st_size > 20_000_000:
         raise GcodeError("文件超过20MB，请先拆分任务。")
@@ -121,10 +121,14 @@ def load_program(path, initial_work=None, g54_offset=(0.0, 0.0, 0.0), pen_thresh
         text = data.decode("utf-8-sig")
     except UnicodeDecodeError:
         text = data.decode("gb18030")
-    return parse_program(text, path, initial_work, g54_offset, pen_threshold)
+    return parse_program(text, path, initial_work, g54_offset, pen_threshold, xy_travel)
 
 
-def parse_program(text, path=Path("未命名.nc"), initial_work=None, g54_offset=(0.0, 0.0, 0.0), pen_threshold=0.0):
+def parse_program(text, path=Path("未命名.nc"), initial_work=None, g54_offset=(0.0, 0.0, 0.0), pen_threshold=0.0, xy_travel=None):
+    # 离线导入只预览；发送前必须传入本次从设备读取的XY行程。
+    if xy_travel is not None:
+        if len(xy_travel) != 2 or any(isinstance(value, bool) or not isinstance(value, (int, float)) or not math.isfinite(value) or value <= 0 for value in xy_travel):
+            raise GcodeError("未读取到有效的X/Y行程（$130、$131须为正数），任务未发送。请检查设备设置后重试。")
     program = Program(Path(path), text)
     position = list(initial_work or (0.0, 0.0, 0.0))
     offset = list(g54_offset)
@@ -237,6 +241,20 @@ def parse_program(text, path=Path("未命名.nc"), initial_work=None, g54_offset
                 else:
                     points = (tuple(position[:2]), tuple(target[:2]))
                     length = math.dist(position[:2], target[:2])
+                if xy_travel is not None:
+                    # 当前固件未启用HOMING_FORCE_SET_ORIGIN，XY机器范围为[-行程, 0]；Z另行检查。
+                    check_points = points if known_xy else (tuple(target[:2]),)
+                    for point in check_points:
+                        for index, axis in enumerate("XY"):
+                            machine_value = point[index] + offset[index]
+                            # 仅容忍圆弧三角函数的浮点舍入，不给真实越界留出额外行程。
+                            if machine_value < -xy_travel[index] - 1e-7 or machine_value > 1e-7:
+                                raise ValueError(
+                                    f"XY软限位超限，任务未发送（第{len(program.commands) + 1}条指令）。\n"
+                                    f"{axis}轴运动轨迹：工作坐标 {point[index]:.4f} + G54偏移 {offset[index]:.4f} = 机器坐标 {machine_value:.4f} mm。\n"
+                                    f"允许机器范围：{-xy_travel[index]:.4f}～0.0000 mm；当前G54允许的工作范围：{-xy_travel[index] - offset[index]:.4f}～{-offset[index]:.4f} mm。\n"
+                                    "请缩小或移动图案，或核实纸张原点与实际行程。"
+                                )
                 if xy_move:
                     bounds.extend(points if known_xy else (tuple(target[:2]),))
                     if known_xy and length > 1e-9:

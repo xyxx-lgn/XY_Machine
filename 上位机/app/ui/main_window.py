@@ -56,6 +56,9 @@ class MainWindow(QMainWindow):
         self.job = JobRunner(self.controller, self)
         self.loader = None
         self.loading = False
+        self.start_read_pending = False
+        self.start_snapshot = None
+        self.start_travel = None
         self.log_buffer = deque(maxlen=2000)
         self.suppressed_lines = 0
         self.summary_at = time.monotonic()
@@ -330,6 +333,8 @@ class MainWindow(QMainWindow):
         self.controller.changed.connect(self.schedule_view)
         self.controller.log.connect(self.append_log)
         self.controller.notice.connect(self.show_notice)
+        self.controller.acknowledged.connect(self.start_settings_received)
+        self.controller.interrupted.connect(self.cancel_start_check)
         self.job.changed.connect(self.schedule_view)
         self.baseline_check.toggled.connect(self.controller.confirm_baseline)
         self.jog_step.valueChanged.connect(lambda value: setattr(self.profile, "jog_step", value))
@@ -383,7 +388,7 @@ class MainWindow(QMainWindow):
         if path is None:
             folder = ROOT / "exports"
             folder.mkdir(exist_ok=True)
-            path, _ = QFileDialog.getSaveFileName(self, "导出当前G代码（上位机目录内）", str(folder / self.job.program.path.name), "G代码 (*.ngc *.nc)")
+            path, _ = QFileDialog.getSaveFileName(self, "导出当前G代码", str(folder / self.job.program.path.name), "G代码 (*.ngc *.nc *.gcode *.tap)")
         if not path:
             return
         try:
@@ -416,12 +421,14 @@ class MainWindow(QMainWindow):
                 context["pen_threshold"] = self.job.program.preview_pen_threshold
             context["initial_work"] = controller.work
             context["g54_offset"] = controller.g54_offset
+            self.start_travel = tuple(controller.settings.get(key) for key in (130, 131))
+            context["xy_travel"] = self.start_travel
             source = self.job.program.source_text
-            self.start_snapshot = (controller.transport, controller.machine, controller.offset)
+            self.start_snapshot = self.current_start_context()
         self.loader = ProgramLoader(path, source, context, self)
         loader = self.loader
         loader.loaded.connect(lambda program: self.program_loaded(program, for_start))
-        loader.failed.connect(self.program_failed)
+        loader.failed.connect(lambda message: self.program_failed(message, for_start))
         loader.finished.connect(lambda: self.release_loader(loader))
         loader.start()
         self.update_view()
@@ -431,11 +438,13 @@ class MainWindow(QMainWindow):
             self.loader = None
         loader.deleteLater()
 
-    def program_failed(self, message):
+    def program_failed(self, message, for_start=False):
         self.loading = False
-        # 导入失败时保留原文件，但明确说明没有替换成功。
-        self.show_notice("文件分析失败，未载入新任务：" + message)
+        # 检查失败保留已载入的任务；任何任务行都尚未发送。
+        self.show_notice(("发送前检查未通过：" if for_start else "文件分析失败，未载入新任务：") + message)
         self.update_view()
+        if for_start:
+            QMessageBox.warning(self, "任务检查未通过，未发送", message)
 
     def program_loaded(self, program, for_start):
         self.loading = False
@@ -452,28 +461,67 @@ class MainWindow(QMainWindow):
                 self.update_view()
                 return
             if program.z_bounds and not self.profile.z_min <= program.z_bounds[0] <= program.z_bounds[1] <= self.profile.z_max:
-                self.show_notice(f"文件机器Z范围 {program.z_bounds} 超出设备配置 {self.profile.z_min}～{self.profile.z_max}，未发送。")
-                self.update_view()
+                self.program_failed(f"文件机器Z范围 {program.z_bounds} 超出设备配置 {self.profile.z_min}～{self.profile.z_max}，任务未发送。", True)
                 return
             issues = list(program.warnings)
             if program.bounds:
                 x0, y0, x1, y1 = program.bounds
                 if x0 < -0.01 or y0 < -0.01 or x1 > self.profile.paper_width + 0.01 or y1 > self.profile.paper_height + 0.01:
                     issues.append("部分路径（含当前位置的进场线）超出预览纸张，请核实实际可用行程。")
-            summary = f"文件：{program.path.name}\n命令：{len(program.commands)}条\n机器Z范围：{program.z_bounds}\nZ/F按文件原值执行；手动按钮参数不会改写文件。\n"
+            summary = (
+                f"文件：{program.path.name}\n命令：{len(program.commands)}条\n"
+                f"XY行程检查通过（含进场线与圆弧）；机器X：{-self.start_travel[0]:g}～0，Y：{-self.start_travel[1]:g}～0 mm。\n"
+                f"机器Z范围：{program.z_bounds}\nZ/F按文件原值执行；手动按钮参数不会改写文件。\n"
+            )
             if issues:
                 summary += "\n" + "\n".join(issues) + "\n"
             summary += "\n已回零、建立G54纸张原点和Z基准，并确认笔尖离纸？开始发送？"
-            if self.confirm("开始文件任务", summary) and self.start_context_valid():
+            if self.confirm("开始文件任务", summary):
+                if not self.start_context_valid():
+                    self.show_notice("确认期间设备状态、坐标或行程参数发生变化，任务未发送。请重新开始检查。")
+                    self.update_view()
+                    return
                 self.job.load(program)
                 self.preview.set_program(program)
                 self.job.start()
+            else:
+                self.show_notice("任务检查通过，已取消发送。")
         self.update_view()
+
+    def current_start_context(self):
+        controller = self.controller
+        return (
+            controller.transport, controller.machine, controller.offset, controller.g54_offset,
+            id(self.job.program), self.profile.z_mode, self.profile.z_min, self.profile.z_max, self.profile.pen_up
+        )
 
     def start_context_valid(self):
         controller = self.controller
-        snapshot = (controller.transport, controller.machine, controller.offset)
-        return controller.available and controller.baseline_confirmed and controller.pen_clear() and snapshot == self.start_snapshot
+        travel = tuple(controller.settings.get(key) for key in (130, 131))
+        return (
+            controller.available and controller.baseline_confirmed and controller.pen_clear()
+            and self.current_start_context() == self.start_snapshot
+            and (self.start_travel is None or travel == self.start_travel)
+        )
+
+    def cancel_start_check(self, message):
+        self.start_snapshot = None
+        if self.start_read_pending:
+            self.start_read_pending = False
+            self.loading = False
+            self.show_notice("发送前检查已中止，任务未发送：" + message)
+            self.schedule_view()
+
+    def start_settings_received(self, command, action, reply):
+        if action != "preflight" or not self.start_read_pending:
+            return
+        self.start_read_pending = False
+        if reply != "ok" or not self.start_context_valid():
+            self.loading = False
+            self.show_notice("读取行程失败或设备状态/坐标已变化，任务未发送。等待Idle后重新开始。")
+            self.update_view()
+            return
+        self.begin_load(self.job.program.path, True)
 
     def start_job(self):
         controller = self.controller
@@ -491,7 +539,15 @@ class MainWindow(QMainWindow):
         if len(controller.g54_offset) != 3 or any(abs(a - b) > 0.002 for a, b in zip(controller.offset, controller.g54_offset)):
             self.show_notice("当前WCO与G54偏移不一致。请确认使用G54、清除G92/刀长偏移，再查询$G、$#和?。")
             return
-        self.begin_load(self.job.program.path, True)
+        # 每次开始都重新读$$，不能用上一次连接或改参数之前的行程判断。
+        self.start_snapshot = self.current_start_context()
+        self.start_travel = None
+        self.loading = self.start_read_pending = True
+        controller.settings.clear()
+        self.show_notice("正在读取设备行程并检查整个任务；尚未发送G代码…")
+        if not controller.send("$$", "preflight"):
+            self.cancel_start_check("设备未接受设置查询。")
+        self.update_view()
 
     def stop_job(self):
         if self.job.active:
@@ -585,6 +641,7 @@ class MainWindow(QMainWindow):
 
     def show_notice(self, message):
         self.notice_label.setText(message.replace("\n", "  "))
+        self.notice_label.setToolTip(message)
         self.append_log("提示", message)
 
     @staticmethod
@@ -595,9 +652,9 @@ class MainWindow(QMainWindow):
         self.view_timer.stop()
         controller = self.controller
         connected = controller.connected
-        available = controller.available
+        available = controller.available and not self.loading
         normal = connected and controller.fresh and not controller.fault and not controller.awaiting_reset
-        can_read = normal and not self.job.active and controller.pending is None and not controller.queue and controller.state in ("Idle", "Alarm", "Check")
+        can_read = normal and not self.loading and not self.job.active and controller.pending is None and not controller.queue and controller.state in ("Idle", "Alarm", "Check")
         self.connect_button.setText("断开" if connected else "连接")
         for widget in (self.port_combo, self.baud_combo, self.refresh_button):
             widget.setEnabled(not connected)
@@ -684,6 +741,9 @@ class MainWindow(QMainWindow):
         command = self.command_input.text().strip()
         if command in ("?", "!", "~"):
             {"?": self.controller.query_status, "!": self.controller.pause, "~": self.controller.resume}[command]()
+            return
+        if self.loading:
+            self.show_notice("正在分析或检查任务，请完成后再发送普通命令。")
             return
         if self.job.active or not self.controller.fresh or self.controller.pending or self.controller.state not in ("Idle", "Alarm", "Check"):
             self.show_notice("当前仅允许实时查询、暂停和复位；等待空闲和应答后再发普通命令。")

@@ -1,5 +1,6 @@
 import unittest
 from dataclasses import replace
+from unittest.mock import patch
 
 import numpy as np
 from PySide6.QtGui import QImage
@@ -159,10 +160,14 @@ class GenerationTests(unittest.TestCase):
         save_gcode(task.program, path)
         self.assertEqual(path.read_text(encoding="utf-8"), task.program.source_text)
 
-    def test_export_outside_host_rejected_before_writing(self):
+    def test_export_outside_host_is_allowed(self):
         task = generate_task(qimage(self.mask), self.options)
-        with self.assertRaisesRegex(GenerationError, "上位机"):
-            save_gcode(task.program, ROOT.parent / "must_not_create.ngc")
+        path = (ROOT.parent / "用户选择的目录" / "图片任务.ngc").resolve()
+        # 模拟用户选择外部目录，不向工程允许范围之外实际写入测试文件。
+        with patch("pathlib.Path.mkdir"), patch("pathlib.Path.write_text") as write, patch("pathlib.Path.replace") as replace_file:
+            self.assertEqual(save_gcode(task.program, path), path)
+        write.assert_called_once_with(task.program.source_text, encoding="utf-8", newline="\n")
+        replace_file.assert_called_once_with(path)
 
     def test_export_cannot_overwrite_config_or_code(self):
         task = generate_task(qimage(self.mask), self.options)
