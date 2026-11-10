@@ -1,3 +1,6 @@
 # 只安装界面、串口需要的Qt模块，不安装WebEngine和PDF组件。
 PySide6-Essentials==6.12.0
 PySide6-Addons==6.12.0
+# 路径生成使用数组处理与无界面的OpenCV，不引入另一套Qt界面。
+numpy==2.4.6
+opencv-python-headless==4.13.0.92

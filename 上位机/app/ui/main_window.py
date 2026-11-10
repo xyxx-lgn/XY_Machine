@@ -20,6 +20,8 @@ from app.profile import ROOT, MachineProfile
 from app.transport import SIMULATOR, SerialTransport
 from app.ui.preview_widget import PreviewWidget
 from app.ui.settings_dialog import SettingsDialog
+from app.ui.generation_dialog import GenerationDialog
+from app.generation import GenerationError, save_gcode
 
 
 STYLE = """
@@ -66,7 +68,7 @@ class MainWindow(QMainWindow):
         self.log_timer = QTimer(self)
         self.log_timer.setInterval(100)
         self.log_timer.timeout.connect(self.flush_log)
-        self.setWindowTitle("XY写字机上位机 · 第二阶段")
+        self.setWindowTitle("XY写字机上位机 · 第三阶段")
         self.resize(1400, 930)
         self.setMinimumSize(1120, 760)
         self.setStyleSheet(STYLE)
@@ -82,7 +84,7 @@ class MainWindow(QMainWindow):
         self.bind_signals()
         self.refresh_ports()
         self.update_view()
-        self.append_log("APP", "第二阶段就绪：轨迹位图缓存、界面合并刷新、逐行流控；大文件日志默认显示摘要。")
+        self.append_log("APP", "第三阶段就绪：文字/图片生成、连续填充、中线提取、G代码导出；生成后预览，手动开始发送。")
         self.append_log("APP", "所有配置、日志和运行文件保存在当前上位机目录。连接后不会自动运动。")
         if warning:
             self.show_notice(warning)
@@ -119,11 +121,10 @@ class MainWindow(QMainWindow):
         header.addStretch()
         self.import_button = self.button("导入G代码", self.import_file, True)
         header.addWidget(self.import_button)
-        for text in ("图片生成", "文字生成"):
-            widget = self.button(text)
-            widget.setEnabled(False)
-            widget.setToolTip("后续阶段实现；本版可导入Inkscape生成的G代码。")
-            header.addWidget(widget)
+        self.image_button = self.button("图片生成", lambda: self.open_generator("image"))
+        self.text_button = self.button("文字生成", lambda: self.open_generator("text"))
+        header.addWidget(self.image_button)
+        header.addWidget(self.text_button)
         self.start_button = self.button("开始发送", self.start_job, True)
         self.pause_button = self.button("暂停 !", self.controller.pause)
         self.resume_button = self.button("继续 ~", self.controller.resume)
@@ -354,7 +355,42 @@ class MainWindow(QMainWindow):
         self.file_warning.setStyleSheet("color: #9a5a10; font-size: 9pt;")
         for widget in (self.file_label, self.file_details, self.job_label, self.file_warning):
             layout.addWidget(widget)
+        self.export_button = self.button("导出当前G代码…", self.export_program)
+        layout.addWidget(self.export_button)
         return group
+
+    def open_generator(self, kind):
+        if self.loading or self.job.active:
+            return
+        dialog = GenerationDialog(self.profile, kind, self)
+        if dialog.exec() == GenerationDialog.DialogCode.Accepted and dialog.loaded_task:
+            self.load_generated(dialog.loaded_task)
+        dialog.deleteLater()
+
+    def load_generated(self, task):
+        if self.loading or self.job.active:
+            return
+        self.job.load(task.program)
+        self.preview.set_program(task.program)
+        self.preview.fit_job()
+        self.append_log("生成", f"{task.program.path.name}：{task.path_count}条路径，{len(task.program.commands)}条命令，未发送。")
+        self.show_notice("生成任务已载入。Z/F固定在本次文件中；确认机器原点、Z基准并抬笔后，点击“开始发送”。")
+        self.update_view()
+
+    def export_program(self, checked=False, path=None):
+        if not self.job.program or self.job.active or self.loading:
+            return
+        if path is None:
+            folder = ROOT / "exports"
+            folder.mkdir(exist_ok=True)
+            path, _ = QFileDialog.getSaveFileName(self, "导出当前G代码（上位机目录内）", str(folder / self.job.program.path.name), "G代码 (*.ngc *.nc)")
+        if not path:
+            return
+        try:
+            target = save_gcode(self.job.program, path)
+            self.show_notice(f"已导出：{target}。未发送。")
+        except (OSError, GenerationError) as error:
+            self.show_notice("导出失败：" + str(error))
 
     def toggle_travel(self, checked):
         self.preview.show_travel = checked
@@ -376,6 +412,8 @@ class MainWindow(QMainWindow):
         source = None
         if for_start:
             controller = self.controller
+            if self.job.program.preview_pen_threshold is not None:
+                context["pen_threshold"] = self.job.program.preview_pen_threshold
             context["initial_work"] = controller.work
             context["g54_offset"] = controller.g54_offset
             source = self.job.program.source_text
@@ -408,6 +446,7 @@ class MainWindow(QMainWindow):
             self.append_log("FILE", f"已载入 {program.path.name}，{len(program.commands)} 条命令；原文件保持不变。")
             self.show_notice("导入完成，仅预览；检查范围及Z高度后点击“开始发送”。")
         else:
+            program.preview_pen_threshold = self.job.program.preview_pen_threshold
             if not self.start_context_valid():
                 self.show_notice("检查期间设备状态/坐标发生变化，请等待Idle后重新点击开始。")
                 self.update_view()
@@ -609,10 +648,13 @@ class MainWindow(QMainWindow):
         self.resume_button.setEnabled(normal and controller.state == "Hold:0")
         self.jog_cancel_button.setEnabled(connected and controller.state == "Jog")
         self.import_button.setEnabled(not self.job.active and not self.loading)
+        self.image_button.setEnabled(not self.job.active and not self.loading)
+        self.text_button.setEnabled(not self.job.active and not self.loading)
+        self.export_button.setEnabled(not self.job.active and not self.loading and self.job.program is not None)
         self.start_button.setEnabled(available and not self.loading and self.job.program is not None and z_ready and self.profile.z_mode == "stepper")
         self.stop_button.setEnabled(self.job.active and connected)
         self.update_job_view()
-        self.statusBar().showMessage("第二阶段：文件预览与发送    |    Z/F取文件值    |    状态查询2Hz，界面刷新合并")
+        self.statusBar().showMessage("第三阶段：文字 / 图片 → 路径 → G代码    |    Z/F取文件值    |    状态查询2Hz")
 
     def confirm(self, title, message):
         return QMessageBox.question(self, title, message, QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No, QMessageBox.StandardButton.No) == QMessageBox.StandardButton.Yes

@@ -30,6 +30,8 @@ class Program:
     z_bounds: tuple | None = None
     drawing_length: float = 0.0
     lift_count: int = 0
+    # 内部生成任务可保留本次抬落笔分界，开始前重解析时不改用手动按钮参数。
+    preview_pen_threshold: float | None = None
 
 
 class GcodeError(ValueError):
