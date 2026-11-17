@@ -3,6 +3,7 @@ import re
 import time
 from collections import deque
 from logging.handlers import RotatingFileHandler
+from pathlib import Path
 
 from PySide6.QtCore import Qt, QTimer
 from PySide6.QtGui import QColor, QFont, QPalette
@@ -71,7 +72,7 @@ class MainWindow(QMainWindow):
         self.log_timer = QTimer(self)
         self.log_timer.setInterval(100)
         self.log_timer.timeout.connect(self.flush_log)
-        self.setWindowTitle("XY写字机上位机 · 第三阶段")
+        self.setWindowTitle("XY写字机上位机 · 第四阶段")
         self.resize(1400, 930)
         self.setMinimumSize(1120, 760)
         self.setStyleSheet(STYLE)
@@ -87,7 +88,7 @@ class MainWindow(QMainWindow):
         self.bind_signals()
         self.refresh_ports()
         self.update_view()
-        self.append_log("APP", "第三阶段就绪：文字/图片生成、连续填充、中线提取、G代码导出；生成后预览，手动开始发送。")
+        self.append_log("APP", "第四阶段就绪：文字/图片生成、多行排版、日志导出；生成后预览，手动开始发送。")
         self.append_log("APP", "所有配置、日志和运行文件保存在当前上位机目录。连接后不会自动运动。")
         if warning:
             self.show_notice(warning)
@@ -207,6 +208,7 @@ class MainWindow(QMainWindow):
         self.log_view.setFont(QFont("Consolas", 10))
         self.log_view.setStyleSheet("background: #101827; color: #dbeafe; padding: 6px;")
         bar.addWidget(self.button("清空显示", self.clear_log))
+        bar.addWidget(self.button("导出日志…", self.export_log))
         log_layout.addLayout(bar)
         log_layout.addWidget(self.log_view)
         right.addWidget(log_group)
@@ -639,6 +641,26 @@ class MainWindow(QMainWindow):
         self.log_buffer.clear()
         self.log_view.clear()
 
+    def export_log(self, checked=False, path=None):
+        if path is None:
+            path, _ = QFileDialog.getSaveFileName(self, "导出操作日志", str(ROOT / "logs" / "session.log"), "日志 (*.log *.txt)")
+        if not path:
+            return
+        try:
+            self.flush_log()
+            text = self.log_view.toPlainText()
+            if not text:
+                self.show_notice("当前没有可导出的日志。")
+                return
+            target = Path(path).resolve()
+            if target.suffix.lower() not in (".log", ".txt"):
+                raise OSError("日志文件请使用.log或.txt扩展名。")
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_text(text + "\n", encoding="utf-8", newline="\n")
+            self.show_notice(f"日志已导出：{target}")
+        except OSError as error:
+            self.show_notice("日志导出失败：" + str(error))
+
     def show_notice(self, message):
         self.notice_label.setText(message.replace("\n", "  "))
         self.notice_label.setToolTip(message)
@@ -711,7 +733,7 @@ class MainWindow(QMainWindow):
         self.start_button.setEnabled(available and not self.loading and self.job.program is not None and z_ready and self.profile.z_mode == "stepper")
         self.stop_button.setEnabled(self.job.active and connected)
         self.update_job_view()
-        self.statusBar().showMessage("第三阶段：文字 / 图片 → 路径 → G代码    |    Z/F取文件值    |    状态查询2Hz")
+        self.statusBar().showMessage("第四阶段：文字 / 图片 → 路径 → G代码    |    Z/F取文件值    |    状态查询2Hz")
 
     def confirm(self, title, message):
         return QMessageBox.question(self, title, message, QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No, QMessageBox.StandardButton.No) == QMessageBox.StandardButton.Yes

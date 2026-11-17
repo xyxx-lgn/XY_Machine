@@ -116,17 +116,30 @@ def read_image(path):
     return image
 
 
-def render_text(text, family, bold=False):
-    """在界面线程将系统字体转成黑白源图；后续轮廓、填充和中线处理共用图片引擎。"""
+def render_text(text, family, bold=False, line_spacing=1.0, alignment="left"):
+    """把系统字体文字排成黑白源图，后续轮廓、填充和中线处理共用同一图片引擎。"""
     if not text.strip() or len(text) > 2000 or len(text.splitlines()) > 60:
         raise GenerationError("请输入文字；一次最多2000字符、60行。")
+    if not math.isfinite(line_spacing) or not 0.5 <= line_spacing <= 3.0:
+        raise GenerationError("行距倍率应为0.5～3.0。")
+    if alignment not in ("left", "center", "right"):
+        raise GenerationError("文字对齐方式无效。")
     font = QFont(family)
     font.setPixelSize(160)
     font.setBold(bold)
     metrics = QFontMetricsF(font)
+    lines = text.splitlines()
+    line_widths = [metrics.horizontalAdvance(line) for line in lines]
+    layout_width = max(line_widths or (0.0,))
     path = QPainterPath()
-    for index, line in enumerate(text.splitlines()):
-        path.addText(0, index * metrics.lineSpacing(), font, line)
+    for index, line in enumerate(lines):
+        if alignment == "center":
+            x = (layout_width - line_widths[index]) / 2
+        elif alignment == "right":
+            x = layout_width - line_widths[index]
+        else:
+            x = 0.0
+        path.addText(x, index * metrics.lineSpacing() * line_spacing, font, line)
     bounds = path.boundingRect()
     if bounds.isEmpty():
         raise GenerationError("所选字体没有可绘制的文字轮廓。")
@@ -266,20 +279,31 @@ def fill_paths(mask, sx, sy, options, cancel):
     return completed
 
 
+def thinning_tables():
+    # 八邻域只有256种组合，将两阶段删点条件预先算好，避免每轮创建大量临时数组。
+    codes = np.arange(256, dtype=np.uint16)
+    neighbors = tuple((codes >> bit) & 1 for bit in range(8))
+    count = sum(neighbors)
+    transitions = sum((a == 0) & (b == 1) for a, b in zip(neighbors, neighbors[1:] + neighbors[:1]))
+    n, _, e, _, s, _, w, _ = neighbors
+    common = (count >= 2) & (count <= 6) & (transitions == 1)
+    return (common & (n * e * s == 0) & (e * s * w == 0), common & (n * e * w == 0) & (n * s * w == 0))
+
+
+THINNING_TABLES = thinning_tables()
+THINNING_KERNEL = np.array([[128, 1, 2], [64, 0, 4], [32, 16, 8]], dtype=np.float32)
+
+
 def thin_mask(mask, cancel):
-    """Zhang-Suen细化保留连通性；每轮检查取消，避免密集图像长时间占用界面。"""
+    """Zhang-Suen两阶段细化；邻域编码交给OpenCV计算，保持原删点规则和取消能力。"""
     image = np.pad((mask > 0).astype(np.uint8), 1)
     for _ in range(max(mask.shape)):
         checkpoint(cancel)
         changed = False
-        for phase in (0, 1):
+        for table in THINNING_TABLES:
             p = image[1:-1, 1:-1]
-            neighbors = (image[:-2, 1:-1], image[:-2, 2:], image[1:-1, 2:], image[2:, 2:], image[2:, 1:-1], image[2:, :-2], image[1:-1, :-2], image[:-2, :-2])
-            count = sum(neighbors)
-            transitions = sum(((a == 0) & (b == 1)).astype(np.uint8) for a, b in zip(neighbors, neighbors[1:] + neighbors[:1]))
-            n, _, e, _, s, _, w, _ = neighbors
-            test = (n * e * s == 0) & (e * s * w == 0) if phase == 0 else (n * e * w == 0) & (n * s * w == 0)
-            remove = (p == 1) & (count >= 2) & (count <= 6) & (transitions == 1) & test
+            codes = cv2.filter2D(image, cv2.CV_16U, THINNING_KERNEL, borderType=cv2.BORDER_CONSTANT)[1:-1, 1:-1]
+            remove = (p == 1) & table[codes]
             if np.any(remove):
                 p[remove] = 0
                 changed = True
@@ -288,8 +312,14 @@ def thin_mask(mask, cancel):
     return image[1:-1, 1:-1]
 
 
-def centerline_paths(mask, sx, sy, options, cancel):
+def centerline_paths(mask, sx, sy, options, cancel, preserve_connections=False):
     skeleton = thin_mask(mask, cancel)
+    if preserve_connections:
+        # 字体的短桥和短末梢不是噪点；只过滤整个独立墨迹块，不拆散交叉处。
+        _, labels, stats, _ = cv2.connectedComponentsWithStats(mask, connectivity=8)
+        keep = np.maximum(stats[:, cv2.CC_STAT_WIDTH] * sx, stats[:, cv2.CC_STAT_HEIGHT] * sy) >= options.min_length
+        keep[0] = False
+        skeleton = skeleton * keep[labels]
     ys, xs = np.nonzero(skeleton)
     if len(xs) > 180000:
         raise GenerationError("中线节点过多，请先清理噪点或缩小图片。")
@@ -308,6 +338,13 @@ def centerline_paths(mask, sx, sy, options, cancel):
     ordered = [node for node in graph if len(graph[node]) != 2] + [node for node in graph if len(graph[node]) == 2]
     for node in ordered:
         checkpoint(cancel)
+        if preserve_connections and not graph[node]:
+            # 圆点细化后可能只剩一个像素，给它一段位于原墨迹内的短线以实际落笔。
+            x, y = node
+            for dx, dy in ((1, 0), (0, 1)):
+                if 0 < x < mask.shape[1] - 1 and 0 < y < mask.shape[0] - 1 and mask[y - dy, x - dx] and mask[y + dy, x + dx]:
+                    paths.append([((x - dx / 2) * sx, (y - dy / 2) * sy), ((x + dx / 2) * sx, (y + dy / 2) * sy)])
+                    break
         for following in graph[node]:
             edge = tuple(sorted((node, following)))
             if edge in visited:
@@ -324,8 +361,9 @@ def centerline_paths(mask, sx, sy, options, cancel):
                     break
                 visited.add(edge)
                 previous, current = current, target
-            path = simplify([(x * sx, y * sy) for x, y in path], options.tolerance, path[0] == path[-1])
-            if len(path) > 1 and path_length(path) >= options.min_length:
+            # 带交点的回环必须保留原起终点，不能让闭环简化把连接位置移走。
+            path = simplify([(x * sx, y * sy) for x, y in path], options.tolerance, path[0] == path[-1] and not preserve_connections)
+            if len(path) > 1 and (preserve_connections or path_length(path) >= options.min_length):
                 paths.append(path)
     return paths
 
@@ -396,6 +434,34 @@ def emit_program(paths, options, name, cancel):
     return program, travel
 
 
+def task_from_paths(paths, options, name, image, resolution, source_notes, cancel=None, progress=None, preserve_order=False):
+    # 图片和正文共用路径优化与G代码输出，保证Z/F、取消和任务上限一致。
+    notify = progress or (lambda value, message: None)
+    paths = [path for path in paths if len(path) > 1]
+    if not paths:
+        raise GenerationError("没有可绘制的路径，请降低短线过滤、改变模式或增大图案。")
+    points = sum(len(path) for path in paths)
+    if points > 180000 or len(paths) > 30000:
+        raise GenerationError("路径过多，请增大填线间距/简化误差，或清理图片噪点。")
+    notify(70, "保留逐字顺序" if preserve_order else "优化空行程顺序")
+    if options.optimize and not preserve_order:
+        paths = join_touching_paths(paths, cancel)
+        paths = order_paths(paths, cancel)
+    notify(85, "生成并检查G代码")
+    program, travel = emit_program(paths, options, name, cancel)
+    checkpoint(cancel)
+    z_distance = options.pen_up - options.pen_down
+    seconds = 60 * (program.drawing_length / options.draw_feed + travel / options.travel_feed + len(paths) * z_distance * (1 / options.up_feed + 1 / options.down_feed))
+    notes = ["耗时仅为匀速理论下限，未计加减速、串口等待和初始进场。", "Z使用G53机器坐标；XY使用G54，未修改EEPROM。"]
+    notes.extend(source_notes)
+    if options.mode == "centerline":
+        notes.append("中线是图形骨架，不是手写笔顺；粗体和交叉笔画可能有短分叉。")
+    if options.mode in ("fill", "outline_fill") and options.spacing < 2 * resolution:
+        notes.append("间距接近栅格精度，建议缩小图案或增大填线间距。")
+    notify(100, "生成完成，尚未发送")
+    return GeneratedTask(program, image, len(paths), points, travel, seconds, resolution, notes)
+
+
 def generate_task(image, options, name="生成任务", cancel=None, progress=None, processed=None):
     options.validate()
     notify = progress or (lambda value, message: None)
@@ -419,31 +485,9 @@ def generate_task(image, options, name="生成任务", cancel=None, progress=Non
     if options.mode == "centerline":
         notify(25, "细化并追踪中线")
         paths.extend(centerline_paths(mask, sx, sy, options, cancel))
-    paths = [path for path in paths if len(path) > 1]
-    if not paths:
-        raise GenerationError("没有可绘制的路径，请降低短线过滤、改变模式或增大图案。")
-    points = sum(len(path) for path in paths)
-    if points > 180000 or len(paths) > 30000:
-        raise GenerationError("路径过多，请增大填线间距/简化误差，或清理图片噪点。")
-    notify(70, "优化空行程顺序")
-    if options.optimize:
-        paths = join_touching_paths(paths, cancel)
-        paths = order_paths(paths, cancel)
-    notify(85, "生成并检查G代码")
-    program, travel = emit_program(paths, options, name, cancel)
-    checkpoint(cancel)
-    preview = 255 - mask
+    preview = np.ascontiguousarray(255 - mask)
     image = QImage(preview.data, preview.shape[1], preview.shape[0], preview.strides[0], QImage.Format.Format_Grayscale8).copy()
-    z_distance = options.pen_up - options.pen_down
-    seconds = 60 * (program.drawing_length / options.draw_feed + travel / options.travel_feed + len(paths) * z_distance * (1 / options.up_feed + 1 / options.down_feed))
-    notes = ["耗时仅为匀速理论下限，未计加减速、串口等待和初始进场。", "Z使用G53机器坐标；XY使用G54，未修改EEPROM。"]
-    notes.extend(processed.notes)
-    if options.mode == "centerline":
-        notes.append("中线是图形骨架，不是手写笔顺；粗体和交叉笔画可能有短分叉。")
-    if options.mode in ("fill", "outline_fill") and options.spacing < 2 * max(sx, sy):
-        notes.append("间距接近栅格精度，建议缩小图案或增大填线间距。")
-    notify(100, "生成完成，尚未发送")
-    return GeneratedTask(program, image, len(paths), points, travel, seconds, max(sx, sy), notes)
+    return task_from_paths(paths, options, name, image, max(sx, sy), processed.notes, cancel, progress)
 
 
 def save_gcode(program, path):

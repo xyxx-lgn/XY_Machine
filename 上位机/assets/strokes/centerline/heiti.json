@@ -1,0 +1,19 @@
+{
+  "schema": 1,
+  "id": "heiti",
+  "name": "XY单线黑体",
+  "ordered": false,
+  "source_font": "Source Han Sans",
+  "source_revision": "87f5e407a36c175c1ab17f2ba4447768a7fffdab",
+  "source_blob": "1ff2584003f2ca1a9c733c9778c9b602e4b3147e",
+  "glyphs": 20976,
+  "paths": 272634,
+  "points": 647070,
+  "omitted_empty": 0,
+  "uniform_transform": {
+    "scale": 0.8380952380952381,
+    "dx": 0.08514285714285713,
+    "dy": 0.07257142857142856
+  },
+  "archive_sha256": "a2c2128e0d16c7f9a85185027b62658b4baa293c26d61f237d9d36cdc2bef7e2"
+}

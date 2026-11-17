@@ -1,0 +1,21 @@
+{
+  "schema": 1,
+  "fonts": [
+    {"id": "hw_wenkai", "name": "XY书卷手写", "source_font": "霞鹜文楷", "repo": "lxgw/LxgwWenKai", "ref": "v1.530", "path": "fonts/TTF/LXGWWenKai-Regular.ttf", "blob": "7f8f031dc5c6c5ba1913d93c36d4667c1e311cea", "license_path": "OFL.txt"},
+    {"id": "hw_xiaolai", "name": "XY轻松手写", "source_font": "小赖字体", "repo": "lxgw/kose-font", "ref": "v3.126", "asset": 291633865, "sha256": "e2f68daf0e72777a8cf58bc83de1b98634b251e537ddbfca24b0ae50d1802da2", "url": "https://github.com/lxgw/kose-font/releases/download/v3.126/Xiaolai-Regular.ttf", "license_path": "OFL.txt"},
+    {"id": "hw_yozai", "name": "XY随性手写", "source_font": "悠哉字体", "repo": "lxgw/yozai-font", "ref": "v0.868", "asset": 292424988, "sha256": "25071998a0fe6a72f54c235e714986d259633e5ff670b1a2b5e264387f3316ac", "url": "https://github.com/lxgw/yozai-font/releases/download/v0.868/Yozai-Regular.ttf", "license_path": "OFL.txt"},
+    {"id": "hw_marker", "name": "XY马克笔手写", "source_font": "霞鹜漫黑", "repo": "lxgw/LxgwMarkerGothic", "ref": "v1.012", "path": "fonts/ttf/LXGWMarkerGothic-Regular.ttf", "blob": "fd4482d589f20e3c0a06f5535b6b2609fdeb567f", "license_path": "OFL.txt"},
+    {"id": "hw_jason1", "name": "XY原子笔01", "source_font": "清松手写1", "repo": "max32002/JasonHandWritingFonts", "ref": "20251204", "path": "tw/JasonHandwriting1-Regular.ttf", "blob": "4a00453abad887f8e1f5c26e7b6074b79fb963ae", "license_path": "SIL_Open_Font_License_1.1.txt"},
+    {"id": "hw_jason2", "name": "XY原子笔02", "source_font": "清松手写2", "repo": "max32002/JasonHandWritingFonts", "ref": "20251204", "path": "tw/JasonHandwriting2-Regular.ttf", "blob": "122361d809768c342d7b6d1e8d7a1eeedb1675d5", "license_path": "SIL_Open_Font_License_1.1.txt"},
+    {"id": "hw_jason3", "name": "XY原子笔03", "source_font": "清松手写3", "repo": "max32002/JasonHandWritingFonts", "ref": "20251204", "path": "tw/JasonHandwriting3-Regular.ttf", "blob": "e01f81b8bce301bfc0cf219e4956725eb22e363e", "license_path": "SIL_Open_Font_License_1.1.txt"},
+    {"id": "hw_jason4", "name": "XY原子笔04", "source_font": "清松手写4", "repo": "max32002/JasonHandWritingFonts", "ref": "20251204", "path": "tw/JasonHandwriting4-Regular.ttf", "blob": "4424a4c8bcb80aa816d398fb4b268b8225814af7", "license_path": "SIL_Open_Font_License_1.1.txt"},
+    {"id": "hw_jason5", "name": "XY原子笔05", "source_font": "清松手写5", "repo": "max32002/JasonHandWritingFonts", "ref": "20251204", "path": "tw/JasonHandwriting5p-Regular.ttf", "blob": "f593e48038be558b76ba74fa22bec67e9bf17d41", "license_path": "SIL_Open_Font_License_1.1.txt"},
+    {"id": "hw_jason6", "name": "XY原子笔06", "source_font": "清松手写6", "repo": "max32002/JasonHandWritingFonts", "ref": "20251204", "path": "tw/JasonHandwriting6p-Regular.ttf", "blob": "2ba75e00620c486b40cd416784685af7b887b48d", "license_path": "SIL_Open_Font_License_1.1.txt"},
+    {"id": "hw_jason7", "name": "XY原子笔07", "source_font": "清松手写7", "repo": "max32002/JasonHandWritingFonts", "ref": "20251204", "path": "tw/JasonHandwriting7p-Regular.ttf", "blob": "4b3b1acc1538aa042a6ee0e241e5f86bcd8a0730", "license_path": "SIL_Open_Font_License_1.1.txt"},
+    {"id": "hw_jason8", "name": "XY原子笔08", "source_font": "清松手写8", "repo": "max32002/JasonHandWritingFonts", "ref": "20251204", "path": "tw/JasonHandwriting8p-Regular.ttf", "blob": "326e4908fbd4114f656685c472cfd33e1a217e7e", "license_path": "SIL_Open_Font_License_1.1.txt"},
+    {"id": "hw_chenyu", "name": "XY细笔手写", "source_font": "辰宇落雁体2.0", "repo": "Chenyu-otf/chenyuluoyan_thin", "ref": "v2.0", "path": "ChenYuluoyan-2.0-Thin.ttf", "blob": "647b14819d9a734eec5800bcbbff0f5cad2d42cf", "license_path": "license.txt"},
+    {"id": "hw_nani", "name": "XY文艺手写", "source_font": "何某手写体", "repo": "max32002/nanifont", "ref": "1.046", "path": "ttf/NaniFont-Regular.ttf", "blob": "8f4a9d294bc8ea8b4ca56a06665904a46cf1a52a", "license_path": "SIL_Open_Font_License_1.1.txt"},
+    {"id": "hw_naikai", "name": "XY圆润手写", "source_font": "内海字体", "repo": "max32002/naikaifont", "ref": "1.89", "path": "tw/NaikaiFont-Regular.ttf", "blob": "a9ec799c805c8fe1616c78b305b54332706c62f8", "license_path": "SIL_Open_Font_License_1.1.txt"},
+    {"id": "hw_tsuipita", "name": "XY清秀手写", "source_font": "芫荽", "repo": "jeffreyxuan/toneoz-font-tsuipita", "ref": "v0.251009", "path": "fonts/ttf/ToneOZ-Tsuipita-TC.ttf", "blob": "2046f91ec279c6a81f4bb6e500267e44d0eed9c6", "license_path": "OFL.txt"}
+  ]
+}

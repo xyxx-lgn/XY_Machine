@@ -1,4 +1,5 @@
 from dataclasses import replace
+from app.ui.dialog_window import FunctionDialog
 
 from PySide6.QtWidgets import (
     QCheckBox, QComboBox, QDialog, QDialogButtonBox, QDoubleSpinBox,
@@ -6,7 +7,7 @@ from PySide6.QtWidgets import (
 )
 
 
-class SettingsDialog(QDialog):
+class SettingsDialog(FunctionDialog):
     def __init__(self, profile, parent=None):
         super().__init__(parent)
         self.setWindowTitle("设备与笔配置 · 仅保存到电脑")

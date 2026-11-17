@@ -1,0 +1,19 @@
+{
+  "schema": 1,
+  "id": "mingti",
+  "name": "XY单线明体",
+  "ordered": false,
+  "source_font": "Hanazono",
+  "source_revision": "87f5e407a36c175c1ab17f2ba4447768a7fffdab",
+  "source_blob": "d69970132586473594c421ace44dc74cd976fe17",
+  "glyphs": 27632,
+  "paths": 354852,
+  "points": 825420,
+  "omitted_empty": 0,
+  "uniform_transform": {
+    "scale": 0.8669950738916257,
+    "dx": 0.0686699507389163,
+    "dy": 0.06433497536945815
+  },
+  "archive_sha256": "5a00acaea6e27853ace591b318f42ec4de1dca2f1721883f148721c71c6c2a8e"
+}

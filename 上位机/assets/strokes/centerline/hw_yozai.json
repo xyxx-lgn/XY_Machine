@@ -1,0 +1,27 @@
+{
+  "schema": 1,
+  "id": "hw_yozai",
+  "name": "XY随性手写",
+  "source_font": "悠哉字体",
+  "source_url": "https://github.com/lxgw/yozai-font",
+  "source_revision": "v0.868",
+  "source_sha256": "25071998a0fe6a72f54c235e714986d259633e5ff670b1a2b5e264387f3316ac",
+  "license": "SIL OFL 1.1",
+  "license_file": "handwriting-licenses/hw_yozai.txt",
+  "ordered": false,
+  "handwriting": true,
+  "glyphs": 21837,
+  "paths": 283628,
+  "points": 5606567,
+  "raster_size": 256,
+  "transform": {
+    "scale": 0.000849609375,
+    "dx": 0.065,
+    "dy": 0.8150560646057128
+  },
+  "omitted": [],
+  "gb2312_hanzi": 6763,
+  "gb2312_missing": "",
+  "archive_sha256": "b70ae70bb15e52de2d2ce4e187fe38c17d120dd199f2c9ba70a7417ac1777a49",
+  "build_seconds": 621.17
+}

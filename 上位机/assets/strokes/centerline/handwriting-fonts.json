@@ -1,0 +1,117 @@
+{
+  "schema": 1,
+  "fonts": [
+    {
+      "id": "hw_wenkai",
+      "name": "XY书卷手写",
+      "source_font": "霞鹜文楷",
+      "glyphs": 27911,
+      "gb2312_hanzi": 6763
+    },
+    {
+      "id": "hw_xiaolai",
+      "name": "XY轻松手写",
+      "source_font": "小赖字体",
+      "glyphs": 27846,
+      "gb2312_hanzi": 6763
+    },
+    {
+      "id": "hw_yozai",
+      "name": "XY随性手写",
+      "source_font": "悠哉字体",
+      "glyphs": 21837,
+      "gb2312_hanzi": 6763
+    },
+    {
+      "id": "hw_marker",
+      "name": "XY马克笔手写",
+      "source_font": "霞鹜漫黑",
+      "glyphs": 13158,
+      "gb2312_hanzi": 6763
+    },
+    {
+      "id": "hw_jason1",
+      "name": "XY原子笔01",
+      "source_font": "清松手写1",
+      "glyphs": 20293,
+      "gb2312_hanzi": 6642
+    },
+    {
+      "id": "hw_jason2",
+      "name": "XY原子笔02",
+      "source_font": "清松手写2",
+      "glyphs": 20293,
+      "gb2312_hanzi": 6642
+    },
+    {
+      "id": "hw_jason3",
+      "name": "XY原子笔03",
+      "source_font": "清松手写3",
+      "glyphs": 17155,
+      "gb2312_hanzi": 4874
+    },
+    {
+      "id": "hw_jason4",
+      "name": "XY原子笔04",
+      "source_font": "清松手写4",
+      "glyphs": 16433,
+      "gb2312_hanzi": 5697
+    },
+    {
+      "id": "hw_jason5",
+      "name": "XY原子笔05",
+      "source_font": "清松手写5",
+      "glyphs": 6296,
+      "gb2312_hanzi": 3602
+    },
+    {
+      "id": "hw_jason6",
+      "name": "XY原子笔06",
+      "source_font": "清松手写6",
+      "glyphs": 8338,
+      "gb2312_hanzi": 4134
+    },
+    {
+      "id": "hw_jason7",
+      "name": "XY原子笔07",
+      "source_font": "清松手写7",
+      "glyphs": 10313,
+      "gb2312_hanzi": 5959
+    },
+    {
+      "id": "hw_jason8",
+      "name": "XY原子笔08",
+      "source_font": "清松手写8",
+      "glyphs": 9409,
+      "gb2312_hanzi": 5165
+    },
+    {
+      "id": "hw_chenyu",
+      "name": "XY细笔手写",
+      "source_font": "辰宇落雁体2.0",
+      "glyphs": 9434,
+      "gb2312_hanzi": 4333
+    },
+    {
+      "id": "hw_nani",
+      "name": "XY文艺手写",
+      "source_font": "何某手写体",
+      "glyphs": 18931,
+      "gb2312_hanzi": 6300
+    },
+    {
+      "id": "hw_naikai",
+      "name": "XY圆润手写",
+      "source_font": "内海字体",
+      "glyphs": 27793,
+      "gb2312_hanzi": 6763
+    },
+    {
+      "id": "hw_tsuipita",
+      "name": "XY清秀手写",
+      "source_font": "芫荽",
+      "glyphs": 15427,
+      "gb2312_hanzi": 6763
+    }
+  ]
+}

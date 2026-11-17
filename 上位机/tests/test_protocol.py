@@ -6,14 +6,15 @@ from tempfile import TemporaryDirectory
 
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 
-from PySide6.QtCore import QCoreApplication
+from PySide6.QtWidgets import QApplication
 
 from app.controller import GrblController
 from app.grbl import normalize_command, parse_status
 from app.profile import ROOT, MachineProfile
 
 
-APPLICATION = QCoreApplication.instance() or QCoreApplication([])
+# 同一测试进程还验证字体排版，使用离屏GUI应用兼容原来的协议事件循环。
+APPLICATION = QApplication.instance() or QApplication([])
 
 
 class CaptureTransport:

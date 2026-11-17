@@ -1,0 +1,27 @@
+{
+  "schema": 1,
+  "id": "hw_tsuipita",
+  "name": "XY清秀手写",
+  "source_font": "芫荽",
+  "source_url": "https://github.com/jeffreyxuan/toneoz-font-tsuipita",
+  "source_revision": "v0.251009",
+  "source_sha256": "4fbfb3dd8e68851deec6c64fe5acf8c34ca0150da16ffa2e543e9bd8fb4f9d06",
+  "license": "SIL OFL 1.1",
+  "license_file": "handwriting-licenses/hw_tsuipita.txt",
+  "ordered": false,
+  "handwriting": true,
+  "glyphs": 15427,
+  "paths": 213721,
+  "points": 4163374,
+  "raster_size": 256,
+  "transform": {
+    "scale": 0.0008132343874701734,
+    "dx": 0.08362399361527123,
+    "dy": 0.8101002127413188
+  },
+  "omitted": [],
+  "gb2312_hanzi": 6763,
+  "gb2312_missing": "",
+  "archive_sha256": "bb4cccc3a96054709cc1014f0ab1b06ef41421a36720e9715ddb4b240b39dadd",
+  "build_seconds": 386.56
+}

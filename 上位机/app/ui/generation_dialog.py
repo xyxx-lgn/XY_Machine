@@ -1,12 +1,13 @@
 import json
 from pathlib import Path
+import secrets
 
 from PySide6.QtCore import QThread, Qt, QTimer, Signal
 from PySide6.QtGui import QFont, QPixmap
 from PySide6.QtWidgets import (
     QCheckBox, QComboBox, QDialog, QDoubleSpinBox, QFileDialog, QFontComboBox,
     QFormLayout, QGroupBox, QHBoxLayout, QLabel, QPlainTextEdit, QProgressBar,
-    QPushButton, QScrollArea, QSpinBox, QSplitter, QVBoxLayout, QWidget
+    QPushButton, QScrollArea, QSpinBox, QSplitter, QTextBrowser, QVBoxLayout, QWidget
 )
 
 from app.generation import (
@@ -17,6 +18,12 @@ from app.image_processing import ProcessingCancelled, binary_thumbnail, process_
 from app.profile import ROOT
 from app.ui.preview_widget import PreviewWidget
 from app.ui.image_inspection import ImageInspectionDialog
+from app.ui.stroke_font_dialog import StrokeFontDialog
+from app.ui.dialog_window import FunctionDialog
+from app.stroke_fonts import FontStore, LATIN_STYLES, NaturalOptions, WritingOptions
+from app.builtin_stroke_fonts import BUILTIN_FONTS, font_info
+from app.text_writing import DATA, STYLE, layout_stroke_artwork, layout_stroke_text, render_stroke_source
+from app.text_layout import TextOptions, generate_artwork_text_task, generate_text_task, layout_artwork, layout_text, render_page
 
 
 PREFERENCES = ROOT / "config" / "generation.json"
@@ -27,14 +34,20 @@ class GenerationWorker(QThread):
     failed = Signal(str)
     progress = Signal(int, str)
 
-    def __init__(self, image, options, name, parent=None, processed=None):
+    def __init__(self, image, options, name, parent=None, processed=None, text_page=None, text_options=None):
         super().__init__(parent)
         self.image, self.options, self.name = image.copy(), options, name
         self.processed = processed
+        self.text_page, self.text_options = text_page, text_options
 
     def run(self):
         try:
-            task = generate_task(self.image, self.options, self.name, self.isInterruptionRequested, self.progress.emit, self.processed)
+            if self.text_page is not None and self.text_options is None:
+                task = generate_artwork_text_task(self.text_page, self.options, self.image, self.name, self.isInterruptionRequested, self.progress.emit)
+            elif self.text_page is not None:
+                task = generate_text_task(self.text_page, self.text_options, self.options, self.name, self.isInterruptionRequested, self.progress.emit)
+            else:
+                task = generate_task(self.image, self.options, self.name, self.isInterruptionRequested, self.progress.emit, self.processed)
             self.ready.emit(task)
         except GenerationCancelled:
             self.failed.emit("已取消生成，可以修改参数后重试。")
@@ -61,7 +74,7 @@ class ImagePreviewWorker(QThread):
             self.failed.emit(str(error) or type(error).__name__, self.revision)
 
 
-class GenerationDialog(QDialog):
+class GenerationDialog(FunctionDialog):
     def __init__(self, profile, kind="text", parent=None):
         super().__init__(parent)
         self.profile, self.kind = profile, kind
@@ -69,6 +82,8 @@ class GenerationDialog(QDialog):
         self.task = None
         self.loaded_task = None
         self.source = None
+        self.text_document = None
+        self.font_store = FontStore() if kind == "text" else None
         self.ratio = 3.0
         self.size_from_width = True
         self.image_path = None
@@ -95,9 +110,9 @@ class GenerationDialog(QDialog):
         self.build_ui()
         self.restore_preferences()
         self.connect_inputs()
+        self.update_mode()
         if kind == "text":
             self.update_text_preview()
-        self.update_mode()
         self.set_busy(False)
 
     def button(self, text, callback):
@@ -133,14 +148,101 @@ class GenerationDialog(QDialog):
             source_form = QVBoxLayout()
             self.text = QPlainTextEdit("HOB 123")
             self.text.setMaximumHeight(110)
-            self.text.setPlaceholderText("输入中文、英文或多行文字")
+            self.text.setPlaceholderText("粘贴正文后自动换行；回车另起段落。正文最多20000字符。")
             self.font = QFontComboBox()
             self.font.setCurrentFont(QFont("Microsoft YaHei"))
             self.bold = QCheckBox("粗体")
+            self.layout_mode = QComboBox()
+            self.layout_mode.addItem("正文排版（固定字号，自动换行）", "page")
+            self.layout_mode.addItem("文字图案（整体缩放）", "artwork")
+            self.line_spacing = self.number(1.2, 0.5, 3.0, 2, " ×")
+            self.alignment = QComboBox()
+            for title, value in (("左对齐", "left"), ("居中对齐", "center"), ("右对齐", "right")):
+                self.alignment.addItem(title, value)
             source_form.addWidget(self.text)
+            source_form.addWidget(self.layout_mode)
+            self.stroke_style = QLabel("笔画字形：" + STYLE + "。系统字体选择仅在轮廓/填充/骨架模式生效。\n©1999 文鼎；ArphicPL许可，可再分发、无担保，详见“字库来源与许可”。")
+            self.stroke_style.setWordWrap(True)
+            source_form.addWidget(self.stroke_style)
+            self.stroke_controls = QWidget()
+            stroke_form = QFormLayout(self.stroke_controls)
+            stroke_form.setContentsMargins(0, 0, 0, 0)
+            self.stroke_font = QComboBox()
+            self.stroke_font.setSizeAdjustPolicy(QComboBox.SizeAdjustPolicy.AdjustToMinimumContentsLengthWithIcon)
+            self.stroke_font.setMinimumContentsLength(12)
+            self.stroke_font.setMaxVisibleItems(14)
+            self.refresh_stroke_fonts()
+            self.latin_style = QComboBox()
+            for value, title in LATIN_STYLES:
+                self.latin_style.addItem(title, value)
+            self.stroke_fallback = QCheckBox("个人字库缺字用基础楷体补缺")
+            self.stroke_fallback.setToolTip("仅用于个人字库；生成结果会列出使用基础楷体的字符。")
+            self.stroke_fallback.setChecked(True)
+            self.natural_enabled = QCheckBox("启用自然书写（所有单线字库可用）")
+            self.natural_strength = self.number(50, 0, 100, 0, " %")
+            self.natural_spacing = self.number(40, 0, 100, 0, " %")
+            self.natural_baseline = self.number(20, 0, 100, 0, " %")
+            self.natural_seed = QSpinBox()
+            self.natural_seed.setRange(1, 2147483647)
+            self.natural_seed.setValue(1)
+            self.natural_seed.setKeyboardTracking(False)
+            font_row = QHBoxLayout()
+            font_row.addWidget(self.stroke_font, 1)
+            self.font_samples_button = self.button("字形对照…", self.show_handwriting_samples)
+            self.font_samples_button.setEnabled((DATA / "centerline/手写字库效果预览1.png").exists())
+            font_row.addWidget(self.font_samples_button)
+            stroke_form.addRow("中文/个人字库", font_row)
+            stroke_form.addRow("英文与数字笔画", self.latin_style)
+            stroke_form.addRow(self.stroke_fallback)
+            stroke_form.addRow(self.button("个人字库 / 手写与照片录入…", self.edit_stroke_font))
+            stroke_form.addRow(self.natural_enabled)
+            stroke_form.addRow("字形与笔画变化", self.natural_strength)
+            stroke_form.addRow("字距变化", self.natural_spacing)
+            stroke_form.addRow("行内起伏", self.natural_baseline)
+            stroke_form.addRow("样式编号", self.natural_seed)
+            stroke_form.addRow(self.button("换一种自然效果", self.shuffle_natural))
+            natural_hint = QLabel("字形变化会轻微调整字内比例和笔画弯曲；字距与行内起伏可分别设为0。保留原数据的分笔和方向，不增加填充。同编号可重现，换编号可对比。手写外观字体和黑体/明体使用中线路径，不保证标准笔顺。")
+            natural_hint.setWordWrap(True)
+            stroke_form.addRow(natural_hint)
+            source_form.addWidget(self.stroke_controls)
             source_form.addWidget(self.font)
             source_form.addWidget(self.bold)
-            left.addWidget(self.group("文字与系统字体", source_form))
+            text_layout = QFormLayout()
+            text_layout.addRow("多行行距", self.line_spacing)
+            text_layout.addRow("多行对齐", self.alignment)
+            source_form.addLayout(text_layout)
+            left.addWidget(self.group("文字与字形", source_form))
+            form = QFormLayout()
+            self.font_size = self.number(14, 6, 96, 1, " pt")
+            self.font_preset = QComboBox()
+            for title, value in (("自定义", None), ("五号（10.5pt）", 10.5), ("小四（12pt）", 12), ("四号（14pt）", 14), ("三号（16pt）", 16), ("小二（18pt）", 18), ("二号（22pt）", 22)):
+                self.font_preset.addItem(title, value)
+            self.font_preset.setCurrentIndex(self.font_preset.findData(14))
+            self.font_hint = QLabel()
+            self.font_hint.setWordWrap(True)
+            self.margin_left = self.number(20, 0, 999, 1, " mm")
+            self.margin_right = self.number(20, 0, 999, 1, " mm")
+            self.margin_top = self.number(20, 0, 999, 1, " mm")
+            self.margin_bottom = self.number(20, 0, 999, 1, " mm")
+            self.letter_spacing = self.number(0, 0, 5, 2, " mm")
+            self.paragraph_spacing = self.number(0, 0, 30, 1, " mm")
+            self.indent = self.number(0, 0, 4, 1, " 字")
+            form.addRow("常用字号", self.font_preset)
+            form.addRow("字号", self.font_size)
+            form.addRow(self.font_hint)
+            form.addRow("纸张", QLabel(f"{self.profile.paper_width:g} × {self.profile.paper_height:g} mm（取主窗口）"))
+            form.addRow("左页边距", self.margin_left)
+            form.addRow("右页边距", self.margin_right)
+            form.addRow("上页边距", self.margin_top)
+            form.addRow("下页边距", self.margin_bottom)
+            form.addRow("额外字距", self.letter_spacing)
+            form.addRow("段后间距", self.paragraph_spacing)
+            form.addRow("首行缩进", self.indent)
+            self.layout_summary = QLabel("按纸张毫米宽度换行，内容超出一页时自动分页。")
+            self.layout_summary.setWordWrap(True)
+            form.addRow(self.layout_summary)
+            self.page_settings = self.group("字号与纸张排版", form)
+            left.addWidget(self.page_settings)
         else:
             source_form = QVBoxLayout()
             self.source_label = QLabel("未选择图片；支持PNG / JPG / BMP / WEBP")
@@ -181,6 +283,8 @@ class GenerationDialog(QDialog):
             left.addWidget(self.group("图片转黑白线稿", processing_form))
         form = QFormLayout()
         self.mode = QComboBox()
+        if self.kind == "text":
+            self.mode.addItem("笔画书写（按笔顺，推荐）", "strokes")
         for title, value in (("轮廓（空心字/线稿边界）", "outline"), ("轮廓＋填充（实心）", "outline_fill"), ("仅填充（实心，减少重复描边）", "fill"), ("中线（骨架，适合细线稿）", "centerline")):
             self.mode.addItem(title, value)
         self.threshold = QSpinBox()
@@ -198,6 +302,12 @@ class GenerationDialog(QDialog):
         self.optimize = QCheckBox("优化路径顺序，减少空行程")
         self.optimize.setChecked(True)
         form.addRow("路径方式", self.mode)
+        if self.kind == "text":
+            self.text_pen_width = self.number(0.18, 0.05, 1.5, 3, " mm")
+            self.text_pen_width.setToolTip("只用于显示实际笔迹的粗细，不生成填线。实际粗细由笔尖和落笔压力决定。")
+            form.addRow("预览笔迹线宽", self.text_pen_width)
+            form.addRow(self.button("使用笔画书写", lambda: self.mode.setCurrentIndex(self.mode.findData("strokes"))))
+            form.addRow(self.button("字库来源与许可…", self.show_stroke_license))
         form.addRow("黑白阈值", self.threshold)
         form.addRow(self.invert)
         form.addRow(self.crop)
@@ -226,7 +336,8 @@ class GenerationDialog(QDialog):
         form.addRow("左上角X（G54）", self.x)
         form.addRow("左上角Y（G54）", self.y)
         form.addRow(self.button("居中放入纸张（留5mm边）", self.fit_paper))
-        left.addWidget(self.group("物理尺寸与位置", form))
+        self.artwork_settings = self.group("物理尺寸与位置", form)
+        left.addWidget(self.artwork_settings)
 
         form = QFormLayout()
         self.draw_feed = self.number(400, 1, 30000, 0, " mm/min")
@@ -260,6 +371,24 @@ class GenerationDialog(QDialog):
         right = QWidget()
         column = QVBoxLayout(right)
         column.setContentsMargins(4, 0, 0, 0)
+        if self.kind == "text":
+            self.page_bar = QWidget()
+            page_row = QHBoxLayout(self.page_bar)
+            page_row.setContentsMargins(0, 0, 0, 0)
+            self.previous_page = self.button("上一页", lambda: self.page_number.setValue(self.page_number.value() - 1))
+            self.next_page = self.button("下一页", lambda: self.page_number.setValue(self.page_number.value() + 1))
+            self.page_number = QSpinBox()
+            self.page_number.setRange(1, 1)
+            self.page_number.setKeyboardTracking(False)
+            self.page_total = QLabel("/ 共1页")
+            page_row.addWidget(self.previous_page)
+            page_row.addWidget(QLabel("当前页"))
+            page_row.addWidget(self.page_number)
+            page_row.addWidget(self.page_total)
+            page_row.addWidget(self.next_page)
+            page_row.addStretch()
+            page_row.addWidget(QLabel("每页独立生成；载入后手动开始"))
+            column.addWidget(self.page_bar)
         image_row = QHBoxLayout()
         for name, title in (("source_preview", "原图"), ("binary_preview", "黑白处理结果 · 自动更新")):
             box = QVBoxLayout()
@@ -294,7 +423,7 @@ class GenerationDialog(QDialog):
         self.travel.toggled.connect(self.toggle_travel)
         column.addLayout(toolbar)
         column.addWidget(self.preview, 1)
-        self.summary = QLabel("尚未生成。轮廓只描边；实心字请选择填充；中线不保证手写笔顺。")
+        self.summary = QLabel("尚未生成。正文推荐笔画书写；系统字体轮廓/填充用于字体图案。")
         self.summary.setWordWrap(True)
         self.summary.setMinimumHeight(100)
         column.addWidget(self.summary)
@@ -334,9 +463,24 @@ class GenerationDialog(QDialog):
         self.aspect.toggled.connect(lambda checked: self.change_size(self.size_from_width) if checked else self.invalidate())
         self.optimize.toggled.connect(self.invalidate)
         if self.kind == "text":
+            self.stroke_font.currentIndexChanged.connect(self.update_mode)
+            self.latin_style.currentIndexChanged.connect(self.text_changed)
+            for field in (self.stroke_fallback, self.natural_enabled):
+                field.toggled.connect(self.text_changed)
+            for field in (self.natural_strength, self.natural_spacing, self.natural_baseline, self.natural_seed):
+                field.valueChanged.connect(self.text_changed)
+            self.text_pen_width.valueChanged.connect(self.text_changed)
             self.text.textChanged.connect(self.text_changed)
             self.font.currentFontChanged.connect(self.text_changed)
             self.bold.toggled.connect(self.text_changed)
+            self.line_spacing.valueChanged.connect(self.text_changed)
+            self.alignment.currentIndexChanged.connect(self.text_changed)
+            self.layout_mode.currentIndexChanged.connect(self.change_text_layout)
+            self.font_preset.currentIndexChanged.connect(self.select_font_size)
+            for field in (self.font_size, self.margin_left, self.margin_right, self.margin_top, self.margin_bottom, self.letter_spacing, self.paragraph_spacing, self.indent):
+                field.valueChanged.connect(self.text_changed)
+            self.page_number.valueChanged.connect(self.change_page)
+            self.change_text_layout()
         else:
             self.processing.currentIndexChanged.connect(self.processing_changed)
             for field in (self.sensitivity, self.detail, self.smoothing, self.despeckle):
@@ -349,18 +493,183 @@ class GenerationDialog(QDialog):
         self.load_button.setEnabled(False)
         self.save_button.setEnabled(False)
         self.status.setText("参数已改变，请点击“生成预览”。右侧轨迹暂时保留上次结果。")
+        if self.is_page_layout():
+            if self.preview.program is not None:
+                self.preview.set_program(None)
+            self.summary.setText("当前为页面排版预览，点击“生成本页轨迹”后可保存或载入。")
+            self.status.setText("参数已改变，请生成当前页轨迹。字号保持不变，内容按可写宽度换行。")
+
+    def is_page_layout(self):
+        return self.kind == "text" and self.layout_mode.currentData() == "page"
+
+    def change_text_layout(self):
+        paged = self.is_page_layout()
+        self.page_settings.setVisible(paged)
+        self.page_bar.setVisible(paged)
+        self.artwork_settings.setVisible(not paged)
+        for field in (self.threshold, self.invert, self.crop):
+            field.setEnabled(not paged and not self.is_stroke_mode())
+        self.generate_button.setText("生成本页轨迹" if paged else "生成预览")
+        self.save_button.setText("保存本页 .ngc…" if paged else "保存 .ngc…")
+        self.load_button.setText("载入当前页" if paged else "载入主窗口")
+        self.text_changed()
+
+    def select_font_size(self):
+        value = self.font_preset.currentData()
+        if value is not None:
+            self.font_size.setValue(value)
+
+    def text_options(self):
+        return TextOptions(
+            paper_width=self.profile.paper_width, paper_height=self.profile.paper_height, font_size=self.font_size.value(),
+            margin_left=self.margin_left.value(), margin_right=self.margin_right.value(), margin_top=self.margin_top.value(), margin_bottom=self.margin_bottom.value(),
+            line_spacing=self.line_spacing.value(), letter_spacing=self.letter_spacing.value(), paragraph_spacing=self.paragraph_spacing.value(),
+            indent=self.indent.value(), alignment=self.alignment.currentData()
+        )
+
+    def change_page(self):
+        if self.is_page_layout() and self.text_document is not None:
+            self.invalidate()
+            self.show_text_page()
+            self.preview.fit()
+
+    def show_text_page(self):
+        document = self.text_document
+        number = self.page_number.value()
+        page = document.pages[number - 1]
+        self.source = render_page(page, document.options)
+        self.show_source(self.source)
+        self.show_processed(self.source)
+        self.page_total.setText(f"/ 共{len(document.pages)}页")
+        self.previous_page.setEnabled(number > 1)
+        self.next_page.setEnabled(number < len(document.pages))
+        rect, bounds = document.options.content_rect, page.bounds
+        self.layout_summary.setText(f"可写区域 {rect.width():.1f} × {rect.height():.1f} mm\n第{number}页 {len(page.lines)}行 · 字迹 {bounds.width():.1f} × {bounds.height():.1f} mm")
+        self.binary_status.setText(f"第{number}/{len(document.pages)}页排版预览 · 字号{document.options.font_size:g}pt · 换页后需重新生成轨迹。")
+        self.preview.set_text_page(page, document.options.content_rect)
+
+    def is_stroke_mode(self):
+        return self.kind == "text" and self.mode.currentData() == "strokes"
+
+    def refresh_stroke_fonts(self, selected=""):
+        self.stroke_font.blockSignals(True)
+        self.stroke_font.clear()
+        self.stroke_font.addItem("XY单线楷体（9574字，内置）", "")
+        for identity, name in BUILTIN_FONTS.items():
+            info = font_info(identity)
+            coverage = info.get("gb2312_hanzi")
+            suffix = "，简体常用字覆盖有限" if coverage is not None and coverage < 6500 else ""
+            self.stroke_font.addItem(f"{name}（{info['glyphs']}字{suffix}）", identity)
+            description = f"来源：{info['source_font']}。离线中线轨迹，逐字书写。"
+            if coverage is not None:
+                description += f"GB2312汉字覆盖：{coverage}/6763。缺字会提示，不会漏字生成。"
+            self.stroke_font.setItemData(self.stroke_font.count() - 1, description, Qt.ItemDataRole.ToolTipRole)
+        for package in self.font_store.catalog():
+            self.stroke_font.addItem(f"{package.name}（{len(package.glyphs)}字）", package.id)
+        index = self.stroke_font.findData(selected)
+        if selected and index < 0:
+            self.stroke_font.addItem("原字库不存在，请重新选择", selected)
+            index = self.stroke_font.count() - 1
+        self.stroke_font.setCurrentIndex(max(0, index))
+        self.stroke_font.blockSignals(False)
+
+    def writing_options(self):
+        identity = self.stroke_font.currentData()
+        try:
+            package = self.font_store.load(identity) if identity and identity not in BUILTIN_FONTS else None
+        except (OSError, GenerationError) as error:
+            raise GenerationError("选中的个人字库无法使用，请重新选择或导入：" + str(error)) from None
+        natural = NaturalOptions(self.natural_enabled.isChecked(), self.natural_strength.value() / 100, self.natural_seed.value(), self.natural_spacing.value() / 100, self.natural_baseline.value() / 100)
+        return WritingOptions(package, self.latin_style.currentData(), self.stroke_fallback.isChecked(), natural, identity if identity in BUILTIN_FONTS else "")
+
+    def edit_stroke_font(self):
+        identity = self.stroke_font.currentData()
+        dialog = StrokeFontDialog(identity if identity not in BUILTIN_FONTS else "", self, self.font_store)
+        dialog.exec()
+        self.refresh_stroke_fonts(dialog.selected_id or identity)
+        self.update_mode()
+
+    def shuffle_natural(self):
+        self.natural_enabled.setChecked(True)
+        self.natural_seed.setValue(secrets.randbelow(2147483646) + 1)
+
+    def show_handwriting_samples(self):
+        dialog = FunctionDialog(self)
+        dialog.setWindowTitle("手写字体 · 实际单线轨迹对照")
+        dialog.resize(1020, 760)
+        layout = QVBoxLayout(dialog)
+        tip = QLabel("以下是各字库生成的实际单线字形；回到文字窗口选择对应字库。英文与数字继续由英文样式控制。")
+        tip.setWordWrap(True)
+        layout.addWidget(tip)
+        scroll = QScrollArea()
+        scroll.setWidgetResizable(True)
+        content = QWidget()
+        column = QVBoxLayout(content)
+        for number in (1, 2):
+            pixmap = QPixmap(str(DATA / f"centerline/手写字库效果预览{number}.png"))
+            if not pixmap.isNull():
+                label = QLabel()
+                label.setPixmap(pixmap.scaledToWidth(940, Qt.TransformationMode.SmoothTransformation))
+                column.addWidget(label)
+        scroll.setWidget(content)
+        layout.addWidget(scroll)
+        layout.addWidget(self.button("关闭", dialog.accept))
+        dialog.exec()
+
+    def show_stroke_license(self):
+        dialog = FunctionDialog(self)
+        dialog.setWindowTitle("离线笔画字库 · 来源与许可")
+        dialog.resize(780, 600)
+        layout = QVBoxLayout(dialog)
+        browser = QTextBrowser()
+        files = [DATA / "来源与许可.txt", DATA / "ARPHICPL.TXT", DATA / "HERSHEY-LICENSE.txt", DATA / "centerline/来源与许可.txt", DATA / "centerline/MIT-LICENSE.txt", DATA / "centerline/Source-Han-Sans-OFL.txt", DATA / "centerline/Hanazono-LICENSE.txt"]
+        handwriting_notes = DATA / "centerline/手写字库来源与许可.txt"
+        if handwriting_notes.exists():
+            files.append(handwriting_notes)
+            files.extend(sorted((DATA / "centerline/handwriting-licenses").glob("*.txt")))
+        browser.setPlainText("\n\n".join(path.read_text(encoding="utf-8") if path.exists() else f"缺少许可文件：{path.name}" for path in files))
+        layout.addWidget(browser)
+        close = QPushButton("关闭")
+        close.clicked.connect(dialog.accept)
+        layout.addWidget(close)
+        dialog.exec()
 
     def update_mode(self, *args):
+        strokes = self.is_stroke_mode()
         filling = self.mode.currentData() in ("fill", "outline_fill")
         self.spacing.setEnabled(filling)
         self.direction.setEnabled(filling)
         hints = {
+            "strokes": "使用离线单线楷体笔画＋Hershey英文/数字。整字按字库笔顺写完后再写下一个字；连续折笔不抬笔，不填充，不反转或重排笔画。缺字会明确提示。",
             "outline": "沿黑色区域边界描线；普通字体会得到空心轮廓字。",
             "outline_fill": "先描边再填充；边缘可能有重复着墨。",
             "fill": "连续蛇形填线，保留孔洞；间距直接决定相邻填线的距离。",
             "centerline": "提取黑色图案骨架；不是自动识别手写笔顺，交叉处可能产生分叉。"
         }
         self.mode_hint.setText(hints[self.mode.currentData()])
+        if self.kind == "text":
+            identity = self.stroke_font.currentData()
+            centerline = identity in BUILTIN_FONTS
+            self.stroke_fallback.setEnabled(bool(identity) and not centerline)
+            self.stroke_style.setText("字形：" + (BUILTIN_FONTS[identity] + "；自动中线数据，保留逐字顺序，不保证标准笔顺。" if centerline else "当前个人字库或内置楷体，使用原数据的分笔、顺序与方向。") + "系统字体选择只对轮廓/填充/骨架模式生效；来源及许可见说明。")
+            if strokes and centerline:
+                info = font_info(identity)
+                coverage = info.get("gb2312_hanzi")
+                if info.get("handwriting"):
+                    self.stroke_style.setText(f"字形：{info['name']}；来源：{info['source_font']}。\n共{info['glyphs']}个可绘制字符，GB2312汉字覆盖{coverage}/6763；缺字会提示。保留手写外观，逐字书写，不保证标准笔顺。")
+                detail = f" 来源：{info['source_font']}；GB2312汉字覆盖{coverage}/6763。" if coverage is not None else ""
+                self.mode_hint.setText("使用所选中文中线字体＋Hershey英文；每字完成后再写下一字。中线数据不能保证标准笔顺，可能有分叉或重复描线；优先用小样验证。" + detail)
+            for field in (self.font, self.bold, self.minimum, self.tolerance, self.optimize):
+                field.setEnabled(not strokes)
+            self.stroke_style.setVisible(strokes)
+            self.stroke_controls.setVisible(strokes)
+            self.text_pen_width.setEnabled(strokes)
+            for field in (self.threshold, self.invert, self.crop):
+                field.setEnabled(not self.is_page_layout() and not strokes)
+            self.optimize.setToolTip("笔画模式固定保留笔顺；其他文字模式仅在同一字内部优化。")
+            self.optimize.setText("优化字内路径，保持逐字完成")
+            self.minimum.setToolTip("笔画模式保留全部笔画和标点，不做短线过滤。")
+            self.text_changed()
         if self.kind == "image" and self.processing.currentData() in ("edges", "cartoon") and self.mode.currentData() != "centerline":
             self.mode_hint.setText(self.mode_hint.text() + " 当前结果已是细线，推荐中线；轮廓会描细线两侧，填充只填细线区域。")
         self.invalidate()
@@ -378,17 +687,52 @@ class GenerationDialog(QDialog):
     def text_changed(self, *args):
         # 合并连续输入，停下300ms后更新文字源图及尺寸比例。
         self.source = None
+        self.text_document = None
+        index = self.font_preset.findData(self.font_size.value())
+        self.font_preset.blockSignals(True)
+        self.font_preset.setCurrentIndex(max(0, index))
+        self.font_preset.blockSignals(False)
+        self.font_hint.setText(f"字框设计尺寸约{self.font_size.value() * 25.4 / 72:.2f}mm；字形实际高度因字体而异。")
+        self.page_bar.setEnabled(False)
+        if self.is_page_layout():
+            self.preview.set_text_page(None)
         self.invalidate()
         self.text_timer.start()
 
     def update_text_preview(self):
+        self.text_timer.stop()
         try:
             self.refresh_text_source()
         except GenerationError as error:
+            self.source_preview.clear()
+            self.binary_preview.clear()
+            self.processed_image = None
+            self.enlarge_button.setEnabled(False)
             self.status.setText(str(error))
 
     def refresh_text_source(self):
-        self.source = render_text(self.text.toPlainText(), self.font.currentFont().family(), self.bold.isChecked())
+        if self.is_page_layout():
+            if self.text_document is None:
+                if self.is_stroke_mode():
+                    self.text_document = layout_stroke_text(self.text.toPlainText(), self.text_options(), self.text_pen_width.value(), self.writing_options())
+                else:
+                    self.text_document = layout_text(self.text.toPlainText(), self.font.currentFont().family(), self.bold.isChecked(), self.text_options())
+            self.page_number.blockSignals(True)
+            self.page_number.setRange(1, len(self.text_document.pages))
+            self.page_number.blockSignals(False)
+            self.page_bar.setEnabled(True)
+            self.show_text_page()
+            return
+        self.preview.set_text_page(None)
+        if self.is_stroke_mode():
+            self.source = render_stroke_source(self.text.toPlainText(), self.line_spacing.value(), self.alignment.currentData(), self.text_pen_width.value(), self.writing_options())
+            self.ratio = self.source.width() / max(1, self.source.height())
+            self.change_size(self.size_from_width)
+            self.show_source(self.source)
+            self.show_processed(self.source)
+            self.binary_status.setText("离线单线笔画预览；无需黑白阈值或填充。")
+            return
+        self.source = render_text(self.text.toPlainText(), self.font.currentFont().family(), self.bold.isChecked(), self.line_spacing.value(), self.alignment.currentData())
         self.source_changed()
 
     def source_changed(self, *args):
@@ -563,9 +907,9 @@ class GenerationDialog(QDialog):
         options = PlotOptions(
             paper_width=self.profile.paper_width, paper_height=self.profile.paper_height,
             x=self.x.value(), y=self.y.value(), width=self.width.value(), height=self.height.value(),
-            mode=self.mode.currentData(), threshold=self.threshold.value(), invert=self.invert.isChecked(), crop=self.crop.isChecked(),
+            mode="outline" if self.is_stroke_mode() else self.mode.currentData(), threshold=self.threshold.value(), invert=self.invert.isChecked(), crop=self.crop.isChecked(),
             spacing=self.spacing.value(), vertical=self.direction.currentIndex() == 1, tolerance=self.tolerance.value(),
-            min_length=self.minimum.value(), optimize=self.optimize.isChecked(), draw_feed=self.draw_feed.value(),
+            min_length=self.minimum.value(), optimize=False if self.is_stroke_mode() else self.optimize.isChecked(), draw_feed=self.draw_feed.value(),
             travel_feed=self.travel_feed.value(), pen_up=self.pen_up.value(), pen_down=self.pen_down.value(),
             up_feed=self.up_feed.value(), down_feed=self.down_feed.value(), z_min=self.profile.z_min, z_max=self.profile.z_max
         )
@@ -576,6 +920,12 @@ class GenerationDialog(QDialog):
             options.smoothing = self.smoothing.value()
             options.despeckle = self.despeckle.value()
             options.repair_gaps = self.repair.isChecked()
+        if self.is_stroke_mode():
+            options.invert, options.crop = False, True
+        if self.is_page_layout():
+            options.x, options.y = 0, 0
+            options.width, options.height = self.profile.paper_width, self.profile.paper_height
+            options.crop, options.invert = False, False
         return options
 
     def generate(self):
@@ -600,13 +950,29 @@ class GenerationDialog(QDialog):
                 return
             options = self.options()
             options.validate()
+            artwork_page = None
+            if self.kind == "text" and not self.is_page_layout() and not options.invert:
+                if self.is_stroke_mode():
+                    artwork_page = layout_stroke_artwork(self.text.toPlainText(), self.line_spacing.value(), self.alignment.currentData(), options, self.text_pen_width.value(), self.writing_options())
+                else:
+                    artwork_page = layout_artwork(self.text.toPlainText(), self.font.currentFont().family(), self.bold.isChecked(), self.line_spacing.value(), self.alignment.currentData(), options)
         except (ValueError, OSError) as error:
             self.status.setText(str(error))
             return
         self.progress.setValue(0)
         self.cancel_requested = False
         self.preview_timer.stop()
-        self.worker = GenerationWorker(self.source, options, "文字任务" if self.kind == "text" else "图片任务", self, self.processed if self.kind == "image" else None)
+        if self.is_page_layout():
+            number = self.page_number.value()
+            page = self.text_document.pages[number - 1]
+            if page.bounds.isEmpty():
+                self.status.setText("当前页为空白页，没有可绘制文字，请选择其他页或减少空行。")
+                return
+            self.worker = GenerationWorker(self.source, options, f"正文任务_第{number:03d}页", self, text_page=page, text_options=self.text_document.options)
+        elif self.kind == "text" and not options.invert:
+            self.worker = GenerationWorker(self.source, options, "文字任务", self, text_page=artwork_page)
+        else:
+            self.worker = GenerationWorker(self.source, options, "文字任务" if self.kind == "text" else "图片任务", self, self.processed if self.kind == "image" else None)
         self.worker.ready.connect(self.generated)
         self.worker.failed.connect(self.failed)
         self.worker.progress.connect(self.on_progress)
@@ -620,6 +986,8 @@ class GenerationDialog(QDialog):
         self.cancel_button.setEnabled(busy or self.image_worker is not None)
         self.load_button.setEnabled(not busy and self.task is not None)
         self.save_button.setEnabled(not busy and self.task is not None)
+        if self.kind == "text":
+            self.page_bar.setEnabled(not busy and self.text_document is not None)
         if self.profile.z_mode != "stepper":
             self.status.setText("当前为舵机配置；本版生成器只输出步进Z文件，请配套固件后再增加舵机任务协议。")
 
@@ -637,9 +1005,12 @@ class GenerationDialog(QDialog):
         self.summary.setText(
             f"{task.path_count}条落笔路径 · {task.point_count}个路径点 · {len(task.program.commands)}条命令\n"
             f"绘制 {task.program.drawing_length:.1f} mm · 空行程 {task.travel_length:.1f} mm · 理论下限 {task.minimum_seconds:.1f}秒\n"
-            f"XY范围 {task.program.bounds} · 栅格精度约 {task.resolution:.3f} mm\n" + "\n".join(task.notes)
+            f"XY范围 {task.program.bounds} · 路径处理精度约 {task.resolution:.3f} mm\n" + "\n".join(task.notes)
         )
         self.status.setText("生成完成。检查尺寸和轨迹后可保存，或载入主窗口；尚未发送。")
+        if self.kind == "text":
+            # 结果说明改变预览高度后再定位，避免文字刚生成便落在可见区域外。
+            QTimer.singleShot(0, self.preview.fit_job)
 
     def failed(self, message):
         self.task = None
@@ -701,7 +1072,12 @@ class GenerationDialog(QDialog):
         if self.kind == "image":
             data.update(processing=self.processing.currentData(), sensitivity=self.sensitivity.value(), detail=self.detail.value(), smoothing=self.smoothing.value(), despeckle=self.despeckle.value(), repair=self.repair.isChecked())
         if self.kind == "text":
-            data.update(text=self.text.toPlainText(), font=self.font.currentFont().family(), bold=self.bold.isChecked())
+            data.update(text=self.text.toPlainText(), font=self.font.currentFont().family(), bold=self.bold.isChecked(), line_spacing=self.line_spacing.value(), alignment=self.alignment.currentData())
+            data.update(text_pen_width=self.text_pen_width.value())
+            data.update(stroke_font=self.stroke_font.currentData(), latin_style=self.latin_style.currentData(), stroke_fallback=self.stroke_fallback.isChecked(), natural_enabled=self.natural_enabled.isChecked(), natural_strength=self.natural_strength.value(), natural_seed=self.natural_seed.value())
+            data.update(natural_spacing=self.natural_spacing.value(), natural_baseline=self.natural_baseline.value())
+            data.update(layout_mode=self.layout_mode.currentData())
+            data.update({name: getattr(self, name).value() for name in ("font_size", "margin_left", "margin_right", "margin_top", "margin_bottom", "letter_spacing", "paragraph_spacing", "indent")})
         try:
             stored = json.loads(PREFERENCES.read_text(encoding="utf-8")) if PREFERENCES.exists() else {}
             stored[self.kind] = data
@@ -723,6 +1099,9 @@ class GenerationDialog(QDialog):
                 if type(stored.get(name)) is bool:
                     getattr(self, name).setChecked(stored[name])
             index = self.mode.findData(stored.get("mode"))
+            # 旧实心书写入口迁移到笔画；显式保存的轮廓/填充/中线偏好仍保留。
+            if self.kind == "text" and stored.get("mode") == "font":
+                index = self.mode.findData("strokes")
             if index >= 0:
                 self.mode.setCurrentIndex(index)
             self.direction.setCurrentIndex(1 if stored.get("direction") == 1 else 0)
@@ -735,11 +1114,40 @@ class GenerationDialog(QDialog):
                         getattr(self, name).setValue(stored[name])
                 self.repair.setChecked(stored.get("repair") is True)
             if self.kind == "text":
+                self.refresh_stroke_fonts(stored.get("stroke_font", ""))
+                index = self.latin_style.findData(stored.get("latin_style"))
+                if index >= 0:
+                    self.latin_style.setCurrentIndex(index)
+                if type(stored.get("stroke_fallback")) is bool:
+                    self.stroke_fallback.setChecked(stored["stroke_fallback"])
+                self.natural_enabled.setChecked(stored.get("natural_enabled") is True)
+                if type(stored.get("natural_strength")) in (int, float):
+                    self.natural_strength.setValue(stored["natural_strength"])
+                    self.natural_spacing.setValue(stored["natural_strength"])
+                    self.natural_baseline.setValue(stored["natural_strength"])
+                for name in ("natural_spacing", "natural_baseline"):
+                    if type(stored.get(name)) in (int, float):
+                        getattr(self, name).setValue(stored[name])
+                if type(stored.get("natural_seed")) is int:
+                    self.natural_seed.setValue(stored["natural_seed"])
+                if type(stored.get("text_pen_width")) in (int, float):
+                    self.text_pen_width.setValue(stored["text_pen_width"])
                 if isinstance(stored.get("text"), str):
-                    self.text.setPlainText(stored["text"][:2000])
+                    self.text.setPlainText(stored["text"][:20000])
                 if isinstance(stored.get("font"), str):
                     self.font.setCurrentFont(QFont(stored["font"]))
                 self.bold.setChecked(stored.get("bold") is True)
+                if type(stored.get("line_spacing")) in (int, float):
+                    self.line_spacing.setValue(stored["line_spacing"])
+                index = self.alignment.findData(stored.get("alignment"))
+                if index >= 0:
+                    self.alignment.setCurrentIndex(index)
+                index = self.layout_mode.findData(stored.get("layout_mode"))
+                if index >= 0:
+                    self.layout_mode.setCurrentIndex(index)
+                for name in ("font_size", "margin_left", "margin_right", "margin_top", "margin_bottom", "letter_spacing", "paragraph_spacing", "indent"):
+                    if type(stored.get(name)) in (int, float):
+                        getattr(self, name).setValue(stored[name])
         except (OSError, ValueError, TypeError, AttributeError, OverflowError):
             pass
 

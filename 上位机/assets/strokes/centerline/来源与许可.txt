@@ -1,0 +1,25 @@
+新增中文中线字库（2026-11-11）
+
+派生字库：XY单线黑体（20976字符）、XY单线明体（27632字符）。
+数据来源：https://github.com/LingDong-/chinese-hershey-font
+固定版本：87f5e407a36c175c1ab17f2ba4447768a7fffdab
+原文件：dist/json/STRK-Heiti.json、STRK-Mingti.json。
+项目许可：MIT；Copyright (c) 2018 Lingdong Huang。全文见MIT-LICENSE.txt。
+
+黑体原字体：Source Han Sans；Copyright 2014-2025 Adobe。
+原字体遵循SIL Open Font License 1.1，保留字体名Source，全文见Source-Han-Sans-OFL.txt。
+本派生字体另名为XY单线黑体，按同一OFL许可提供；无担保。
+
+明体原字体：Hanazono / GlyphWiki Project。
+官方许可来源：https://glyphwiki.org/hanazono/
+本分发选择其自有宽松许可；全文见Hanazono-LICENSE.txt，无担保。
+
+源项目从字形图像自动提取线条，不是带标准笔顺的手写字库。
+因此不能承诺标准笔顺、无分叉、无重复描线，也不冒充个人手写风格。
+黑体与明体为可选的不同字形，原楷体仍用于按笔顺书写。
+原数据有少量点超出0～1字框。构建时对整套字体使用统一等比缩放和平移，
+留出边缘空间；不逐字拉伸、不自动跨空白接线，仅清除重复点及零长度路径。
+详见heiti.json、mingti.json中的计数、源Git blob校验值、坐标变换和归档SHA256。
+可运行tools/build_centerline_fonts.py从校验后的固定源文件重建。
+
+字库随程序离线提供，使用时不联网、不上传文字。缺字明确提示并阻止生成。

@@ -90,6 +90,10 @@ wait_until(application, lambda: not window.stop_button.isEnabled())
 window.grab().save(str(folder / "stage2-stopped.png"))
 window.controller.disconnect_device()
 assert not window.pen_up_button.isEnabled()
+window.append_log("TEST", "第四阶段日志导出测试")
+log_path = ROOT / ".runtime" / "session-test.log"
+window.export_log(path=log_path)
+assert log_path.exists() and "第四阶段日志导出测试" in log_path.read_text(encoding="utf-8")
 large_file = ROOT.parent / "G代码生成软件" / "生成G代码" / "output_0006.ngc"
 if large_file.exists():
     window.import_file(path=large_file)

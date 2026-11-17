@@ -1,0 +1,27 @@
+{
+  "schema": 1,
+  "id": "hw_wenkai",
+  "name": "XY书卷手写",
+  "source_font": "霞鹜文楷",
+  "source_url": "https://github.com/lxgw/LxgwWenKai",
+  "source_revision": "v1.530",
+  "source_sha256": "2d73eea94ad808999d90c0000c239a84a33b09d4bc6ab6c5b8bbf1eda8a7fc8b",
+  "license": "SIL OFL 1.1",
+  "license_file": "handwriting-licenses/hw_wenkai.txt",
+  "ordered": false,
+  "handwriting": true,
+  "glyphs": 27911,
+  "paths": 409845,
+  "points": 6675037,
+  "raster_size": 256,
+  "transform": {
+    "scale": 0.000849609375,
+    "dx": 0.065,
+    "dy": 0.8132005310058594
+  },
+  "omitted": [],
+  "gb2312_hanzi": 6763,
+  "gb2312_missing": "",
+  "archive_sha256": "7d2c73c24d3f668c3373fd4a78ec5851bff473649ce40406af933a0279acd9fc",
+  "build_seconds": 791.53
+}

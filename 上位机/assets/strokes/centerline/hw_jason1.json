@@ -1,0 +1,27 @@
+{
+  "schema": 1,
+  "id": "hw_jason1",
+  "name": "XY原子笔01",
+  "source_font": "清松手写1",
+  "source_url": "https://github.com/max32002/JasonHandWritingFonts",
+  "source_revision": "20251204",
+  "source_sha256": "d507f42681200214398f2f91416ec59ce1ed24fb4db2eb23a260ec78fac65153",
+  "license": "SIL OFL 1.1",
+  "license_file": "handwriting-licenses/hw_jason1.txt",
+  "ordered": false,
+  "handwriting": true,
+  "glyphs": 20293,
+  "paths": 243040,
+  "points": 4552499,
+  "raster_size": 256,
+  "transform": {
+    "scale": 0.000849609375,
+    "dx": 0.065,
+    "dy": 0.759130859375
+  },
+  "omitted": [],
+  "gb2312_hanzi": 6642,
+  "gb2312_missing": "丨丬丿乇亠亻佥冂凵凼勹匚匦卣卩卺厣厶塄塍墼夂媵孛宀巛廛廴廾彖彡彳忄恝戋扌搿攵敫旃旄旆枭橥毂氘氚氩泶犭璺甙瘗瘛礻箧簋纟罂羁羼肀舄芈茏茕荥荬莶蒇蓟蕲蕻虍蠃衤衮裒觞讠豳赉赍赓蹒郄醢钅锎闫闳闶闼阃阄阆阈阊阋阌阍阏阒阚阝隳隹雠鞴颍餍饣馓鬯鲎鲞黉黧鼍齑龛",
+  "archive_sha256": "fdc0e53773580cec357b280fc849f8d5493349b1a85aa017ce162b372a2aad88",
+  "build_seconds": 541.42
+}

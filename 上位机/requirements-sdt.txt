@@ -1,0 +1,8 @@
+# coding: utf-8
+# 仅供.runtime/sdt/venv使用，不安装到上位机主环境。
+# CUDA 12.1轮子通过说明中的官方PyTorch索引安装。
+torch==2.5.1
+torchvision==0.20.1
+numpy==1.26.4
+einops>=0.8,<0.9
+Pillow>=10,<13

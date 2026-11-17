@@ -24,6 +24,7 @@ application = QApplication([])
 configure_appearance(application)
 generation_dialog.PREFERENCES = ROOT / ".runtime" / "unused_generation_preferences.json"
 dialog = GenerationDialog(MachineProfile(), "text")
+dialog.layout_mode.setCurrentIndex(dialog.layout_mode.findData("artwork"))
 dialog.text.setPlainText("HOB 123 写字机\nABC 456 运动测试\nDEFG 789 测试完成")
 dialog.width.setValue(180)
 dialog.mode.setCurrentIndex(dialog.mode.findData("fill"))

@@ -1,0 +1,32 @@
+离线单线笔画字库说明（2026-11-11）
+
+中文字库：Hanzi Writer Data 2.0.1，共9574个汉字，源自Make Me a Hanzi及文鼎字体。
+来源：https://github.com/chanind/hanzi-writer-data
+下载：https://registry.npmjs.org/hanzi-writer-data/-/hanzi-writer-data-2.0.1.tgz
+源包SHA256：72baf3d82b114e60d6e40ea05f24d2262a05cd39d544e2f322ba2fceb7beff15
+Copyright (C) 1999 Arphic Technology Co., Ltd.
+遵循Arphic Public License，可按该许可自由再分发及修改，无担保。
+许可全文：本目录ARPHICPL.TXT；中文副本ARPHICPL-zh-CN.txt。
+
+hanzi-writer-data-2.0.1.zip仅重新压缩原始单字JSON，内容未改动。
+本程序2026-11-11将原中线转换为毫米单线笔迹；只在原笔画轮廓相交、连接位于原墨迹内且沿笔端方向时补接点，不合并笔画。
+ordered-kaiti-v1.zip保存9574字的预计算笔画，每个单字文件含修改日期、内容及许可声明；tools/build_stroke_data.py可从校验后的原始源包重建。
+这一运行时派生字形命名为“XY单线楷体笔画”，保留原笔顺；派生字形及其转换代码可按Arphic Public License自由取得、修改和再分发，无担保。
+它不是系统黑体/宋体，也不是声称能还原任意人的手写体。笔画数据存在地区字形与笔顺差异。
+
+英文/数字/ASCII符号：Hershey Text 2.0.0的Futural单线字体，来源：https://github.com/techninja/hersheytextjs
+下载：https://registry.npmjs.org/hersheytext/-/hersheytext-2.0.0.tgz
+源包SHA256：02b5dec72395c04940048b4cac9c6e7a41ddb41954884c482fbfd4e9e955bb1e
+保留原始字形数据；MIT许可全文在HERSHEY-LICENSE.txt。
+2026-11-11新增hershey-styles.json，包含同一源包的Futural、Scripts、Scriptc、Timesr原始路径，保留字形数据及上述MIT许可。部分花体/衬线字形有更多描线，不冒充中文字体。
+常用中文标点为本程序单线几何路径，全角ASCII符号使用居中的对应Hershey字形。
+
+所有数据随程序离线提供；使用与生成时不向网络上传正文，也不在线下载单字。
+不支持的字符会列出并阻止生成，不会静默漏字或换成普通字体。
+
+2026-11-12个人笔迹学习的部件标签：Make Me a Hanzi dictionary.txt。
+来源：https://github.com/skishore/makemeahanzi/blob/master/dictionary.txt
+仅提取decomposition与matches结构标签至personal-components.json.gz，不包含用户笔迹。
+该字典源自Unihan与CJKlib，按LGPL 3.0或更新版本分发；原声明见MakeMeAHanzi-COPYING.txt，许可全文见MakeMeAHanzi-LGPL.txt。
+源字典SHA256保存在压缩包metadata的dictionary_sha256；tools/build_personal_components.py可从原字典重建。
+个人笔形核回归代码独立于该字典，结构标签不提供个人写法；实际笔形与部件来自本机真实录字。

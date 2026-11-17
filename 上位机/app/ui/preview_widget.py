@@ -11,6 +11,8 @@ class PreviewWidget(QWidget):
         self.paper_width, self.paper_height = 210.0, 297.0
         self.position = None
         self.program = None
+        self.text_path = QPainterPath()
+        self.text_rect = None
         self.zoom = 1.0
         self.pan = QPointF()
         self.drag_start = None
@@ -42,6 +44,17 @@ class PreviewWidget(QWidget):
         previous = self.marker_rect(self.position)
         self.position = position
         self.update(previous.united(self.marker_rect(position)).toAlignedRect())
+
+    def set_text_page(self, page, content_rect=None):
+        # 灰色字形和页边距只作排版参考，蓝色轨迹仍来自实际生成的G代码。
+        self.text_path = QPainterPath()
+        self.text_path.setFillRule(Qt.FillRule.WindingFill)
+        if page is not None:
+            for line in page.lines:
+                self.text_path.addPath(line.path)
+        self.text_rect = content_rect
+        self.scene_cache = None
+        self.update()
 
     def set_program(self, program):
         self.program = program
@@ -91,9 +104,13 @@ class PreviewWidget(QWidget):
 
     def fit_job(self):
         self.interaction_timer.stop()
-        if not self.program or not self.program.bounds:
+        if self.program and self.program.bounds:
+            x0, y0, x1, y1 = self.program.bounds
+        elif not self.text_path.isEmpty():
+            bounds = self.text_path.boundingRect()
+            x0, y0, x1, y1 = bounds.left(), bounds.top(), bounds.right(), bounds.bottom()
+        else:
             return self.fit()
-        x0, y0, x1, y1 = self.program.bounds
         base = self.base_scale()
         self.zoom = min(40, max(0.25, min((self.width() - 100) / max(x1 - x0, 1), (self.height() - 100) / max(y1 - y0, 1)) / base))
         scale = base * self.zoom
@@ -102,6 +119,15 @@ class PreviewWidget(QWidget):
 
     def base_scale(self):
         return max(0.01, min((self.width() - 100) / self.paper_width, (self.height() - 90) / self.paper_height))
+
+    def drawing_pen(self):
+        width = getattr(self.program, "preview_pen_width", None)
+        # 只有笔画书写任务按填写的毫米线宽预览，其他任务沿用原来的细轨迹。
+        if width is not None:
+            return QPen(QColor("#174f9e"), width, Qt.PenStyle.SolidLine, Qt.PenCapStyle.RoundCap, Qt.PenJoinStyle.RoundJoin)
+        pen = QPen(QColor("#174f9e"), 1.25)
+        pen.setCosmetic(True)
+        return pen
 
     def wheelEvent(self, event):
         self.change_zoom(1.2 if event.angleDelta().y() > 0 else 1 / 1.2)
@@ -171,15 +197,19 @@ class PreviewWidget(QWidget):
         painter.restore()
         painter.save()
         painter.setTransform(QTransform(scale, 0, 0, scale, left, top))
+        if self.text_rect is not None:
+            margin_pen = QPen(QColor("#9caec5"), 1, Qt.PenStyle.DashLine)
+            margin_pen.setCosmetic(True)
+            painter.setPen(margin_pen)
+            painter.drawRect(self.text_rect)
+            painter.fillPath(self.text_path, QColor("#c7d0dd"))
         if self.show_travel:
             pen = QPen(QColor("#aab8cc"), 1, Qt.PenStyle.DashLine)
             pen.setCosmetic(True)
             painter.setPen(pen)
             for path in self.travel_chunks:
                 painter.drawPath(path)
-        pen = QPen(QColor("#174f9e"), 1.25)
-        pen.setCosmetic(True)
-        painter.setPen(pen)
+        painter.setPen(self.drawing_pen())
         for path in self.drawing_chunks:
             painter.drawPath(path)
         painter.restore()
@@ -194,4 +224,8 @@ class PreviewWidget(QWidget):
         painter.drawText(QPointF(left - 30, top + 24), "Y ↓")
         painter.setPen(QColor("#64748b"))
         caption = f"缩放 {self.zoom:.0%} · 滚轮缩放 / 拖动平移 · 蓝色：落笔轨迹 · 橙色：实时位置"
+        if self.text_rect is not None:
+            caption = f"缩放 {self.zoom:.0%} · 灰色：文字排版 · 蓝色：已生成轨迹 · 虚线：页边距"
+        if getattr(self.program, "preview_pen_width", None) is not None:
+            caption = f"缩放 {self.zoom:.0%} · 蓝色：按填写笔宽{self.program.preview_pen_width:g}mm预览的笔迹"
         painter.drawText(QRectF(8, self.height() - 26, self.width() - 16, 24), Qt.AlignmentFlag.AlignCenter, caption)

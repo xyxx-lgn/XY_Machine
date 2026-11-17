@@ -56,6 +56,7 @@ assert not window.export_button.isEnabled()
 
 # 文本刚改变就指定总高，也应保留用户最后编辑的尺寸，不被字体比例刷新覆盖。
 geometry_dialog = GenerationDialog(window.profile, "text", window)
+geometry_dialog.layout_mode.setCurrentIndex(geometry_dialog.layout_mode.findData("artwork"))
 geometry_dialog.text.setPlainText("H")
 geometry_dialog.height.setValue(10)
 geometry_dialog.generate()
@@ -65,6 +66,7 @@ assert geometry_dialog.height.value() == 10
 geometry_dialog.reject()
 
 dialog = GenerationDialog(window.profile, "text", window)
+dialog.layout_mode.setCurrentIndex(dialog.layout_mode.findData("artwork"))
 dialog.show()
 assert dialog.pen_up.value() == 3 and dialog.up_feed.value() == 300
 dialog.text.setPlainText("HOB 123\n写字机")
@@ -84,6 +86,8 @@ assert len(parsed.commands) == len(dialog.task.program.commands)
 dialog.x.setValue(11)
 dialog.up_feed.setValue(1000)
 dialog.down_feed.setValue(900)
+dialog.line_spacing.setValue(1.25)
+dialog.alignment.setCurrentIndex(dialog.alignment.findData("center"))
 assert dialog.task is None and not dialog.load_button.isEnabled()
 assert not dialog.save_button.isEnabled()
 dialog.generate()
@@ -102,6 +106,7 @@ dialog = GenerationDialog(MachineProfile(pen_up=4, pen_up_feed=360), "text", win
 assert dialog.text.toPlainText() == "HOB 123\n写字机"
 assert dialog.x.value() == 11
 assert dialog.pen_up.value() == 4 and dialog.up_feed.value() == 1000 and dialog.down_feed.value() == 900
+assert dialog.line_spacing.value() == 1.25 and dialog.alignment.currentData() == "center"
 dialog.reject()
 
 dialog = GenerationDialog(window.profile, "image", window)

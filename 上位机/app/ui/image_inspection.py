@@ -3,9 +3,10 @@ from PySide6.QtGui import QPixmap
 from PySide6.QtWidgets import QDialog, QHBoxLayout, QLabel, QPushButton, QScrollArea, QVBoxLayout
 
 from app.image_processing import binary_thumbnail
+from app.ui.dialog_window import FunctionDialog
 
 
-class ImageInspectionDialog(QDialog):
+class ImageInspectionDialog(FunctionDialog):
     def __init__(self, image, parent=None):
         super().__init__(parent)
         self.image = image

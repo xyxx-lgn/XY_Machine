@@ -1,0 +1,31 @@
+MIT License
+
+Copyright (c) 2026 周昊 (HWDGRMY) <zhouhao_oss@163.com>
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+Source: https://github.com/HWDGRMY/OLHWG-PageSynth
+Architecture and paper: https://github.com/singularityrms/OLHWG
+Ren, Zhang, Chen. Decoupling Layout from Glyph in Online Chinese Handwriting
+Generation. ICLR 2025. https://openreview.net/forum?id=DhHIw9Nbl1
+
+tools/trajectory_model.py is a compact inference adaptation of the MIT
+PageSynth model implementation. Pretrained models and CASIA/ICDAR data retain
+their own terms; they are downloaded separately into the ignored .runtime
+directory and are not bundled into the font assets or this source package.
