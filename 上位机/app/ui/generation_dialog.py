@@ -20,10 +20,11 @@ from app.ui.preview_widget import PreviewWidget
 from app.ui.image_inspection import ImageInspectionDialog
 from app.ui.stroke_font_dialog import StrokeFontDialog
 from app.ui.dialog_window import FunctionDialog
+from app.ui.text_document_tools import TextDocumentTools
 from app.stroke_fonts import FontStore, LATIN_STYLES, NaturalOptions, WritingOptions
 from app.builtin_stroke_fonts import BUILTIN_FONTS, font_info
 from app.text_writing import DATA, STYLE, layout_stroke_artwork, layout_stroke_text, render_stroke_source
-from app.text_layout import TextOptions, generate_artwork_text_task, generate_text_task, layout_artwork, layout_text, render_page
+from app.text_layout import FONT_SIZE_RANGE, LETTER_SPACING_RANGE, TextOptions, generate_artwork_text_task, generate_text_task, layout_artwork, layout_text, render_page
 
 
 PREFERENCES = ROOT / "config" / "generation.json"
@@ -81,8 +82,12 @@ class GenerationDialog(FunctionDialog):
         self.worker = None
         self.task = None
         self.loaded_task = None
+        self.batch_paths = None
         self.source = None
         self.text_document = None
+        self.text_paragraph_styles = None
+        self.paragraph_font_sizes = None
+        self._loading_document = False
         self.font_store = FontStore() if kind == "text" else None
         self.ratio = 3.0
         self.size_from_width = True
@@ -149,6 +154,8 @@ class GenerationDialog(FunctionDialog):
             self.text = QPlainTextEdit("HOB 123")
             self.text.setMaximumHeight(110)
             self.text.setPlaceholderText("粘贴正文后自动换行；回车另起段落。正文最多20000字符。")
+            self.document_tools = TextDocumentTools(self)
+            source_form.addWidget(self.document_tools)
             self.font = QFontComboBox()
             self.font.setCurrentFont(QFont("Microsoft YaHei"))
             self.bold = QCheckBox("粗体")
@@ -213,29 +220,37 @@ class GenerationDialog(FunctionDialog):
             source_form.addLayout(text_layout)
             left.addWidget(self.group("文字与字形", source_form))
             form = QFormLayout()
-            self.font_size = self.number(14, 6, 96, 1, " pt")
+            self.font_size = self.number(14, *FONT_SIZE_RANGE, decimals=1, suffix=" pt")
+            self.use_document_font_sizes = QCheckBox("采用Word段落字号")
+            self.use_document_font_sizes.setToolTip("使用Word各段的主要字号。取消后用下方字号统一排版；缺少字号的段落也用下方字号。")
+            self.use_document_font_sizes.hide()
             self.font_preset = QComboBox()
             for title, value in (("自定义", None), ("五号（10.5pt）", 10.5), ("小四（12pt）", 12), ("四号（14pt）", 14), ("三号（16pt）", 16), ("小二（18pt）", 18), ("二号（22pt）", 22)):
                 self.font_preset.addItem(title, value)
             self.font_preset.setCurrentIndex(self.font_preset.findData(14))
             self.font_hint = QLabel()
             self.font_hint.setWordWrap(True)
-            self.margin_left = self.number(20, 0, 999, 1, " mm")
-            self.margin_right = self.number(20, 0, 999, 1, " mm")
-            self.margin_top = self.number(20, 0, 999, 1, " mm")
-            self.margin_bottom = self.number(20, 0, 999, 1, " mm")
-            self.letter_spacing = self.number(0, 0, 5, 2, " mm")
+            self.margin_left = self.number(20, 0, 999, 2, " mm")
+            self.margin_right = self.number(20, 0, 999, 2, " mm")
+            self.margin_top = self.number(20, 0, 999, 2, " mm")
+            self.margin_bottom = self.number(20, 0, 999, 2, " mm")
+            self.letter_spacing = self.number(0, *LETTER_SPACING_RANGE, decimals=2, suffix=" mm")
+            self.letter_spacing.setSingleStep(.05)
+            self.letter_spacing.setToolTip("负值收紧，0保留原字距，正值拉开。实际收紧量受字形和字号限制；笔画模式会保留相邻笔迹的留白。")
             self.paragraph_spacing = self.number(0, 0, 30, 1, " mm")
             self.indent = self.number(0, 0, 4, 1, " 字")
             form.addRow("常用字号", self.font_preset)
+            form.addRow(self.use_document_font_sizes)
             form.addRow("字号", self.font_size)
             form.addRow(self.font_hint)
-            form.addRow("纸张", QLabel(f"{self.profile.paper_width:g} × {self.profile.paper_height:g} mm（取主窗口）"))
+            self.text_paper_label = QLabel(f"{self.profile.paper_width:g} × {self.profile.paper_height:g} mm（取主窗口）")
+            self.text_paper_label.setWordWrap(True)
+            form.addRow("纸张", self.text_paper_label)
             form.addRow("左页边距", self.margin_left)
             form.addRow("右页边距", self.margin_right)
             form.addRow("上页边距", self.margin_top)
             form.addRow("下页边距", self.margin_bottom)
-            form.addRow("额外字距", self.letter_spacing)
+            form.addRow("字距微调", self.letter_spacing)
             form.addRow("段后间距", self.paragraph_spacing)
             form.addRow("首行缩进", self.indent)
             self.layout_summary = QLabel("按纸张毫米宽度换行，内容超出一页时自动分页。")
@@ -304,7 +319,7 @@ class GenerationDialog(FunctionDialog):
         form.addRow("路径方式", self.mode)
         if self.kind == "text":
             self.text_pen_width = self.number(0.18, 0.05, 1.5, 3, " mm")
-            self.text_pen_width.setToolTip("只用于显示实际笔迹的粗细，不生成填线。实际粗细由笔尖和落笔压力决定。")
+            self.text_pen_width.setToolTip("用于显示笔迹粗细，并估算字距收紧时需要保留的留白。实际粗细由笔尖和落笔压力决定。")
             form.addRow("预览笔迹线宽", self.text_pen_width)
             form.addRow(self.button("使用笔画书写", lambda: self.mode.setCurrentIndex(self.mode.findData("strokes"))))
             form.addRow(self.button("字库来源与许可…", self.show_stroke_license))
@@ -389,6 +404,7 @@ class GenerationDialog(FunctionDialog):
             page_row.addStretch()
             page_row.addWidget(QLabel("每页独立生成；载入后手动开始"))
             column.addWidget(self.page_bar)
+            column.addWidget(self.document_tools.page_controls)
         image_row = QHBoxLayout()
         for name, title in (("source_preview", "原图"), ("binary_preview", "黑白处理结果 · 自动更新")):
             box = QVBoxLayout()
@@ -470,13 +486,14 @@ class GenerationDialog(FunctionDialog):
             for field in (self.natural_strength, self.natural_spacing, self.natural_baseline, self.natural_seed):
                 field.valueChanged.connect(self.text_changed)
             self.text_pen_width.valueChanged.connect(self.text_changed)
-            self.text.textChanged.connect(self.text_changed)
+            self.text.textChanged.connect(self.text_content_changed)
             self.font.currentFontChanged.connect(self.text_changed)
             self.bold.toggled.connect(self.text_changed)
             self.line_spacing.valueChanged.connect(self.text_changed)
             self.alignment.currentIndexChanged.connect(self.text_changed)
             self.layout_mode.currentIndexChanged.connect(self.change_text_layout)
             self.font_preset.currentIndexChanged.connect(self.select_font_size)
+            self.use_document_font_sizes.toggled.connect(self.text_changed)
             for field in (self.font_size, self.margin_left, self.margin_right, self.margin_top, self.margin_bottom, self.letter_spacing, self.paragraph_spacing, self.indent):
                 field.valueChanged.connect(self.text_changed)
             self.page_number.valueChanged.connect(self.change_page)
@@ -506,12 +523,14 @@ class GenerationDialog(FunctionDialog):
         paged = self.is_page_layout()
         self.page_settings.setVisible(paged)
         self.page_bar.setVisible(paged)
+        self.document_tools.page_controls.setVisible(paged)
         self.artwork_settings.setVisible(not paged)
         for field in (self.threshold, self.invert, self.crop):
             field.setEnabled(not paged and not self.is_stroke_mode())
         self.generate_button.setText("生成本页轨迹" if paged else "生成预览")
         self.save_button.setText("保存本页 .ngc…" if paged else "保存 .ngc…")
         self.load_button.setText("载入当前页" if paged else "载入主窗口")
+        self.sync_paragraph_alignment()
         self.text_changed()
 
     def select_font_size(self):
@@ -545,7 +564,7 @@ class GenerationDialog(FunctionDialog):
         self.next_page.setEnabled(number < len(document.pages))
         rect, bounds = document.options.content_rect, page.bounds
         self.layout_summary.setText(f"可写区域 {rect.width():.1f} × {rect.height():.1f} mm\n第{number}页 {len(page.lines)}行 · 字迹 {bounds.width():.1f} × {bounds.height():.1f} mm")
-        self.binary_status.setText(f"第{number}/{len(document.pages)}页排版预览 · 字号{document.options.font_size:g}pt · 换页后需重新生成轨迹。")
+        self.binary_status.setText(f"第{number}/{len(document.pages)}页排版预览 · 字号 {page.font_size_label(document.options.font_size)} · 换页后需重新生成轨迹。")
         self.preview.set_text_page(page, document.options.content_rect)
 
     def is_stroke_mode(self):
@@ -692,12 +711,34 @@ class GenerationDialog(FunctionDialog):
         self.font_preset.blockSignals(True)
         self.font_preset.setCurrentIndex(max(0, index))
         self.font_preset.blockSignals(False)
-        self.font_hint.setText(f"字框设计尺寸约{self.font_size.value() * 25.4 / 72:.2f}mm；字形实际高度因字体而异。")
+        size_note = "已采用Word段落字号；未读取到字号的段落使用上方设置。" if self.paragraph_font_sizes is not None and self.use_document_font_sizes.isChecked() else "字形实际高度因字体而异。"
+        self.font_hint.setText(f"上方字号的字框约{self.font_size.value() * 25.4 / 72:.2f} mm。{size_note}")
         self.page_bar.setEnabled(False)
         if self.is_page_layout():
             self.preview.set_text_page(None)
         self.invalidate()
         self.text_timer.start()
+        self.document_tools.invalidate_coverage()
+
+    def text_content_changed(self):
+        if not self._loading_document:
+            count = self.text.document().blockCount()
+            if any(values is not None and len(values) != count for values in (self.text_paragraph_styles, self.paragraph_font_sizes)):
+                self.set_document_format(None, None)
+                self.document_tools.document_note.setText("正文段落数量已改变，现按上位机的字号和对齐设置排版。需要原Word段落格式时可重新导入。")
+        self.text_changed()
+
+    def set_document_format(self, alignments, sizes, use_sizes=True):
+        self.text_paragraph_styles = alignments
+        self.paragraph_font_sizes = sizes
+        self.use_document_font_sizes.setVisible(sizes is not None)
+        self.use_document_font_sizes.setChecked(sizes is not None and use_sizes)
+        self.sync_paragraph_alignment()
+
+    def sync_paragraph_alignment(self):
+        use_word = self.is_page_layout() and self.text_paragraph_styles is not None
+        self.alignment.setEnabled(not use_word)
+        self.alignment.setToolTip("正文保留Word逐段对齐；全局对齐仅用于无段落格式的正文和文字图案。" if use_word else "适用于正文所有段落。")
 
     def update_text_preview(self):
         self.text_timer.stop()
@@ -711,15 +752,18 @@ class GenerationDialog(FunctionDialog):
             self.status.setText(str(error))
 
     def refresh_text_source(self):
+        self.document_tools.update_coverage()
         if self.is_page_layout():
             if self.text_document is None:
+                sizes = self.paragraph_font_sizes if self.use_document_font_sizes.isChecked() else None
                 if self.is_stroke_mode():
-                    self.text_document = layout_stroke_text(self.text.toPlainText(), self.text_options(), self.text_pen_width.value(), self.writing_options())
+                    self.text_document = layout_stroke_text(self.text.toPlainText(), self.text_options(), self.text_pen_width.value(), self.writing_options(), self.text_paragraph_styles, sizes)
                 else:
-                    self.text_document = layout_text(self.text.toPlainText(), self.font.currentFont().family(), self.bold.isChecked(), self.text_options())
+                    self.text_document = layout_text(self.text.toPlainText(), self.font.currentFont().family(), self.bold.isChecked(), self.text_options(), self.text_paragraph_styles, sizes)
             self.page_number.blockSignals(True)
             self.page_number.setRange(1, len(self.text_document.pages))
             self.page_number.blockSignals(False)
+            self.document_tools.sync_pages(len(self.text_document.pages))
             self.page_bar.setEnabled(True)
             self.show_text_page()
             return
@@ -988,6 +1032,7 @@ class GenerationDialog(FunctionDialog):
         self.save_button.setEnabled(not busy and self.task is not None)
         if self.kind == "text":
             self.page_bar.setEnabled(not busy and self.text_document is not None)
+            self.document_tools.set_busy(busy)
         if self.profile.z_mode != "stepper":
             self.status.setText("当前为舵机配置；本版生成器只输出步进Z文件，请配套固件后再增加舵机任务协议。")
 
@@ -1024,7 +1069,8 @@ class GenerationDialog(FunctionDialog):
             self.status.setText("已取消生成，可以修改参数后重试。")
         self.set_busy(False)
         if self.close_pending and self.image_worker is None:
-            super().reject()
+            self.close_pending = False
+            self.reject()
 
     def cancel_generation(self):
         self.preview_timer.stop()
@@ -1063,9 +1109,7 @@ class GenerationDialog(FunctionDialog):
         except (OSError, GenerationError) as error:
             self.status.setText("保存失败：" + str(error))
 
-    def save_preferences(self):
-        if not self.remember.isChecked():
-            return
+    def preference_data(self):
         data = {name: getattr(self, name).value() for name in ("width", "height", "x", "y", "spacing", "tolerance", "minimum", "draw_feed", "travel_feed", "up_feed", "down_feed", "threshold")}
         data.update({name: getattr(self, name).isChecked() for name in ("invert", "crop", "aspect", "optimize")})
         data.update(mode=self.mode.currentData(), direction=self.direction.currentIndex())
@@ -1078,6 +1122,12 @@ class GenerationDialog(FunctionDialog):
             data.update(natural_spacing=self.natural_spacing.value(), natural_baseline=self.natural_baseline.value())
             data.update(layout_mode=self.layout_mode.currentData())
             data.update({name: getattr(self, name).value() for name in ("font_size", "margin_left", "margin_right", "margin_top", "margin_bottom", "letter_spacing", "paragraph_spacing", "indent")})
+        return data
+
+    def save_preferences(self):
+        if not self.remember.isChecked():
+            return
+        data = self.preference_data()
         try:
             stored = json.loads(PREFERENCES.read_text(encoding="utf-8")) if PREFERENCES.exists() else {}
             stored[self.kind] = data
@@ -1089,9 +1139,10 @@ class GenerationDialog(FunctionDialog):
             # 生成成功不依赖偏好文件，配置异常不会影响任务载入。
             self.status.setText("任务已生成，但生成偏好未保存。")
 
-    def restore_preferences(self):
+    def restore_preferences(self, stored=None):
         try:
-            stored = json.loads(PREFERENCES.read_text(encoding="utf-8")).get(self.kind, {})
+            if stored is None:
+                stored = json.loads(PREFERENCES.read_text(encoding="utf-8")).get(self.kind, {})
             for name in ("width", "height", "x", "y", "spacing", "tolerance", "minimum", "draw_feed", "travel_feed", "up_feed", "down_feed", "threshold"):
                 if name in stored and type(stored[name]) in (int, float):
                     getattr(self, name).setValue(stored[name])
@@ -1162,6 +1213,8 @@ class GenerationDialog(FunctionDialog):
             self.close_pending = True
             self.cancel_generation()
             return
+        if self.kind == "text" and not self.document_tools.confirm_close():
+            return
         super().reject()
 
     def closeEvent(self, event):
@@ -1171,5 +1224,9 @@ class GenerationDialog(FunctionDialog):
             self.close_pending = True
             self.cancel_generation()
             event.ignore()
-        else:
-            super().closeEvent(event)
+            return
+        # 先阻止原始关闭事件，避免确认框点击“取消”后 Qt 继续接受本次 close。
+        event.ignore()
+        self.reject()
+        if not self.isVisible():
+            event.accept()

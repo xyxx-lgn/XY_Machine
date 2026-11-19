@@ -74,6 +74,29 @@ class TextLayoutTests(unittest.TestCase):
         self.assertLess(positions[0], positions[1])
         self.assertLess(positions[1], positions[2])
 
+    def test_tighter_system_font_spacing_reduces_width_without_resizing_glyphs(self):
+        text = "中文 HOB 123"
+        normal, tight = (self.layout(text, letter_spacing=spacing) for spacing in (0, -.2))
+        a, b = normal.pages[0].lines[0], tight.pages[0].lines[0]
+        self.assertLess(b.path.boundingRect().width(), a.path.boundingRect().width() - 1)
+        self.assertEqual([char.path for char in a.characters], [char.path for char in b.characters])
+
+    def test_minimum_spacing_does_not_reverse_narrow_glyphs(self):
+        text = "i.l: Iii"
+        doc = self.layout(text, font_size=6, letter_spacing=-5)
+        origins = [char.position.x() for char in doc.pages[0].lines[0].characters]
+        self.assertEqual(len(origins), len(text.replace(" ", "")))
+        self.assertTrue(all(left < right for left, right in zip(origins, origins[1:])))
+
+    def test_negative_spacing_leaves_room_for_ink_at_the_end_of_wrapped_lines(self):
+        text = "正文内容" * 40
+        for alignment in ("left", "center", "right"):
+            doc = self.layout(text, font_size=18, letter_spacing=-5, margin_left=31.75, margin_right=31.75, alignment=alignment)
+            lines = [line for page in doc.pages for line in page.lines]
+            self.assertGreater(len(lines), 1)
+            self.assertEqual("".join(line.text for line in lines), text)
+            self.assertTrue(all(doc.options.content_rect.contains(line.path.boundingRect()) for line in lines))
+
     def test_pages_preserve_all_lines_inside_margins(self):
         doc = self.layout("写字机测试\n" * 100)
         self.assertGreater(len(doc.pages), 1)
@@ -86,7 +109,7 @@ class TextLayoutTests(unittest.TestCase):
         self.assertGreaterEqual(doc.pages[0].bounds.left(), self.options.margin_left - 0.001)
 
     def test_blank_and_invalid_parameters_rejected(self):
-        for text, changes in (("", {}), ("abc", {"font_size": float("nan")}), ("abc", {"font_size": 2}), ("abc", {"margin_left": 205}), ("abc", {"alignment": "invalid"}), ("abc", {"letter_spacing": -1})):
+        for text, changes in (("", {}), ("abc", {"font_size": float("nan")}), ("abc", {"font_size": 2}), ("abc", {"margin_left": 205}), ("abc", {"alignment": "invalid"}), ("abc", {"letter_spacing": -5.01})):
             with self.assertRaises(GenerationError):
                 self.layout(text, **changes)
 

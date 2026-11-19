@@ -4,6 +4,7 @@ import os
 from pathlib import Path
 import sys
 import unittest
+from dataclasses import replace
 from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -15,6 +16,7 @@ from PySide6.QtGui import QPainterPath
 from PySide6.QtWidgets import QApplication
 
 from app.generation import GenerationCancelled, GenerationError, PlotOptions, save_gcode
+from app.stroke_fonts import FontPackage, WritingOptions
 from app.text_layout import TextOptions, character_paths, generate_artwork_text_task, generate_text_task, render_page
 from app.text_writing import DATA, contact_strokes, hanzi_archive, layout_stroke_artwork, layout_stroke_text, nearest_point, stroke_glyph, validate_text
 
@@ -86,6 +88,40 @@ class StrokeWritingTests(unittest.TestCase):
         narrow = layout_stroke_text('永' * 30, TextOptions(font_size=18, margin_right=145))
         self.assertGreater(len(narrow.pages[0].lines), len(wide.pages[0].lines))
         self.assertEqual(wide.pages[0].lines[0].characters[0].strokes, narrow.pages[0].lines[0].characters[0].strokes)
+
+    def test_tighter_spacing_reflows_pages_and_moves_generated_trajectories(self):
+        # 可写宽度收窄到恰好能在收紧后放下3个字。
+        options = TextOptions(paper_width=24.7, paper_height=20, margin_left=5, margin_right=5, margin_top=6.8, margin_bottom=6.8)
+        wider = layout_stroke_text('口' * 7, options)
+        tighter = layout_stroke_text('口' * 7, replace(options, letter_spacing=-.30))
+        self.assertEqual([len(wider.pages), len(tighter.pages)], [4, 3])
+        test_text = '口口 HOB 123'
+        normal, tight = (layout_stroke_text(test_text, TextOptions(letter_spacing=value)) for value in (0, -.2))
+        tasks = [generate_text_task(doc.pages[0], doc.options, PlotOptions()) for doc in (normal, tight)]
+        self.assertAlmostEqual(tasks[0].program.drawing_length, tasks[1].program.drawing_length, places=3)
+        self.assertLess(tasks[1].program.bounds[2], tasks[0].program.bounds[2] - 1)
+
+    def test_tighter_spacing_preserves_clearance_between_wide_personal_glyphs(self):
+        package = FontPackage("测试个人字库", {"一": {"advance": 1, "variants": [{"strokes": [[(.03, .5), (.97, .5)]]}]}})
+        writing = WritingOptions(package=package)
+        options = TextOptions(letter_spacing=-5)
+        chars = layout_stroke_text('一一', options, writing=writing).pages[0].lines[0].characters
+        left, right = [char.path.boundingRect().translated(char.position) for char in chars]
+        self.assertGreater(right.left() - left.right(), 0)
+        self.assertLess(chars[1].position.x() - chars[0].position.x(), options.em_mm)
+        self.assertEqual(chars[0].strokes, chars[1].strokes)
+
+    def test_mixed_paragraph_sizes_keep_wrap_and_output_in_millimeters(self):
+        options = TextOptions(paper_width=40, paper_height=22, margin_left=5, margin_right=5, margin_top=4, margin_bottom=4)
+        doc = layout_stroke_text('口\n口', options, paragraph_alignments=('center', 'left'), paragraph_font_sizes=(24, 12))
+        lines = [line for page in doc.pages for line in page.lines]
+        self.assertEqual(len(lines), 2)
+        self.assertEqual([len(page.lines) for page in doc.pages], [1, 1])
+        tasks = [generate_text_task(page, doc.options, PlotOptions()) for page in doc.pages]
+        widths = [task.program.bounds[2] - task.program.bounds[0] for task in tasks]
+        self.assertAlmostEqual(widths[0], widths[1] * 2, places=3)
+        self.assertAlmostEqual(lines[0].path.boundingRect().center().x(), 20, delta=1)
+        self.assertLess(lines[1].path.boundingRect().left(), 6.5)
 
     def test_wrap_preserves_words_and_punctuation(self):
         options = TextOptions(paper_width=40, margin_left=5, margin_right=5, margin_top=5, margin_bottom=5)

@@ -2,6 +2,7 @@
 
 import json
 import math
+import uuid
 from collections import Counter
 from dataclasses import dataclass
 from pathlib import Path
@@ -27,6 +28,18 @@ class PhotoSample:
     note: str = ""
     trajectory: str = "continuous"
     ink_width: float = .03
+    quality_score: float = 1.0
+    quality_flags: tuple = ()
+    quality_blocking: bool = False
+    line_id: str = ""
+    source_frame: tuple = ()
+    source_flags: tuple = ()
+    calibration_source: object = None
+    quality_checked: bool = False
+    quality_coverage: float = 1.0
+    quality_missing_parts: int = 0
+    label_suggestion: str = ""
+    label_score: float = 0.0
 
 
 def photo_characters(value):
@@ -140,6 +153,15 @@ def normalize_cell(cell, threshold=210, adaptive=False, remove_colored=True, pro
     return canvas
 
 
+def cell_frame(cell):
+    """记录原始单字到256像素样本的映射，供同一行共用纸面尺度。"""
+    h, w = cell.shape[:2]
+    scale = 240 / max(h, w)
+    rw, rh = max(1, round(w * scale)), max(1, round(h * scale))
+    return ((256 - rw) // 2 / 255, (256 - rh) // 2 / 255,
+            (rw - 1) / max(1, w - 1) / 255, (rh - 1) / max(1, h - 1) / 255)
+
+
 def trace_sample(character, image, cancel=None, trajectory="continuous", ink_width=.03):
     gray = image.convertToFormat(QImage.Format.Format_Grayscale8)
     pixels = np.frombuffer(gray.constBits(), np.uint8).reshape(gray.height(), gray.bytesPerLine())[:, :gray.width()]
@@ -196,6 +218,7 @@ def prepare_photo_samples(source, characters, rows, columns, threshold=210, marg
     if len(chars) > len(cells):
         raise GenerationError("字符数量多于格子数量，请检查照片行列数和字符顺序。")
     results = []
+    batch_id = uuid.uuid4().hex
     for index, char in enumerate(chars):
         checkpoint(cancel)
         x0, y0, x1, y1 = cells[index]
@@ -211,6 +234,8 @@ def prepare_photo_samples(source, characters, rows, columns, threshold=210, marg
             result = PhotoSample(char, cell_image, [], f"第{index + 1}格“{char}”：{error}")
         result.trajectory, result.ink_width = trajectory, ink_width
         result.original = rgb_image(cell)
+        result.line_id = f"{batch_id}:{index // columns}"
+        result.source_frame = cell_frame(cell)
         if min(cell.shape[:2]) < 24:
             result.note = "原图单字不足24像素，细节有限，建议放大拍摄后重录。"
         results.append(result)
@@ -250,8 +275,24 @@ def export_photo_samples(samples, destination):
         name = f"u{ord(sample.character):06x}_{index + 1:05d}.png"
         if not sample.image.save(str(destination / name)):
             raise GenerationError("保存照片样本失败：" + name)
-        records.append({"character": sample.character, "file": name, "index": index + 1})
-    (destination / "samples.json").write_text(json.dumps({"schema": 1, "source": "photo", "samples": records}, ensure_ascii=False, indent=2), encoding="utf-8")
+        record = {"character": sample.character, "file": name, "index": index + 1, "strokes": sample.strokes,
+                  "trajectory": sample.trajectory, "ink_width": sample.ink_width, "line_id": sample.line_id,
+                  "source_frame": sample.source_frame, "source_flags": sample.source_flags, "note": sample.note,
+                  "confidence": sample.confidence, "label_suggestion": sample.label_suggestion, "label_score": sample.label_score}
+        if sample.original is not None:
+            original_name = Path(name).stem + "_original.png"
+            if not sample.original.save(str(destination / original_name)):
+                raise GenerationError("保存原始单字失败：" + original_name)
+            record["original_file"] = original_name
+        if sample.calibration_source is not None:
+            raw = sample.calibration_source
+            raw_name = Path(name).stem + "_raw.png"
+            if not raw.image.save(str(destination / raw_name)):
+                raise GenerationError("保存校准前样本失败：" + raw_name)
+            record["raw"] = dict(file=raw_name, strokes=raw.strokes, source_frame=raw.source_frame,
+                                 source_flags=raw.source_flags, note=raw.note)
+        records.append(record)
+    (destination / "samples.json").write_text(json.dumps({"schema": 2, "source": "photo", "samples": records}, ensure_ascii=False, indent=2), encoding="utf-8")
     (destination / "photo-font.json").write_text(json.dumps(package_data(package), ensure_ascii=False), encoding="utf-8")
     return destination
 
@@ -262,20 +303,87 @@ def extract_photo_samples(source, characters, rows, columns, destination, thresh
     return Path(destination), [sample.character for sample in samples]
 
 
-def photo_font_package(folder, name="照片手写候选"):
+def load_photo_samples(folder, cancel=None, progress=None):
+    """加载已导出的原样本，兼容旧清单，恢复校准前数据以便整批重做。"""
     folder = Path(folder)
     try:
-        records = json.loads((folder / "samples.json").read_text(encoding="utf-8"))["samples"]
+        manifest = folder / "samples.json"
+        if manifest.stat().st_size > 64_000_000:
+            raise GenerationError("照片样本清单超过64MB，请分批导入。")
+        records = json.loads(manifest.read_text(encoding="utf-8"))["samples"]
     except (OSError, ValueError, KeyError, TypeError):
         raise GenerationError("照片样本清单读取失败，请重新导入照片。") from None
     if not isinstance(records, list) or not 1 <= len(records) <= 20000:
         raise GenerationError("照片样本清单数量无效。")
     samples = []
-    for record in records:
+    def sample_image(filename):
+        if not isinstance(filename, str) or Path(filename).name != filename or "\\" in filename or "/" in filename:
+            raise GenerationError("照片样本文件名无效。")
+        target = (folder / filename).resolve()
+        if target.parent != folder.resolve():
+            raise GenerationError("照片样本文件不在所选目录内。")
+        return read_image(target)
+
+    def restored_sample(character, image, record, trajectory, ink_width):
+        if "strokes" not in record:
+            return trace_sample(character, image, cancel, trajectory, ink_width)
+        checked = validate_package({"schema": 1, "name": "照片样本", "glyphs": {character: {
+            "advance": 1.0, "variants": [{"strokes": record["strokes"]}]}}})
+        return PhotoSample(character, image, [list(path) for path in checked.glyphs[character]["variants"][0]["strokes"]],
+                           trajectory=trajectory, ink_width=ink_width)
+
+    def restored_frame(record):
+        frame = record.get("source_frame", [])
+        if not isinstance(frame, (list, tuple)) or (frame and (len(frame) != 4 or any(
+                type(v) not in (int, float) or not math.isfinite(v) for v in frame) or min(frame[2:]) <= 0)):
+            raise GenerationError("照片样本来源映射无效。")
+        return tuple(frame)
+
+    def restored_flags(record):
+        flags = record.get("source_flags", [])
+        if not isinstance(flags, list) or any(not isinstance(v, str) for v in flags):
+            raise GenerationError("照片样本质量标记无效。")
+        return tuple(flags)
+
+    for index, record in enumerate(records):
+        checkpoint(cancel)
         if not isinstance(record, dict):
             raise GenerationError("照片样本清单条目无效。")
         char, filename = record.get("character"), record.get("file")
         if not isinstance(char, str) or len(char) != 1 or ord(char) < 33 or not isinstance(filename, str) or Path(filename).name != filename:
             raise GenerationError("照片样本清单包含无效字符或文件名。")
-        samples.append(trace_sample(char, read_image(folder / filename)))
+        image = sample_image(filename)
+        trajectory, ink_width = record.get("trajectory", "continuous"), record.get("ink_width", .03)
+        if trajectory not in ("pen_shape", "continuous", "ink", "legacy") or type(ink_width) not in (int, float) or not math.isfinite(ink_width) or not .001 <= ink_width <= .2:
+            raise GenerationError("照片样本轨迹方式或笔宽无效。")
+        sample = restored_sample(char, image, record, trajectory, ink_width)
+        sample.source_frame = restored_frame(record)
+        sample.line_id = str(record.get("line_id", ""))[:128]
+        sample.note = str(record.get("note", ""))[:2000]
+        sample.source_flags = restored_flags(record)
+        confidence = record.get("confidence")
+        sample.confidence = confidence if type(confidence) in (float, int) and math.isfinite(confidence) and 0 <= confidence <= 1 else None
+        suggestion, score = record.get("label_suggestion", ""), record.get("label_score", 0.0)
+        if isinstance(suggestion, str) and len(suggestion) <= 1 and type(score) in (int, float) and math.isfinite(score) and 0 <= score <= 1:
+            sample.label_suggestion, sample.label_score = suggestion, float(score)
+        if record.get("original_file"):
+            sample.original = sample_image(record["original_file"])
+        raw = record.get("raw")
+        if isinstance(raw, dict):
+            raw_image = sample_image(raw.get("file"))
+            # 校验后直接恢复原路径，避免导入时重新描摹改变已核对的笔迹。
+            restored = restored_sample(char, raw_image, raw, trajectory, ink_width)
+            restored.original, restored.line_id = sample.original, sample.line_id
+            restored.source_frame, restored.source_flags = restored_frame(raw), restored_flags(raw)
+            restored.note, restored.confidence = str(raw.get("note", sample.note))[:2000], sample.confidence
+            restored.label_suggestion, restored.label_score = sample.label_suggestion, sample.label_score
+            sample.calibration_source = restored
+        samples.append(sample)
+        if progress:
+            progress(index + 1, len(records))
+    return samples
+
+
+def photo_font_package(folder, name="照片手写候选"):
+    samples = load_photo_samples(folder)
     return build_photo_package(samples, name)

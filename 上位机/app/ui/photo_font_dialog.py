@@ -9,12 +9,15 @@ from PySide6.QtWidgets import (
 )
 
 from app.generation import GenerationCancelled, GenerationError, read_image
-from app.photo_samples import build_photo_package, export_photo_samples, grid_cells, prepare_photo_samples
+from app.photo_quality import annotate_photo_quality, calibrate_photo_samples
+from app.photo_selection import choose_photo_variants
+from app.photo_samples import build_photo_package, export_photo_samples, grid_cells, load_photo_samples, prepare_photo_samples
 from app.profile import ROOT
 from app.stroke_fonts import FontStore
 from app.ui.font_messages import confirm_font_action
 from app.ui.dialog_window import FunctionDialog
 from app.ui.photo_sample_editor import PhotoSampleEditor
+from app.ui.photo_batch_dialog import PhotoBatchCalibrationDialog
 
 
 class PhotoCanvas(QWidget):
@@ -248,13 +251,20 @@ class PhotoWorker(QThread):
     def run(self):
         try:
             settings = dict(self.settings)
-            if settings.pop("automatic", False):
+            calibration = settings.pop("calibration", "raw")
+            if "load_directory" in settings:
+                samples = load_photo_samples(settings["load_directory"], self.isInterruptionRequested, self.progress.emit)
+            elif settings.pop("automatic", False):
                 from app.photo_ocr import recognize_photo
                 samples = recognize_photo(self.image, cancel=self.isInterruptionRequested, progress=self.progress.emit, **settings)
             else:
                 samples = prepare_photo_samples(self.image, cancel=self.isInterruptionRequested, progress=self.progress.emit, **settings)
             if self.isInterruptionRequested():
                 raise GenerationCancelled()
+            if calibration != "raw":
+                samples, _ = calibrate_photo_samples(samples, calibration, cancel=self.isInterruptionRequested)
+            else:
+                annotate_photo_quality(samples, cancel=self.isInterruptionRequested)
             self.ready.emit(samples)
         except GenerationCancelled:
             self.failed.emit("已取消提取，已收录字形保留。")
@@ -286,6 +296,7 @@ class PhotoFontDialog(FunctionDialog):
         controls = QHBoxLayout(self.controls)
         controls.setContentsMargins(0, 0, 0, 0)
         self.add_button(controls, "导入照片…", self.choose_photo)
+        self.add_button(controls, "导入单字样本…", self.import_samples)
         self.add_button(controls, "顺时针旋转90°", self.rotate)
         self.corner = QCheckBox("四角校正")
         controls.addWidget(self.corner)
@@ -383,12 +394,30 @@ class PhotoFontDialog(FunctionDialog):
         self.separate_neighbors = QCheckBox("沿字间空白分离邻字残痕")
         self.separate_neighbors.setChecked(True)
         form.addRow(self.separate_neighbors)
+        self.suppress_faint = QCheckBox("过滤极淡透印/背景杂字")
+        self.suppress_faint.setChecked(True)
+        self.suppress_faint.setToolTip("比较同页正文墨色，只过滤极淡且识字不可靠的整行；如确需录入淡字，可取消后重新提取。")
+        form.addRow(self.suppress_faint)
+        self.verify_labels = QCheckBox("精细分字与单字复核（较慢，推荐）")
+        self.verify_labels.setChecked(True)
+        form.addRow(self.verify_labels)
         self.trajectory = QComboBox()
         self.trajectory.addItem("笔形单线（改善端头，推荐）", "pen_shape")
         self.trajectory.addItem("连贯单线（保留闭环，减少抬笔）", "continuous")
         self.trajectory.addItem("墨迹还原（轮廓＋填线，较慢）", "ink")
         self.trajectory.addItem("原中线（旧方式对照）", "legacy")
         form.addRow("照片轨迹", self.trajectory)
+        self.calibration = QComboBox()
+        self.calibration.addItem("按行统一尺度，保留自然比例（推荐）", "natural")
+        self.calibration.addItem("统一整齐（等比调整主体字）", "uniform")
+        self.calibration.addItem("保留原始比例，仅检查", "raw")
+        form.addRow("字形校准", self.calibration)
+        self.variant_limit = QSpinBox()
+        self.variant_limit.setRange(1, 16)
+        self.variant_limit.setValue(5)
+        self.variant_limit.setSuffix(" 版 / 字")
+        self.variant_limit.setToolTip("重复字按裁切和轨迹质量择优，再保留不同写法；近似重复自动跳过。原库与已收录批次占用配额，不会被替换。")
+        form.addRow("重复字择优保留", self.variant_limit)
         row = QHBoxLayout()
         self.reference_size, self.pen_width = QDoubleSpinBox(), QDoubleSpinBox()
         self.reference_size.setRange(2, 50)
@@ -442,6 +471,9 @@ class PhotoFontDialog(FunctionDialog):
         row.addWidget(QLabel("本字"))
         row.addWidget(self.correct_character)
         self.correct_button = self.add_button(row, "修改本字", self.correct_sample)
+        self.suggestion_button = self.add_button(row, "采用复核建议", self.use_suggestion)
+        self.suggestion_button.setEnabled(False)
+        self.suggestion_button.setToolTip("建议也可能识错。先对照原字确认，再采用；只修改标签，不修补被裁掉的笔画。")
         row.addStretch()
         side.addLayout(row)
         row = QHBoxLayout()
@@ -453,6 +485,8 @@ class PhotoFontDialog(FunctionDialog):
         self.return_button.setVisible(False)
         side.addLayout(row)
         self.select_valid_button = self.add_button(side, "已核对，勾选有效项", self.select_valid)
+        self.calibrate_button = self.add_button(side, "整批质量检查/校准…", self.batch_calibrate)
+        self.calibrate_button.setToolTip("按整批中位字高和共同基线校准，原始照片与原字库不变。")
         self.preview = SamplePreview()
         self.simulate_pen = QCheckBox("按参考笔宽模拟（仅显示，可取消查看分段）")
         self.simulate_pen.setChecked(True)
@@ -479,6 +513,7 @@ class PhotoFontDialog(FunctionDialog):
         footer.addWidget(self.font_name, 1)
         self.undo_button = self.add_button(footer, "撤销上一批收录", self.undo_batch)
         self.export_button = self.add_button(footer, "导出单字照片样本…", self.export_samples)
+        self.calibrate_collected_button = self.add_button(footer, "校准已收录整批…", self.calibrate_collected)
         self.save_button = self.add_button(footer, "另存为个人字库并返回", self.save_font)
         self.add_button(footer, "关闭", self.reject)
         layout.addLayout(footer)
@@ -497,11 +532,14 @@ class PhotoFontDialog(FunctionDialog):
         self.results.itemDoubleClicked.connect(lambda item: self.canvas.focus_sample())
         self.processing.currentIndexChanged.connect(self.invalidate)
         self.trajectory.currentIndexChanged.connect(self.invalidate)
+        self.calibration.currentIndexChanged.connect(self.invalidate)
         self.trajectory.currentIndexChanged.connect(self.update_trajectory_hint)
         self.reference_size.valueChanged.connect(self.update_pen_reference)
         self.pen_width.valueChanged.connect(self.update_pen_reference)
         self.simulate_pen.toggled.connect(self.update_pen_reference)
         self.separate_neighbors.toggled.connect(self.invalidate)
+        self.suppress_faint.toggled.connect(self.invalidate)
+        self.verify_labels.toggled.connect(self.invalidate)
         self.base_checkbox.toggled.connect(self.change_base)
         self.change_base()
         self.update_collection()
@@ -542,6 +580,25 @@ class PhotoFontDialog(FunctionDialog):
             except (OSError, GenerationError) as error:
                 self.status.setText(str(error))
 
+    def import_samples(self, checked=False, path=None):
+        if self.worker is not None:
+            return
+        if path is None:
+            path = QFileDialog.getExistingDirectory(self, "选择包含samples.json的单字样本目录", str(ROOT / "exports"))
+        if not path:
+            return
+        self.mode.setCurrentIndex(self.mode.findData("auto"))
+        self.invalidate_results()
+        from PySide6.QtGui import QImage
+        self.worker = PhotoWorker(QImage(), dict(load_directory=path), self)
+        self.worker.ready.connect(self.generated)
+        self.worker.failed.connect(self.status.setText)
+        self.worker.progress.connect(self.show_progress)
+        self.worker.finished.connect(self.worker_finished)
+        self.set_busy(True)
+        self.status.setText("正在恢复整批单字样本和质量检查，已有字库不变…")
+        self.worker.start()
+
     def rotate(self):
         if self.canvas.image is not None:
             self.canvas.set_image(self.canvas.image.transformed(QTransform().rotate(90)))
@@ -577,6 +634,8 @@ class PhotoFontDialog(FunctionDialog):
         mode = self.mode.currentData()
         grid = mode == "grid"
         self.separate_neighbors.setVisible(mode == "auto")
+        self.suppress_faint.setVisible(mode == "auto")
+        self.verify_labels.setVisible(mode == "auto")
         for index in self.grid_setting_rows:
             self.settings.layout().setRowVisible(index, grid)
         self.margin.setVisible(mode != "auto")
@@ -590,8 +649,10 @@ class PhotoFontDialog(FunctionDialog):
 
     def invalidate(self):
         self.candidates = []
+        self.suggestion_button.setEnabled(False)
         self.results.clear()
         self.delete_button.setEnabled(False)
+        self.calibrate_button.setEnabled(False)
         self.preview.sample = None
         self.preview.update()
         self.add_batch_button.setEnabled(False)
@@ -617,11 +678,14 @@ class PhotoFontDialog(FunctionDialog):
             settings["processing"] = self.processing.currentData()
             settings["trajectory"] = self.trajectory.currentData()
             settings["ink_width"] = self.pen_width.value() / self.reference_size.value()
+            settings["calibration"] = self.calibration.currentData()
             if automatic:
                 for key in ("characters", "rows", "columns", "gap_x", "gap_y", "margin"):
                     settings.pop(key)
                 settings["automatic"] = True
                 settings["separate_neighbors"] = self.separate_neighbors.isChecked()
+                settings["suppress_faint"] = self.suppress_faint.isChecked()
+                settings["verify_labels"] = self.verify_labels.isChecked()
             self.invalidate_results()
             self.worker = PhotoWorker(self.canvas.image, settings, self)
             self.worker.ready.connect(self.generated)
@@ -636,8 +700,10 @@ class PhotoFontDialog(FunctionDialog):
 
     def invalidate_results(self):
         self.candidates = []
+        self.suggestion_button.setEnabled(False)
         self.results.clear()
         self.delete_button.setEnabled(False)
+        self.calibrate_button.setEnabled(False)
         self.add_batch_button.setEnabled(False)
         self.canvas.sample_boxes = []
         self.preview.sample = None
@@ -666,6 +732,8 @@ class PhotoFontDialog(FunctionDialog):
         # 候选列表独立于调用方；删除或清理候选不应改动识字结果缓存或测试/重框暂存列表。
         self.candidates = list(samples)
         samples = self.candidates
+        if not all(s.quality_checked for s in samples):
+            annotate_photo_quality(samples)
         if self.trajectory.currentData() == "ink":
             for sample in samples:
                 sample.note += f" 墨迹还原参考：字框{self.reference_size.value():g}mm，实际笔迹{self.pen_width.value():g}mm；改变字号/笔宽请重新生成。"
@@ -677,36 +745,52 @@ class PhotoFontDialog(FunctionDialog):
         for index, sample in enumerate(samples):
             item = QListWidgetItem(self.sample_label(index))
             item.setFlags(item.flags() | Qt.ItemFlag.ItemIsUserCheckable)
-            item.setCheckState(Qt.CheckState.Unchecked if sample.error or sample.confidence is not None else Qt.CheckState.Checked)
-            item.setToolTip(sample.error or sample.note)
+            item.setCheckState(Qt.CheckState.Unchecked if sample.error or sample.confidence is not None or sample.quality_blocking else Qt.CheckState.Checked)
+            item.setToolTip(sample.error or sample.note + "\n质量检查：" + ("、".join(sample.quality_flags) or "未发现自动检查项；仍需核对"))
             if sample.error:
                 item.setToolTip(sample.error)
                 item.setFlags(item.flags() & ~Qt.ItemFlag.ItemIsUserCheckable)
             self.results.addItem(item)
         self.results.setCurrentRow(0)
-        bad = sum(bool(sample.error) for sample in samples)
-        self.status.setText(f"提取{len(samples)}个候选，{bad}个提取异常。自动识字项默认不勾选；点击列表核对原字、黑白和轨迹，错字用“修改本字”，裁错用“重框本字”，核对后勾选收录。")
+        bad = sum(bool(sample.error) or sample.quality_blocking for sample in samples)
+        self.calibrate_button.setEnabled(bool(samples) and self.worker is None)
+        self.status.setText(f"提取{len(samples)}个候选，{bad}个需重点核对。自动识字项默认不勾选；可打开“整批质量检查/校准”分页查看全部样本。错字用“修改本字”，裁错用“重框本字”。")
 
     def sample_label(self, index):
         sample = self.candidates[index]
         detail = "需重拍/调整" if sample.error else f"{len(sample.strokes)}条落笔路径"
         if sample.confidence is not None:
             detail += f" · 识字分数{sample.confidence:.2f} · 待核对"
+        if getattr(sample, "quality_flags", ()):
+            detail += " · " + ("重点核对" if sample.quality_blocking else "质量提醒")
+        if sample.label_suggestion:
+            detail += f" · 复核建议{sample.label_suggestion}"
         if "边界穿过" in sample.note:
             detail += " · 连字边界需核对"
         return f"{index + 1:04d}　{sample.character}　{detail}"
+
+    def refresh_quality_items(self):
+        # 改字、删字只重算整批尺寸统计，已有轨迹完整度不用重复描摹检查。
+        annotate_photo_quality(self.candidates, refresh_paths=False)
+        for index, sample in enumerate(self.candidates):
+            item = self.results.item(index)
+            item.setText(self.sample_label(index))
+            item.setToolTip(sample.error or sample.note + "\n质量检查：" + ("、".join(sample.quality_flags) or "未发现自动检查项；仍需核对"))
 
     def show_sample(self, index):
         self.preview.sample = self.candidates[index] if 0 <= index < len(self.candidates) else None
         self.correct_character.setText(self.preview.sample.character if self.preview.sample else "")
         self.delete_button.setEnabled(self.preview.sample is not None and self.worker is None)
+        suggested = self.preview.sample.label_suggestion if self.preview.sample else ""
+        self.suggestion_button.setEnabled(bool(suggested) and self.worker is None)
+        self.suggestion_button.setText(f"采用建议：{suggested}" if suggested else "采用复核建议")
         self.canvas.selected_sample = index
         self.canvas.update()
         self.preview.update()
         if self.preview.sample and self.preview.sample.error:
             self.status.setText(self.preview.sample.error)
-        elif self.preview.sample and self.preview.sample.note:
-            self.status.setText(self.preview.sample.note)
+        elif self.preview.sample:
+            self.status.setText(self.preview.sample.note + " 质量检查：" + ("、".join(self.preview.sample.quality_flags) or "未发现自动检查项；仍需人工核对。"))
 
     def correct_sample(self):
         index = self.results.currentRow()
@@ -716,13 +800,29 @@ class PhotoFontDialog(FunctionDialog):
         if len(char) != 1 or char.isspace() or ord(char) < 33:
             self.status.setText("请填写一个可绘制的字符。")
             return
-        self.candidates[index].character = char
-        self.results.item(index).setText(self.sample_label(index))
+        sample = self.candidates[index]
+        for target in (sample, sample.calibration_source):
+            if target is not None:
+                target.character, target.confidence = char, None
+                for flag in target.source_flags:
+                    if flag.startswith("识字复核"):
+                        target.note = target.note.replace(" " + flag, "")
+                target.source_flags = tuple(f for f in target.source_flags if not f.startswith("识字复核"))
+                target.label_suggestion, target.label_score = "", 0.0
+        self.refresh_quality_items()
+        self.suggestion_button.setEnabled(False)
+        self.results.item(index).setCheckState(Qt.CheckState.Unchecked)
         if self.mode.currentData() == "auto":
             self.characters.blockSignals(True)
             self.characters.setPlainText("".join(sample.character for sample in self.candidates))
             self.characters.blockSignals(False)
         self.status.setText(f"已将当前字标注为“{char}”，保留照片的原始轨迹；请核对后勾选。")
+
+    def use_suggestion(self):
+        index = self.results.currentRow()
+        if self.worker is None and 0 <= index < len(self.candidates) and self.candidates[index].label_suggestion:
+            self.correct_character.setText(self.candidates[index].label_suggestion)
+            self.correct_sample()
 
     def delete_sample(self):
         """删除当前提取候选，不影响原照片、已收录批次或已有字库。"""
@@ -734,8 +834,7 @@ class PhotoFontDialog(FunctionDialog):
         blocked = self.results.blockSignals(True)
         try:
             self.results.takeItem(index)
-            for row in range(len(self.candidates)):
-                self.results.item(row).setText(self.sample_label(row))
+            self.refresh_quality_items()
             self.results.setCurrentRow(min(index, len(self.candidates) - 1))
         finally:
             self.results.blockSignals(blocked)
@@ -746,12 +845,60 @@ class PhotoFontDialog(FunctionDialog):
             self.characters.blockSignals(False)
         self.show_sample(self.results.currentRow())
         self.add_batch_button.setEnabled(bool(self.candidates) and self.worker is None)
+        self.calibrate_button.setEnabled(bool(self.candidates) and self.worker is None)
         self.status.setText(f"已删除候选“{character}”，剩余{len(self.candidates)}项。" + ("可继续删除问题字，核对后点击“已核对，勾选有效项”。" if self.candidates else "本张候选已清空，需要时可重新提取。"))
 
     def select_valid(self):
+        eligible = [index for index, sample in enumerate(self.candidates) if not sample.error and not sample.quality_blocking]
+        selection = choose_photo_variants([self.candidates[i] for i in eligible], self.collected(), self.active_base(), self.variant_limit.value())
+        chosen = {eligible[i] for i in selection.indices}
         for index, sample in enumerate(self.candidates):
-            if not sample.error:
-                self.results.item(index).setCheckState(Qt.CheckState.Checked)
+            self.results.item(index).setCheckState(Qt.CheckState.Checked if index in chosen else Qt.CheckState.Unchecked)
+        skipped = len(self.candidates) - len(eligible)
+        self.status.setText(f"已择优勾选。{selection.summary()} 另有{skipped}个重点问题项未勾选；请集中核对，确认后可手动勾选。")
+
+    def batch_calibrate(self):
+        """对当前整批候选做一次可撤销的质量检查与几何校准。"""
+        if self.worker is not None or not self.candidates:
+            return
+        checked = [self.results.item(index).checkState() for index in range(len(self.candidates))]
+        dialog = PhotoBatchCalibrationDialog(self.candidates, self)
+        dialog.exec()
+        if dialog.result_samples is None:
+            if 0 <= dialog.locate_index < len(self.candidates):
+                self.results.setCurrentRow(dialog.locate_index)
+                self.canvas.focus_sample()
+            return
+        self.show_candidates(dialog.result_samples)
+        retained = dialog.result_indices if dialog.result_indices is not None else list(range(len(dialog.result_samples)))
+        for index, original in enumerate(retained):
+            if not dialog.result_samples[index].quality_blocking:
+                self.results.item(index).setCheckState(checked[original])
+        target = retained.index(dialog.locate_index) if dialog.locate_index in retained else (0 if self.candidates else -1)
+        self.results.setCurrentRow(target)
+        if dialog.locate_index in retained:
+            self.canvas.focus_sample()
+        self.status.setText(f"已应用整批处理，移除{len(checked) - len(retained)}项。请再次核对字形，确认无漏笔、粘连和裁切后再收录。")
+
+    def calibrate_collected(self):
+        samples = self.collected()
+        if self.worker is not None or not samples:
+            return
+        dialog = PhotoBatchCalibrationDialog(samples, self, allow_location=False)
+        dialog.exec()
+        if dialog.result_samples is not None:
+            sizes, offset = [len(batch) for batch in self.batches], 0
+            retained = getattr(dialog, "result_indices", None)
+            kept = dict(zip(retained, dialog.result_samples)) if retained is not None else dict(enumerate(dialog.result_samples))
+            batches = []
+            for size in sizes:
+                batch = [kept[i] for i in range(offset, offset + size) if i in kept]
+                if batch:
+                    batches.append(batch)
+                offset += size
+            self.batches = batches
+            self.status.setText("已校准本次已收录的所有批次，保存时仍另存新字库；原字库不变。")
+            self.update_collection()
 
     def clean_sample(self):
         index = self.results.currentRow()
@@ -760,9 +907,8 @@ class PhotoFontDialog(FunctionDialog):
         dialog = PhotoSampleEditor(self.candidates[index], self.trajectory.currentData(), self)
         if dialog.exec() and dialog.result_sample is not None:
             self.candidates[index] = dialog.result_sample
-            self.results.item(index).setText(self.sample_label(index))
+            self.refresh_quality_items()
             self.results.item(index).setFlags(self.results.item(index).flags() | Qt.ItemFlag.ItemIsUserCheckable)
-            self.results.item(index).setToolTip(dialog.result_sample.note)
             self.results.item(index).setCheckState(Qt.CheckState.Unchecked)
             self.canvas.sample_boxes = self.candidates
             self.show_sample(index)
@@ -815,13 +961,16 @@ class PhotoFontDialog(FunctionDialog):
         self.progress.setValue(value)
 
     def set_busy(self, busy):
-        for widget in (self.controls, self.settings, self.canvas, self.preview_button, self.auto_button, self.font_name, self.base_checkbox, self.correct_character, self.correct_button, self.recrop_button, self.clean_button, self.delete_button, self.return_button, self.select_valid_button, self.results):
+        for widget in (self.controls, self.settings, self.canvas, self.preview_button, self.auto_button, self.font_name, self.base_checkbox, self.correct_character, self.correct_button, self.suggestion_button, self.recrop_button, self.clean_button, self.delete_button, self.return_button, self.select_valid_button, self.calibrate_button, self.results):
             widget.setEnabled(not busy)
         self.cancel_button.setEnabled(busy)
         self.mode.setEnabled(not busy and self.recrop_review is None)
         self.auto_button.setEnabled(not busy and self.recrop_review is None)
         self.delete_button.setEnabled(not busy and 0 <= self.results.currentRow() < len(self.candidates))
         self.add_batch_button.setEnabled(not busy and bool(self.candidates))
+        self.calibrate_button.setEnabled(not busy and bool(self.candidates))
+        index = self.results.currentRow()
+        self.suggestion_button.setEnabled(not busy and 0 <= index < len(self.candidates) and bool(self.candidates[index].label_suggestion))
         self.update_collection(busy)
 
     def worker_finished(self):
@@ -844,22 +993,31 @@ class PhotoFontDialog(FunctionDialog):
         return [sample for batch in self.batches for sample in batch]
 
     def collect(self):
-        samples = [sample for index, sample in enumerate(self.candidates) if not sample.error and self.results.item(index).checkState() == Qt.CheckState.Checked]
+        samples = [sample for index, sample in enumerate(self.candidates)
+                   if not sample.error
+                   and self.results.item(index).checkState() == Qt.CheckState.Checked]
         try:
             if not samples:
-                raise GenerationError("请至少勾选一个有效字格。")
+                raise GenerationError("请至少核对并勾选一个有效字格；重点问题请先重框、清理或删除。")
+            selection = choose_photo_variants(samples, self.collected(), self.active_base(), self.variant_limit.value())
+            samples = [samples[i] for i in selection.indices]
+            if not samples:
+                self.status.setText("本批没有需新增的版本。" + selection.summary() + " 可保留候选继续核对，或提高每字版本配额。")
+                return
             build_photo_package(self.collected() + samples, self.font_name.text(), self.active_base())
             self.batches.append(samples)
             self.add_batch_button.setEnabled(False)
             self.candidates = []
+            self.suggestion_button.setEnabled(False)
             self.results.clear()
             self.delete_button.setEnabled(False)
+            self.calibrate_button.setEnabled(False)
             self.canvas.sample_boxes = []
             self.canvas.update()
             self.preview.sample = None
             self.preview.update()
             self.update_collection()
-            self.status.setText(f"已收录{len(samples)}格。可换照片/框选下一个字继续录入，完成后另存为个人字库。")
+            self.status.setText("本批已收录。" + selection.summary() + " 可继续导入下一张照片；完成后另存为个人字库。")
         except GenerationError as error:
             self.status.setText(str(error))
 
@@ -873,7 +1031,7 @@ class PhotoFontDialog(FunctionDialog):
         samples = self.collected()
         base_count = len(self.active_base().glyphs) if self.active_base() else 0
         self.collection_status.setText(f"本次收录：{len(set(sample.character for sample in samples))}种字 / {len(samples)}版 / {len(self.batches)}批；保留原库{base_count}字。每字最多16版，整套最多20000种字及200万轨迹点。")
-        for button in (self.save_button, self.export_button, self.undo_button):
+        for button in (self.save_button, self.export_button, self.undo_button, self.calibrate_collected_button):
             button.setEnabled(bool(samples) and not busy)
 
     def save_font(self):
@@ -890,7 +1048,7 @@ class PhotoFontDialog(FunctionDialog):
         if path:
             try:
                 export_photo_samples(self.collected(), path)
-                self.status.setText("已导出单字PNG、samples.json与photo-font.json。可作为SDT图片参考；这不是带真实笔顺的手录数据。")
+                self.status.setText("已导出单字、原始裁切、校准前样本及清单；以后可用“导入单字样本”继续整批校准，不必重新识字。照片没有真实笔顺。")
             except (OSError, GenerationError) as error:
                 self.status.setText(str(error))
 

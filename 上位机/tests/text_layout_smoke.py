@@ -79,7 +79,7 @@ output = ROOT / ".runtime" / "正文第二页.ngc"
 dialog.up_feed.setValue(1000)
 dialog.down_feed.setValue(900)
 dialog.font_preset.setCurrentIndex(dialog.font_preset.findData(12))
-dialog.letter_spacing.setValue(0.1)
+dialog.letter_spacing.setValue(-0.2)
 dialog.paragraph_spacing.setValue(1)
 dialog.indent.setValue(2)
 dialog.alignment.setCurrentIndex(dialog.alignment.findData("center"))
@@ -97,7 +97,7 @@ dialog.reject()
 
 dialog = GenerationDialog(MachineProfile(pen_up=4), "text")
 assert dialog.font_size.value() == 12 and dialog.font_preset.currentData() == 12
-assert dialog.letter_spacing.value() == 0.1 and dialog.indent.value() == 2
+assert dialog.letter_spacing.value() == -0.2 and dialog.indent.value() == 2
 assert dialog.paragraph_spacing.value() == 1 and dialog.margin_bottom.value() == 245
 assert dialog.bold.isChecked() and dialog.alignment.currentData() == "center"
 assert dialog.up_feed.value() == 1000 and dialog.down_feed.value() == 900 and dialog.pen_up.value() == 4

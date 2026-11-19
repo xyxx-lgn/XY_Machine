@@ -111,7 +111,9 @@ assert photo.results.item(1).text().startswith("0002")
 assert photo.results.item(1).checkState() == Qt.CheckState.Checked
 assert photo.preview.sample is samples[1] and photo.canvas.selected_sample == 1
 photo.select_valid()
-assert all(photo.results.item(i).checkState() == Qt.CheckState.Checked for i in range(2))
+# 已收录的完全相同版本不再勾选；本张的新字仍可直接收录。
+assert photo.results.item(0).checkState() == Qt.CheckState.Unchecked
+assert photo.results.item(1).checkState() == Qt.CheckState.Checked
 photo.results.setCurrentRow(0)
 photo.delete_button.click()
 assert photo.candidates == [samples[1]] and photo.preview.sample is samples[1]
@@ -167,6 +169,25 @@ assert "识字失败验证" in photo.status.text() and not photo.candidates
 assert photo.auto_button.isEnabled() and photo.progress.maximum() > 0
 
 report = dict(small_number_pixels=int(diff.sum()), chinese_buttons=modal["labels"], recrop_preserved_candidates=True, candidate_deletion=True)
+# 大量重复不阻断整批；改复核建议保留路径，并清除已核对的识字分歧。
+from dataclasses import replace
+repeated = [replace(samples[0], character="动", strokes=[[(.1 + i * .025, .2), (.1 + i * .025, .8)]]) for i in range(25)]
+photo.show_candidates(repeated)
+for i in range(25):
+    photo.results.item(i).setCheckState(Qt.CheckState.Checked)
+photo.collect()
+assert len(photo.collected()) == 5 and "超过每字配额20版" in photo.status.text()
+photo.undo_batch()
+proposed = replace(samples[0], character="系", label_suggestion="条", label_score=.97,
+                   source_flags=("识字复核分歧：系/条",), note=" 识字复核分歧：系/条", confidence=.99)
+paths = proposed.strokes
+photo.show_candidates([proposed])
+assert photo.suggestion_button.isEnabled()
+photo.suggestion_button.click()
+assert proposed.character == "条" and proposed.strokes is paths and not proposed.label_suggestion
+assert not proposed.source_flags and proposed.confidence is None
+photo.invalidate_results()
+report.update(duplicate_batch_selection=True, reviewed_label_preserves_paths=True)
 if len(sys.argv) > 1:
     # 阻断Python联网入口，实际加载本地ONNX模型并从用户照片提取；不替换识字结果。
     def offline(*args, **kwargs):

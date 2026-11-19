@@ -12,6 +12,19 @@
     "ch_ppocr_mobile_v2.0_cls_infer.onnx": {
       "bytes": 585532,
       "sha256": "e47acedf663230f8863ff1ab0e64dd2d82b838fceb5957146dab185a89d6215c"
+    },
+    "ch_PP-OCRv5_rec_server.onnx": {
+      "sha256": "e09385400eaaaef34ceff54aeb7c4f0f1fe014c27fa8b9905d4709b65746562a",
+      "url": "https://www.modelscope.cn/models/RapidAI/RapidOCR/resolve/v3.10.0/onnx/PP-OCRv5/rec/ch_PP-OCRv5_rec_server.onnx",
+      "bytes": 84577022
+    },
+    "ch_PP-OCRv5_det_mobile.onnx": {
+      "sha256": "4d97c44a20d30a81aad087d6a396b08f786c4635742afc391f6621f5c6ae78ae",
+      "url": "https://www.modelscope.cn/models/RapidAI/RapidOCR/resolve/v3.10.0/onnx/PP-OCRv5/det/ch_PP-OCRv5_det_mobile.onnx",
+      "bytes": 4819576
     }
-  }
+  },
+  "source": "PaddleOCR PP-OCRv5; ONNX conversion distributed by RapidAI/RapidOCR",
+  "license": "Apache-2.0",
+  "upstream": "https://github.com/PaddlePaddle/PaddleOCR"
 }

@@ -218,15 +218,14 @@ def stroke_ink(strokes, width):
     return stroker.createStroke(path)
 
 
-def wrap_paragraph(paragraph, capacity, first_capacity, em, spacing, advances=None):
+def wrap_paragraph(paragraph, capacity, first_capacity, advances, gaps):
     # 优先在空格处换英文单词；连续长单词允许断开，中文避免常见标点挂在行首。
     rows, start = [], 0
     while start < len(paragraph):
         limit = first_capacity if not rows else capacity
         width, end = 0.0, start
         while end < len(paragraph):
-            advance = (advances[end] if advances is not None else stroke_glyph(paragraph[end]).advance) * em
-            following = width + (spacing if end > start else 0) + advance
+            following = width + (gaps[end - 1] if end > start else 0) + advances[end]
             if following > limit + 1e-8:
                 break
             width = following
@@ -246,7 +245,24 @@ def wrap_paragraph(paragraph, capacity, first_capacity, em, spacing, advances=No
     return rows or [""]
 
 
-def layout_stroke_text(text, options=None, pen_width=0.18, writing=None):
+def stroke_letter_gaps(prepared, advances, spacing):
+    gaps = [spacing] * max(0, len(prepared) - 1)
+    if spacing >= 0 or not gaps:
+        return gaps
+    # 只收紧相邻笔迹之间现有的留白，已经接近的字保持原距离。使用同一组字距换行和定位。
+    bounds = [ink.boundingRect() for _, _, _, ink in prepared]
+    for index, (before, after) in enumerate(zip(bounds, bounds[1:])):
+        # 窄标点和空格也要保有正向宽度，使换行累计宽度单调增加。
+        limit = -min(advances[index], advances[index + 1]) / 2
+        if not before.isEmpty() and not after.isEmpty():
+            limit = max(limit, min(0, before.right() + .02 - after.left() - advances[index]))
+        else:
+            limit /= 2  # 显式空格两边都可能收紧，保留它与普通字间留白的区别。
+        gaps[index] = max(spacing, limit)
+    return gaps
+
+
+def layout_stroke_text(text, options=None, pen_width=0.18, writing=None, paragraph_alignments=None, paragraph_font_sizes=None):
     """先确定每个字的版本和自然变化，再按实际宽度换行，预览与发送共用这份轨迹。"""
     options = options or TextOptions()
     writing = writing or WritingOptions()
@@ -255,7 +271,7 @@ def layout_stroke_text(text, options=None, pen_width=0.18, writing=None):
     if not math.isfinite(pen_width) or not 0.05 <= pen_width <= 1.5:
         raise GenerationError("预览笔迹线宽应为0.05～1.5mm。")
     validate_text(text, writing)
-    rect, em, natural = options.content_rect, options.em_mm, writing.natural
+    rect, natural = options.content_rect, writing.natural
     name = writing.package.name if writing.package else BUILTIN_FONTS.get(writing.builtin_font, "单线楷体笔画")
     notes = [f"笔画字库：{name}；英文：{dict(LATIN_STYLES)[writing.latin_style]}。"]
     if writing.package is not None and writing.fallback:
@@ -269,16 +285,27 @@ def layout_stroke_text(text, options=None, pen_width=0.18, writing=None):
         notes.append("本字体是自动提取的中线路径，不能保证标准笔顺；仍按行逐字完成，不进行填充。")
     pages, cache = [TextPage(stroke_width=pen_width, writing_notes=notes, stroke_ordered=ordered)], {}
     inner = rect.adjusted(pen_width / 2, pen_width / 2, -pen_width / 2, -pen_width / 2)
-    reserve = .08 * em * natural.baseline if natural.enabled else 0
-    height = em + 2 * reserve
-    if inner.height() < height:
-        raise GenerationError("可写高度不足以容纳当前字号和自然变化，请减小字号或页边距。")
     y, occurrence, line_index = inner.top(), 0, 0
-    for paragraph in text.replace("\r\n", "\n").replace("\r", "\n").expandtabs(4).split("\n"):
+    paragraphs = text.replace("\r\n", "\n").replace("\r", "\n").expandtabs(4).split("\n")
+    if paragraph_alignments is not None and len(paragraph_alignments) != len(paragraphs):
+        paragraph_alignments = None
+    if paragraph_font_sizes is not None and len(paragraph_font_sizes) != len(paragraphs):
+        paragraph_font_sizes = None
+    for paragraph_index, paragraph in enumerate(paragraphs):
+        size = (paragraph_font_sizes[paragraph_index] if paragraph_font_sizes else None) or options.font_size
+        em = size * 25.4 / 72
+        reserve = .08 * em * natural.baseline if natural.enabled else 0
+        height = em + 2 * reserve
+        if inner.height() < height:
+            raise GenerationError("可写高度不足以容纳当前字号和自然变化，请减小字号或页边距。")
+        paragraph_alignment = paragraph_alignments[paragraph_index] if paragraph_alignments else options.alignment
+        if paragraph_alignment not in ("left", "center", "right"):
+            paragraph_alignment = options.alignment
         prepared = []
         for char in paragraph:
             key = (char, occurrence) if natural.enabled else char
-            if key not in cache:
+            cache_key = (key, size)
+            if cache_key not in cache:
                 glyph = resolve_glyph(char, writing, occurrence)
                 strokes, advance = natural_glyph(glyph.strokes, glyph.advance, natural, occurrence)
                 if natural.enabled and natural.spacing:
@@ -286,11 +313,13 @@ def layout_stroke_text(text, options=None, pen_width=0.18, writing=None):
                     right = max((x for path in strokes for x, y in path), default=0)
                     advance = max(advance + delta, right + pen_width / em + .025)
                 strokes = tuple(tuple((x * em, y * em) for x, y in stroke) for stroke in strokes)
-                cache[key] = (strokes, advance, stroke_ink(strokes, pen_width))
-            prepared.append((key, *cache[key]))
+                cache[cache_key] = (strokes, advance, stroke_ink(strokes, pen_width))
+            prepared.append((key, *cache[cache_key]))
             occurrence += 1
-        indent = options.indent * em if options.alignment == "left" else 0
-        rows = wrap_paragraph(paragraph, inner.width(), inner.width() - indent, em, options.letter_spacing, [item[2] for item in prepared])
+        indent = options.indent * em if paragraph_alignment == "left" else 0
+        advances = [advance * em for _, _, advance, _ in prepared]
+        gaps = stroke_letter_gaps(prepared, advances, options.letter_spacing)
+        rows = wrap_paragraph(paragraph, inner.width(), inner.width() - indent, advances, gaps)
         cursor = 0
         for row, content in enumerate(rows):
             if y + height > inner.bottom() + 1e-7:
@@ -298,17 +327,30 @@ def layout_stroke_text(text, options=None, pen_width=0.18, writing=None):
                     raise GenerationError("正文超过100页，请分成多个文稿。")
                 pages.append(TextPage(stroke_width=pen_width, writing_notes=notes, stroke_ordered=ordered))
                 y = inner.top()
-            entries = prepared[cursor:cursor + len(content)]
-            cursor += len(content)
+            start, end = cursor, cursor + len(content)
+            cursor = end
             while cursor < len(paragraph) and paragraph[cursor] == " ":
                 cursor += 1
-            width = sum(item[2] * em for item in entries) + max(0, len(content) - 1) * options.letter_spacing
-            dx = {"left": indent if row == 0 else 0, "center": (inner.width() - width) / 2, "right": inner.width() - width}[options.alignment]
+            width = sum(advances[start:end]) + (sum(gaps[start:end - 1]) if end > start else 0)
+            dx = {"left": indent if row == 0 else 0, "center": (inner.width() - width) / 2, "right": inner.width() - width}[paragraph_alignment]
+            if paragraph_alignment == "center":
+                ink_left, ink_right, offset = math.inf, -math.inf, 0.0
+                for index in range(start, end):
+                    ink = prepared[index][3]
+                    if not ink.isEmpty():
+                        bounds = ink.boundingRect()
+                        ink_left = min(ink_left, offset + bounds.left())
+                        ink_right = max(ink_right, offset + bounds.right())
+                    if index + 1 < end:
+                        offset += advances[index] + gaps[index]
+                if ink_left <= ink_right:
+                    dx = (inner.width() - ink_left - ink_right) / 2
             x, path, characters = inner.left() + dx, QPainterPath(), []
             path.setFillRule(Qt.FillRule.WindingFill)
             row_rng = seeded_random(natural.seed, "row", line_index)
             tilt, phase = row_rng.uniform(-.25, .25), row_rng.uniform(0, math.tau)
-            for key, strokes, advance, ink in entries:
+            for index in range(start, end):
+                key, strokes, _, ink = prepared[index]
                 baseline = 0
                 if natural.enabled:
                     t = (x - inner.left()) / max(1, inner.width())
@@ -318,10 +360,11 @@ def layout_stroke_text(text, options=None, pen_width=0.18, writing=None):
                 if strokes:
                     characters.append(TextCharacter(ink, position, (name, key, em), strokes))
                     path.addPath(ink.translated(position))
-                x += advance * em + options.letter_spacing
+                if index + 1 < end:
+                    x += advances[index] + gaps[index]
             if not path.isEmpty() and not rect.adjusted(-.001, -.001, .001, .001).contains(path.boundingRect()):
                 raise GenerationError("字形或自然变化超出页边距，请调整字号、强度或字库。")
-            pages[-1].lines.append(TextLine(content, path, y, height, characters))
+            pages[-1].lines.append(TextLine(content, path, y, height, characters, size))
             y += height * options.line_spacing
             line_index += 1
         y += options.paragraph_spacing

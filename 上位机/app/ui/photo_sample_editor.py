@@ -120,6 +120,8 @@ class PhotoSampleEditor(FunctionDialog):
         try:
             result = trace_sample(self.sample.character, self.canvas.image, trajectory=self.trajectory, ink_width=self.sample.ink_width)
             result.original, result.box, result.confidence = self.sample.original, self.sample.box, self.sample.confidence
+            result.line_id, result.source_frame = self.sample.line_id, self.sample.source_frame
+            # 清理结果作为新的校准起点，避免下次批量校准恢复已擦掉的邻字残痕。
             result.note = "本字已手工清理并重算轨迹，请重新核对后勾选。"
             self.result_sample = result
             self.accept()

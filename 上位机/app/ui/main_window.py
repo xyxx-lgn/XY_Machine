@@ -11,12 +11,13 @@ from PySide6.QtWidgets import (
     QCheckBox, QComboBox, QDoubleSpinBox, QFormLayout, QFrame, QGridLayout,
     QGroupBox, QHBoxLayout, QLabel, QLineEdit, QMainWindow, QMessageBox,
     QPlainTextEdit, QProgressBar, QPushButton, QScrollArea, QSplitter,
-    QVBoxLayout, QWidget, QFileDialog
+    QVBoxLayout, QWidget, QFileDialog, QInputDialog
 )
 
 from app.controller import GrblController
 from app.job import JobRunner
 from app.loader import ProgramLoader
+from app.page_batches import page_number, read_page_batch
 from app.profile import ROOT, MachineProfile
 from app.transport import SIMULATOR, SerialTransport
 from app.ui.preview_widget import PreviewWidget
@@ -60,6 +61,12 @@ class MainWindow(QMainWindow):
         self.start_read_pending = False
         self.start_snapshot = None
         self.start_travel = None
+        self.batch_paths = []
+        self.batch_index = -1
+        self.batch_waiting = False
+        self.batch_next_start = False
+        self.batch_prompt = None
+        self.batch_next_button = None
         self.log_buffer = deque(maxlen=2000)
         self.suppressed_lines = 0
         self.summary_at = time.monotonic()
@@ -125,6 +132,8 @@ class MainWindow(QMainWindow):
         header.addStretch()
         self.import_button = self.button("导入G代码", self.import_file, True)
         header.addWidget(self.import_button)
+        self.open_batch_button = self.button("打开分页任务…", self.open_batch_tasks)
+        header.addWidget(self.open_batch_button)
         self.image_button = self.button("图片生成", lambda: self.open_generator("image"))
         self.text_button = self.button("文字生成", lambda: self.open_generator("text"))
         header.addWidget(self.image_button)
@@ -337,7 +346,9 @@ class MainWindow(QMainWindow):
         self.controller.notice.connect(self.show_notice)
         self.controller.acknowledged.connect(self.start_settings_received)
         self.controller.interrupted.connect(self.cancel_start_check)
+        self.controller.interrupted.connect(self.interrupt_batch)
         self.job.changed.connect(self.schedule_view)
+        self.job.changed.connect(self.handle_batch_job)
         self.baseline_check.toggled.connect(self.controller.confirm_baseline)
         self.jog_step.valueChanged.connect(lambda value: setattr(self.profile, "jog_step", value))
         self.jog_feed.valueChanged.connect(lambda value: setattr(self.profile, "jog_feed", value))
@@ -367,22 +378,157 @@ class MainWindow(QMainWindow):
         return group
 
     def open_generator(self, kind):
-        if self.loading or self.job.active:
+        if self.loading or self.job.active or self.batch_paths:
             return
         dialog = GenerationDialog(self.profile, kind, self)
-        if dialog.exec() == GenerationDialog.DialogCode.Accepted and dialog.loaded_task:
-            self.load_generated(dialog.loaded_task)
+        if dialog.exec() == GenerationDialog.DialogCode.Accepted:
+            if dialog.batch_paths:
+                self.load_batch_tasks(dialog.batch_paths)
+            elif dialog.loaded_task:
+                self.load_generated(dialog.loaded_task)
         dialog.deleteLater()
 
     def load_generated(self, task):
         if self.loading or self.job.active:
             return
+        self.clear_batch_tasks()
         self.job.load(task.program)
         self.preview.set_program(task.program)
         self.preview.fit_job()
         self.append_log("生成", f"{task.program.path.name}：{task.path_count}条路径，{len(task.program.commands)}条命令，未发送。")
         self.show_notice("生成任务已载入。Z/F固定在本次文件中；确认机器原点、Z基准并抬笔后，点击“开始发送”。")
         self.update_view()
+
+    def open_batch_tasks(self):
+        if self.loading or self.job.active or self.batch_paths:
+            return
+        folder = QFileDialog.getExistingDirectory(self, "选择批量导出生成的分页任务文件夹", str(ROOT / "exports"))
+        if not folder:
+            return
+        try:
+            paper, paths, issues = read_page_batch(folder)
+        except (OSError, ValueError) as error:
+            self.show_notice("无法打开分页任务：" + str(error))
+            return
+        if not paths:
+            reason = next(iter(issues.values()), "清单只有空白页")
+            self.show_notice(f"分页任务没有可载入的页面（{reason}）。")
+            return
+
+        choices = {f"第{number}页": number for number in paths}
+        message = f"任务纸张：{paper[0]:g} × {paper[1]:g} mm\n请选择从哪一页开始。空白页自动跳过。"
+        current_paper = self.profile.paper_width, self.profile.paper_height
+        if current_paper != paper:
+            message += f"\n主窗口纸张：{current_paper[0]:g} × {current_paper[1]:g} mm。发送前请核对纸张尺寸。"
+        if issues:
+            message += "\n部分页面未完整导出，请选择后续完整页段的起始页。"
+        choice, accepted = QInputDialog.getItem(self, "选择起始页", message, list(choices), 0, False)
+        if not accepted:
+            return
+        first = choices[choice]
+        blocked = next((issue for number, issue in issues.items() if number >= first), None)
+        if blocked:
+            self.show_notice(f"第{first}页起的任务不完整：{blocked}。请重新导出，或选择问题页之后的起始页。")
+            return
+        self.load_batch_tasks([path for number, path in paths.items() if number >= first])
+
+    def load_batch_tasks(self, paths):
+        """载入生成器或已导出任务的首个待写页，等待手动开始。"""
+        if self.loading or self.job.active or self.batch_paths:
+            return
+        paths = [Path(path) for path in paths]
+        if not paths or any(not path.is_file() for path in paths):
+            self.show_notice("分页任务文件缺失，未载入；请重新批量生成。")
+            return
+        self.batch_paths = paths
+        self.batch_index = 0
+        self.append_log("BATCH", f"从文档{self.batch_page_label(0)}开始，共{len(paths)}个待写页。")
+        self.begin_load(paths[0])
+
+    def batch_page_label(self, index):
+        number = page_number(self.batch_paths[index])
+        return f"第{number if number is not None else index + 1}页"
+
+    def clear_batch_tasks(self):
+        if self.batch_paths:
+            self.append_log("BATCH", "已结束分页任务队列；不会自动载入下一页。")
+        self.batch_paths = []
+        self.batch_index = -1
+        self.batch_waiting = False
+        self.batch_next_start = False
+        if self.batch_prompt is not None:
+            box, self.batch_prompt = self.batch_prompt, None
+            self.batch_next_button = None
+            box.close()
+            box.deleteLater()
+
+    def interrupt_batch(self, reason):
+        if self.batch_paths:
+            self.clear_batch_tasks()
+            self.show_notice("分页队列已结束，后续页面不会自动执行：" + reason)
+            self.schedule_view()
+
+    def handle_batch_job(self):
+        if not self.batch_paths or self.batch_waiting:
+            return
+        if self.job.result == "complete" and not self.job.active:
+            self.batch_waiting = True
+            QTimer.singleShot(0, self.batch_page_finished)
+        elif self.job.result == "aborted" and not self.job.active:
+            self.show_notice("当前分页任务已中止，后续页面不会自动执行。")
+            self.clear_batch_tasks()
+
+    def batch_page_finished(self):
+        if not self.batch_paths or self.job.result != "complete":
+            self.batch_waiting = False
+            return
+        current = self.batch_page_label(self.batch_index)
+        total = len(self.batch_paths)
+        if self.batch_index + 1 >= total:
+            self.clear_batch_tasks()
+            box = QMessageBox(QMessageBox.Icon.Information, "批量任务完成", f"文档{current}已书写完成，设备已回到Idle。\n本次选择的{total}个待写页已全部完成。", parent=self)
+            box.addButton("确定", QMessageBox.ButtonRole.AcceptRole)
+            box.setAttribute(Qt.WidgetAttribute.WA_DeleteOnClose)
+            box.show()
+            self.update_view()
+            return
+        next_page = self.batch_page_label(self.batch_index + 1)
+        box = QMessageBox(QMessageBox.Icon.Information, "本页书写完成，请手动换纸",
+                          f"文档{current}已完成，接下来书写{next_page}。\n\n请确认笔尖离纸，再手动更换纸张并固定。\n纸张与上一页对齐时沿用原G54原点；摆放位置改变时，请在主窗口重设XY原点。更换笔或纸张厚度后还需检查Z基准。\n\n换纸完成后点击下方按钮，将检查并开始下一页。等待期间可在主窗口操作。", parent=self)
+        next_button = box.addButton("换纸完成，开始下一页", QMessageBox.ButtonRole.AcceptRole)
+        stop_button = box.addButton("结束分页任务", QMessageBox.ButtonRole.RejectRole)
+        box.setDefaultButton(stop_button)
+        box.setEscapeButton(stop_button)
+        box.setWindowModality(Qt.WindowModality.NonModal)
+        self.batch_prompt = box
+        self.batch_next_button = next_button
+        box.finished.connect(lambda result: self.batch_paper_confirmed(box, next_button))
+        box.show()
+        self.update_view()
+
+    def batch_paper_confirmed(self, box, next_button):
+        if self.batch_prompt is not box:
+            return
+        self.batch_prompt = None
+        self.batch_next_button = None
+        self.batch_waiting = False
+        proceed = box.clickedButton() == next_button
+        box.deleteLater()
+        if not self.batch_paths:
+            return
+        if not proceed:
+            self.clear_batch_tasks()
+            self.show_notice("已结束分页任务，后续页面未发送。")
+            self.update_view()
+            return
+        self.batch_index += 1
+        self.batch_next_start = True
+        self.append_log("BATCH", f"用户确认换纸，准备检查并开始文档{self.batch_page_label(self.batch_index)}。")
+        self.begin_load(self.batch_paths[self.batch_index])
+
+    def start_next_batch_page(self):
+        if self.batch_paths and self.batch_next_start and not self.loading and self.controller.available:
+            self.start_job(batch_confirmed=True)
 
     def export_program(self, checked=False, path=None):
         if not self.job.program or self.job.active or self.loading:
@@ -404,7 +550,7 @@ class MainWindow(QMainWindow):
         self.preview.update()
 
     def import_file(self, checked=False, path=None):
-        if self.loading or self.job.active:
+        if self.loading or self.job.active or self.batch_paths:
             return
         if path is None:
             path, _ = QFileDialog.getOpenFileName(self, "导入G代码（不会自动发送）", str(ROOT), "G代码 (*.nc *.ngc *.gcode *.gc *.tap *.txt);;所有文件 (*)")
@@ -442,8 +588,12 @@ class MainWindow(QMainWindow):
 
     def program_failed(self, message, for_start=False):
         self.loading = False
+        self.batch_next_start = False
         # 检查失败保留已载入的任务；任何任务行都尚未发送。
         self.show_notice(("发送前检查未通过：" if for_start else "文件分析失败，未载入新任务：") + message)
+        if not for_start and self.batch_paths:
+            self.show_notice("分页任务载入失败，后续页面不会自动执行：" + message)
+            self.clear_batch_tasks()
         self.update_view()
         if for_start:
             QMessageBox.warning(self, "任务检查未通过，未发送", message)
@@ -455,8 +605,14 @@ class MainWindow(QMainWindow):
             self.preview.set_program(program)
             self.preview.fit()
             self.append_log("FILE", f"已载入 {program.path.name}，{len(program.commands)} 条命令；原文件保持不变。")
-            self.show_notice("导入完成，仅预览；检查范围及Z高度后点击“开始发送”。")
+            if self.batch_next_start:
+                self.show_notice(f"正在准备文档{self.batch_page_label(self.batch_index)}的发送前检查。")
+            elif self.batch_paths:
+                self.show_notice(f"文档{self.batch_page_label(self.batch_index)}已载入；确认G54原点、Z基准和范围后点击“开始发送”。")
+            else:
+                self.show_notice("导入完成，仅预览；检查范围及Z高度后点击“开始发送”。")
         else:
+            batch_confirmed, self.batch_next_start = self.batch_next_start, False
             program.preview_pen_threshold = self.job.program.preview_pen_threshold
             if not self.start_context_valid():
                 self.show_notice("检查期间设备状态/坐标发生变化，请等待Idle后重新点击开始。")
@@ -478,7 +634,8 @@ class MainWindow(QMainWindow):
             if issues:
                 summary += "\n" + "\n".join(issues) + "\n"
             summary += "\n已回零、建立G54纸张原点和Z基准，并确认笔尖离纸？开始发送？"
-            if self.confirm("开始文件任务", summary):
+            # 换纸按钮已明确授权下一页；仍完整执行坐标、Z范围和行程检查。
+            if (batch_confirmed and not issues) or self.confirm("开始文件任务", summary):
                 if not self.start_context_valid():
                     self.show_notice("确认期间设备状态、坐标或行程参数发生变化，任务未发送。请重新开始检查。")
                     self.update_view()
@@ -508,6 +665,7 @@ class MainWindow(QMainWindow):
 
     def cancel_start_check(self, message):
         self.start_snapshot = None
+        self.batch_next_start = False
         if self.start_read_pending:
             self.start_read_pending = False
             self.loading = False
@@ -520,14 +678,19 @@ class MainWindow(QMainWindow):
         self.start_read_pending = False
         if reply != "ok" or not self.start_context_valid():
             self.loading = False
+            self.batch_next_start = False
             self.show_notice("读取行程失败或设备状态/坐标已变化，任务未发送。等待Idle后重新开始。")
             self.update_view()
             return
         self.begin_load(self.job.program.path, True)
 
-    def start_job(self):
+    def start_job(self, *, batch_confirmed=False):
+        self.batch_next_start = False
         controller = self.controller
-        if self.loading or not self.job.program or not controller.require_idle():
+        if self.loading or self.batch_waiting or not self.job.program:
+            return
+        if not controller.require_idle():
+            self.show_notice("设备尚未空闲，任务未发送；等待Idle后点击“开始发送”。")
             return
         if self.profile.z_mode != "stepper":
             self.show_notice("本阶段文件通道支持步进Z。舵机手动命令已预留，文件转换需配套固件协议，暂不把Z文件直接发给舵机。")
@@ -544,6 +707,7 @@ class MainWindow(QMainWindow):
         # 每次开始都重新读$$，不能用上一次连接或改参数之前的行程判断。
         self.start_snapshot = self.current_start_context()
         self.start_travel = None
+        self.batch_next_start = batch_confirmed
         self.loading = self.start_read_pending = True
         controller.settings.clear()
         self.show_notice("正在读取设备行程并检查整个任务；尚未发送G代码…")
@@ -556,6 +720,11 @@ class MainWindow(QMainWindow):
             self.controller.pause()
             if self.confirm("中止任务", "已请求暂停。确认后发Ctrl+X软复位。设备可能停在纸面；请重新确认坐标和Z基准。不会从中断行自动继续。是否中止？"):
                 self.job.stop()
+                self.clear_batch_tasks()
+        elif self.batch_paths:
+            self.clear_batch_tasks()
+            self.show_notice("分页队列已结束，后续页面未发送。")
+            self.update_view()
 
     def update_job_view(self):
         job = self.job
@@ -726,14 +895,23 @@ class MainWindow(QMainWindow):
         self.pause_button.setEnabled(connected)
         self.resume_button.setEnabled(normal and controller.state == "Hold:0")
         self.jog_cancel_button.setEnabled(connected and controller.state == "Jog")
-        self.import_button.setEnabled(not self.job.active and not self.loading)
-        self.image_button.setEnabled(not self.job.active and not self.loading)
-        self.text_button.setEnabled(not self.job.active and not self.loading)
+        batch_locked = bool(self.batch_paths)
+        for button in (self.import_button, self.open_batch_button, self.image_button, self.text_button):
+            button.setEnabled(not self.job.active and not self.loading and not batch_locked)
         self.export_button.setEnabled(not self.job.active and not self.loading and self.job.program is not None)
-        self.start_button.setEnabled(available and not self.loading and self.job.program is not None and z_ready and self.profile.z_mode == "stepper")
-        self.stop_button.setEnabled(self.job.active and connected)
+        self.start_button.setEnabled(available and not self.loading and not self.batch_waiting and self.job.program is not None and z_ready and self.profile.z_mode == "stepper")
+        self.stop_button.setEnabled((self.job.active and connected) or (batch_locked and not self.loading))
+        self.stop_button.setText("中止任务" if self.job.active or not batch_locked else "结束分页任务")
+        if self.batch_next_button is not None:
+            self.batch_next_button.setEnabled(available and controller.baseline_confirmed and controller.pen_clear())
+        if available and self.batch_next_start:
+            # 等待上页结束时发出的模态和坐标查询全部应答，不要求重复确认换纸。
+            QTimer.singleShot(0, self.start_next_batch_page)
         self.update_job_view()
-        self.statusBar().showMessage("第四阶段：文字 / 图片 → 路径 → G代码    |    Z/F取文件值    |    状态查询2Hz")
+        batch_note = ""
+        if batch_locked:
+            batch_note = f"    |    文档{self.batch_page_label(self.batch_index)}（队列 {self.batch_index + 1}/{len(self.batch_paths)}）"
+        self.statusBar().showMessage("第四阶段：文字 / 图片 → 路径 → G代码    |    Z/F取文件值    |    状态查询2Hz" + batch_note)
 
     def confirm(self, title, message):
         return QMessageBox.question(self, title, message, QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No, QMessageBox.StandardButton.No) == QMessageBox.StandardButton.Yes
